@@ -66,9 +66,10 @@ namespace graphics_editor_cgs
             // 
             // colorDialogBtn
             // 
-            this.colorDialogBtn.Location = new System.Drawing.Point(137, 21);
+            this.colorDialogBtn.Location = new System.Drawing.Point(183, 26);
+            this.colorDialogBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.colorDialogBtn.Name = "colorDialogBtn";
-            this.colorDialogBtn.Size = new System.Drawing.Size(64, 20);
+            this.colorDialogBtn.Size = new System.Drawing.Size(85, 25);
             this.colorDialogBtn.TabIndex = 0;
             this.colorDialogBtn.Text = "Больше";
             this.colorDialogBtn.UseVisualStyleBackColor = true;
@@ -80,9 +81,11 @@ namespace graphics_editor_cgs
             this.settingColorBox.Controls.Add(this.standartColorsPanel);
             this.settingColorBox.Controls.Add(this.colorDialogBtn);
             this.settingColorBox.Controls.Add(this.currentColorPanel);
-            this.settingColorBox.Location = new System.Drawing.Point(10, 365);
+            this.settingColorBox.Location = new System.Drawing.Point(13, 449);
+            this.settingColorBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.settingColorBox.Name = "settingColorBox";
-            this.settingColorBox.Size = new System.Drawing.Size(215, 122);
+            this.settingColorBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.settingColorBox.Size = new System.Drawing.Size(287, 150);
             this.settingColorBox.TabIndex = 1;
             this.settingColorBox.TabStop = false;
             this.settingColorBox.Text = "Цвет";
@@ -90,9 +93,10 @@ namespace graphics_editor_cgs
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 60);
+            this.label1.Location = new System.Drawing.Point(7, 74);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 13);
+            this.label1.Size = new System.Drawing.Size(119, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Выбранный цвет";
             // 
@@ -103,18 +107,20 @@ namespace graphics_editor_cgs
             this.standartColorsPanel.Controls.Add(this.greenBtn);
             this.standartColorsPanel.Controls.Add(this.blueBtn);
             this.standartColorsPanel.Controls.Add(this.whiteBtn);
-            this.standartColorsPanel.Location = new System.Drawing.Point(5, 19);
+            this.standartColorsPanel.Location = new System.Drawing.Point(7, 23);
+            this.standartColorsPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.standartColorsPanel.Name = "standartColorsPanel";
-            this.standartColorsPanel.Size = new System.Drawing.Size(117, 23);
+            this.standartColorsPanel.Size = new System.Drawing.Size(156, 28);
             this.standartColorsPanel.TabIndex = 1;
             // 
             // redBtn
             // 
             this.redBtn.BackColor = System.Drawing.Color.Red;
             this.redBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.redBtn.Location = new System.Drawing.Point(3, 3);
+            this.redBtn.Location = new System.Drawing.Point(4, 4);
+            this.redBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.redBtn.Name = "redBtn";
-            this.redBtn.Size = new System.Drawing.Size(17, 17);
+            this.redBtn.Size = new System.Drawing.Size(23, 21);
             this.redBtn.TabIndex = 0;
             this.redBtn.UseVisualStyleBackColor = false;
             this.redBtn.Click += new System.EventHandler(this.RedBtn_Click);
@@ -123,9 +129,10 @@ namespace graphics_editor_cgs
             // 
             this.yellowBtn.BackColor = System.Drawing.Color.Yellow;
             this.yellowBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.yellowBtn.Location = new System.Drawing.Point(26, 3);
+            this.yellowBtn.Location = new System.Drawing.Point(35, 4);
+            this.yellowBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.yellowBtn.Name = "yellowBtn";
-            this.yellowBtn.Size = new System.Drawing.Size(17, 17);
+            this.yellowBtn.Size = new System.Drawing.Size(23, 21);
             this.yellowBtn.TabIndex = 1;
             this.yellowBtn.UseVisualStyleBackColor = false;
             this.yellowBtn.Click += new System.EventHandler(this.YellowBtn_Click);
@@ -134,9 +141,10 @@ namespace graphics_editor_cgs
             // 
             this.greenBtn.BackColor = System.Drawing.Color.Green;
             this.greenBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.greenBtn.Location = new System.Drawing.Point(49, 3);
+            this.greenBtn.Location = new System.Drawing.Point(66, 4);
+            this.greenBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.greenBtn.Name = "greenBtn";
-            this.greenBtn.Size = new System.Drawing.Size(17, 17);
+            this.greenBtn.Size = new System.Drawing.Size(23, 21);
             this.greenBtn.TabIndex = 2;
             this.greenBtn.UseVisualStyleBackColor = false;
             this.greenBtn.Click += new System.EventHandler(this.GreenBtn_Click);
@@ -145,9 +153,10 @@ namespace graphics_editor_cgs
             // 
             this.blueBtn.BackColor = System.Drawing.Color.Blue;
             this.blueBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.blueBtn.Location = new System.Drawing.Point(72, 3);
+            this.blueBtn.Location = new System.Drawing.Point(97, 4);
+            this.blueBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.blueBtn.Name = "blueBtn";
-            this.blueBtn.Size = new System.Drawing.Size(17, 17);
+            this.blueBtn.Size = new System.Drawing.Size(23, 21);
             this.blueBtn.TabIndex = 3;
             this.blueBtn.UseVisualStyleBackColor = false;
             this.blueBtn.Click += new System.EventHandler(this.BlueBtn_Click);
@@ -156,37 +165,42 @@ namespace graphics_editor_cgs
             // 
             this.whiteBtn.BackColor = System.Drawing.Color.White;
             this.whiteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.whiteBtn.Location = new System.Drawing.Point(95, 3);
+            this.whiteBtn.Location = new System.Drawing.Point(128, 4);
+            this.whiteBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.whiteBtn.Name = "whiteBtn";
-            this.whiteBtn.Size = new System.Drawing.Size(17, 17);
+            this.whiteBtn.Size = new System.Drawing.Size(23, 21);
             this.whiteBtn.TabIndex = 4;
             this.whiteBtn.UseVisualStyleBackColor = false;
             this.whiteBtn.Click += new System.EventHandler(this.WhiteBtn_Click);
             // 
             // currentColorPanel
             // 
-            this.currentColorPanel.Location = new System.Drawing.Point(5, 75);
+            this.currentColorPanel.Location = new System.Drawing.Point(7, 92);
+            this.currentColorPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.currentColorPanel.Name = "currentColorPanel";
-            this.currentColorPanel.Size = new System.Drawing.Size(117, 30);
+            this.currentColorPanel.Size = new System.Drawing.Size(156, 37);
             this.currentColorPanel.TabIndex = 5;
             // 
             // drawingPanel
             // 
             this.drawingPanel.BackColor = System.Drawing.Color.White;
             this.drawingPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.drawingPanel.Location = new System.Drawing.Point(339, 29);
+            this.drawingPanel.Location = new System.Drawing.Point(452, 36);
+            this.drawingPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.drawingPanel.Name = "drawingPanel";
-            this.drawingPanel.Size = new System.Drawing.Size(545, 342);
+            this.drawingPanel.Size = new System.Drawing.Size(726, 420);
             this.drawingPanel.TabIndex = 2;
             this.drawingPanel.TabStop = false;
+            this.drawingPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.drawingPanel_MouseClick);
             this.drawingPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.drawingPanel_MouseDown);
             this.drawingPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.drawingPanel_MouseUp);
             // 
             // segmentBtn
             // 
-            this.segmentBtn.Location = new System.Drawing.Point(10, 10);
+            this.segmentBtn.Location = new System.Drawing.Point(13, 12);
+            this.segmentBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.segmentBtn.Name = "segmentBtn";
-            this.segmentBtn.Size = new System.Drawing.Size(80, 20);
+            this.segmentBtn.Size = new System.Drawing.Size(107, 25);
             this.segmentBtn.TabIndex = 3;
             this.segmentBtn.Text = "Отрезок";
             this.segmentBtn.UseVisualStyleBackColor = true;
@@ -195,17 +209,19 @@ namespace graphics_editor_cgs
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(267, 387);
+            this.label2.Location = new System.Drawing.Point(356, 476);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(191, 13);
+            this.label2.Size = new System.Drawing.Size(246, 17);
             this.label2.TabIndex = 4;
             this.label2.Text = "Безье, стрелка1, стрелка2, отрезок";
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(267, 409);
+            this.label3.Location = new System.Drawing.Point(356, 503);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(168, 64);
+            this.label3.Size = new System.Drawing.Size(224, 79);
             this.label3.TabIndex = 5;
             this.label3.Text = "Поворот вокруг з.ц. на произвольный угол, на 30 гр., масштабирование относительно" +
     " ц.ф. по Х, перемещение";
@@ -213,18 +229,20 @@ namespace graphics_editor_cgs
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(267, 473);
+            this.label4.Location = new System.Drawing.Point(356, 582);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(294, 13);
+            this.label4.Size = new System.Drawing.Size(375, 17);
             this.label4.TabIndex = 6;
             this.label4.Text = "ТМО: симметрическая разность, разность А/В и В/А (?)";
             // 
             // bezierBtn
             // 
             this.bezierBtn.AutoSize = true;
-            this.bezierBtn.Location = new System.Drawing.Point(10, 36);
+            this.bezierBtn.Location = new System.Drawing.Point(13, 42);
+            this.bezierBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.bezierBtn.Name = "bezierBtn";
-            this.bezierBtn.Size = new System.Drawing.Size(91, 23);
+            this.bezierBtn.Size = new System.Drawing.Size(121, 28);
             this.bezierBtn.TabIndex = 7;
             this.bezierBtn.Text = "Прямая Безье";
             this.bezierBtn.UseVisualStyleBackColor = true;
@@ -233,9 +251,10 @@ namespace graphics_editor_cgs
             // arrow1Btn
             // 
             this.arrow1Btn.AutoSize = true;
-            this.arrow1Btn.Location = new System.Drawing.Point(10, 62);
+            this.arrow1Btn.Location = new System.Drawing.Point(13, 76);
+            this.arrow1Btn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.arrow1Btn.Name = "arrow1Btn";
-            this.arrow1Btn.Size = new System.Drawing.Size(80, 23);
+            this.arrow1Btn.Size = new System.Drawing.Size(107, 28);
             this.arrow1Btn.TabIndex = 8;
             this.arrow1Btn.Text = "Стрелка 1";
             this.arrow1Btn.UseVisualStyleBackColor = true;
@@ -244,9 +263,10 @@ namespace graphics_editor_cgs
             // arrow2Btn
             // 
             this.arrow2Btn.AutoSize = true;
-            this.arrow2Btn.Location = new System.Drawing.Point(10, 89);
+            this.arrow2Btn.Location = new System.Drawing.Point(13, 110);
+            this.arrow2Btn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.arrow2Btn.Name = "arrow2Btn";
-            this.arrow2Btn.Size = new System.Drawing.Size(80, 23);
+            this.arrow2Btn.Size = new System.Drawing.Size(107, 28);
             this.arrow2Btn.TabIndex = 9;
             this.arrow2Btn.Text = "Стрелка 2";
             this.arrow2Btn.UseVisualStyleBackColor = true;
@@ -255,9 +275,10 @@ namespace graphics_editor_cgs
             // selectFigureBtn
             // 
             this.selectFigureBtn.AutoSize = true;
-            this.selectFigureBtn.Location = new System.Drawing.Point(10, 143);
+            this.selectFigureBtn.Location = new System.Drawing.Point(13, 176);
+            this.selectFigureBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.selectFigureBtn.Name = "selectFigureBtn";
-            this.selectFigureBtn.Size = new System.Drawing.Size(80, 23);
+            this.selectFigureBtn.Size = new System.Drawing.Size(107, 28);
             this.selectFigureBtn.TabIndex = 10;
             this.selectFigureBtn.Text = "Выделить";
             this.selectFigureBtn.UseVisualStyleBackColor = true;
@@ -266,9 +287,10 @@ namespace graphics_editor_cgs
             // deleteFigureBtn
             // 
             this.deleteFigureBtn.AutoSize = true;
-            this.deleteFigureBtn.Location = new System.Drawing.Point(10, 170);
+            this.deleteFigureBtn.Location = new System.Drawing.Point(13, 209);
+            this.deleteFigureBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.deleteFigureBtn.Name = "deleteFigureBtn";
-            this.deleteFigureBtn.Size = new System.Drawing.Size(80, 23);
+            this.deleteFigureBtn.Size = new System.Drawing.Size(107, 28);
             this.deleteFigureBtn.TabIndex = 11;
             this.deleteFigureBtn.Text = "Удалить";
             this.deleteFigureBtn.UseVisualStyleBackColor = true;
@@ -277,9 +299,10 @@ namespace graphics_editor_cgs
             // clearPanelBtn
             // 
             this.clearPanelBtn.AutoSize = true;
-            this.clearPanelBtn.Location = new System.Drawing.Point(10, 197);
+            this.clearPanelBtn.Location = new System.Drawing.Point(13, 242);
+            this.clearPanelBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.clearPanelBtn.Name = "clearPanelBtn";
-            this.clearPanelBtn.Size = new System.Drawing.Size(80, 23);
+            this.clearPanelBtn.Size = new System.Drawing.Size(107, 28);
             this.clearPanelBtn.TabIndex = 12;
             this.clearPanelBtn.Text = "Очистить";
             this.clearPanelBtn.UseVisualStyleBackColor = true;
@@ -293,9 +316,10 @@ namespace graphics_editor_cgs
             "Симметрическая разность",
             "Разность А/В",
             "Разность В/А"});
-            this.tmoCb.Location = new System.Drawing.Point(10, 270);
+            this.tmoCb.Location = new System.Drawing.Point(13, 332);
+            this.tmoCb.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tmoCb.Name = "tmoCb";
-            this.tmoCb.Size = new System.Drawing.Size(156, 21);
+            this.tmoCb.Size = new System.Drawing.Size(207, 24);
             this.tmoCb.TabIndex = 13;
             this.tmoCb.Text = "Выберите ТМО";
             this.tmoCb.SelectedIndexChanged += new System.EventHandler(this.TmoCb_SelectedIndexChanged);
@@ -303,9 +327,10 @@ namespace graphics_editor_cgs
             // tmoBtn
             // 
             this.tmoBtn.AutoSize = true;
-            this.tmoBtn.Location = new System.Drawing.Point(10, 244);
+            this.tmoBtn.Location = new System.Drawing.Point(13, 300);
+            this.tmoBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tmoBtn.Name = "tmoBtn";
-            this.tmoBtn.Size = new System.Drawing.Size(80, 23);
+            this.tmoBtn.Size = new System.Drawing.Size(107, 28);
             this.tmoBtn.TabIndex = 14;
             this.tmoBtn.Text = "ТМО";
             this.tmoBtn.UseVisualStyleBackColor = true;
@@ -316,17 +341,18 @@ namespace graphics_editor_cgs
             this.debugLabel.AutoSize = true;
             this.debugLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.debugLabel.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.debugLabel.Location = new System.Drawing.Point(573, 409);
+            this.debugLabel.Location = new System.Drawing.Point(764, 503);
+            this.debugLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.debugLabel.Name = "debugLabel";
-            this.debugLabel.Size = new System.Drawing.Size(91, 21);
+            this.debugLabel.Size = new System.Drawing.Size(115, 28);
             this.debugLabel.TabIndex = 15;
             this.debugLabel.Text = "debugLabel";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(973, 518);
+            this.ClientSize = new System.Drawing.Size(1297, 638);
             this.Controls.Add(this.debugLabel);
             this.Controls.Add(this.tmoBtn);
             this.Controls.Add(this.tmoCb);
@@ -342,6 +368,7 @@ namespace graphics_editor_cgs
             this.Controls.Add(this.segmentBtn);
             this.Controls.Add(this.drawingPanel);
             this.Controls.Add(this.settingColorBox);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Графический редактор | Вариант 7";
             this.settingColorBox.ResumeLayout(false);

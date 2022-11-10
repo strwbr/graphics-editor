@@ -10,8 +10,7 @@ namespace graphics_editor_cgs
     // Фигура (многоугольник)
     public class Figure
     {
-        List<Point> VertexList { get; set;}
-
+        public List<Point> VertexList { get; set;}
 
 
         public Figure(List<Point> vertexList)

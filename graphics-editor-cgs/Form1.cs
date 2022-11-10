@@ -9,6 +9,7 @@ namespace graphics_editor_cgs
     {
         Graphics g;
         Bitmap myBitmap;
+        Figure figure = new Figure();
         List<Point> VertexList = new List<Point>();
 
         private int[] SetQ = new int[] { -1, -1 };
@@ -105,6 +106,39 @@ namespace graphics_editor_cgs
 
         }
 
+        private void drawingPanel_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (indexOperation == 0)
+            {
+                // Стрелка 1 -->
+                // Исправить пропорции
+                //figure.VertexList.Add(new Point(20, 20));
+                //figure.VertexList.Add(new Point(50, 20));
+                //figure.VertexList.Add(new Point(50, 5));
+                //figure.VertexList.Add(new Point(70, 25));
+                //figure.VertexList.Add(new Point(50, 45));
+                //figure.VertexList.Add(new Point(50, 30));
+                //figure.VertexList.Add(new Point(20, 30));
+
+                // Стрелка 2 <-->
+                figure.VertexList.Add(new Point(20,100));
+                figure.VertexList.Add(new Point(30,80));
+                figure.VertexList.Add(new Point(30,90));
+                figure.VertexList.Add(new Point(70,90));
+                figure.VertexList.Add(new Point(70,80));
+                figure.VertexList.Add(new Point(80,100));
+                figure.VertexList.Add(new Point(70,120));
+                figure.VertexList.Add(new Point(70,110));
+                figure.VertexList.Add(new Point(30,110));
+                figure.VertexList.Add(new Point(30,120));
+
+
+                //g.DrawEllipse(CurrentPen, e.X - 2, e.Y - 2, 5, 5);
+
+                g.DrawPolygon(CurrentPen, figure.VertexList.ToArray());
+
+            }
+        }
 
         // Получение выбранного пользователем цвета из спец ДО
         private void ColorDialogBtn_Click(object sender, EventArgs e)
@@ -137,5 +171,7 @@ namespace graphics_editor_cgs
         {
             currentColorPanel.BackColor = whiteBtn.BackColor;
         }
+
+
     }
 }
