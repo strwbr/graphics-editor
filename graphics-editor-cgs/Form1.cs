@@ -110,34 +110,32 @@ namespace graphics_editor_cgs
         {
             if (indexOperation == 0)
             {
-                // Стрелка 1 -->
-                // Исправить пропорции
-                //figure.VertexList.Add(new Point(20, 20));
-                //figure.VertexList.Add(new Point(50, 20));
-                //figure.VertexList.Add(new Point(50, 5));
-                //figure.VertexList.Add(new Point(70, 25));
-                //figure.VertexList.Add(new Point(50, 45));
-                //figure.VertexList.Add(new Point(50, 30));
-                //figure.VertexList.Add(new Point(20, 30));
-
-                // Стрелка 2 <-->
-                figure.VertexList.Add(new Point(20,100));
-                figure.VertexList.Add(new Point(30,80));
-                figure.VertexList.Add(new Point(30,90));
-                figure.VertexList.Add(new Point(70,90));
-                figure.VertexList.Add(new Point(70,80));
-                figure.VertexList.Add(new Point(80,100));
-                figure.VertexList.Add(new Point(70,120));
-                figure.VertexList.Add(new Point(70,110));
-                figure.VertexList.Add(new Point(30,110));
-                figure.VertexList.Add(new Point(30,120));
-
-
-                //g.DrawEllipse(CurrentPen, e.X - 2, e.Y - 2, 5, 5);
-
-                g.DrawPolygon(CurrentPen, figure.VertexList.ToArray());
-
+                switch (indexFigure)
+                {
+                    case 0: debugLabel.Text = $"indexFigure = {indexFigure}"; break;
+                    case 1: 
+                        if (e.Button == MouseButtons.Left) 
+                            InputBezierPoints(e.Location);
+                    else if (e.Button == MouseButtons.Right) 
+                            DrawBezier(CurrentPen, Figure.Bezier(figure.VertexList, figure.VertexList.Count));
+                        break;
+                    case 2: g.DrawPolygon(CurrentPen, Figure.Arrow1(e.Location).ToArray()); break;
+                    case 3: g.DrawPolygon(CurrentPen, Figure.Arrow2(e.Location).ToArray()); break;
+                }
             }
+        }
+
+        private void DrawBezier(Pen color, List<Point> bezierPoints)
+        {
+            for (int i = 0; i < bezierPoints.Count - 1; i ++)
+            {
+                g.DrawLine(color, bezierPoints[i], bezierPoints[i + 1]);
+            }
+        }
+
+        private void InputBezierPoints(Point p)
+        {
+            figure.VertexList.Add(p);
         }
 
         // Получение выбранного пользователем цвета из спец ДО

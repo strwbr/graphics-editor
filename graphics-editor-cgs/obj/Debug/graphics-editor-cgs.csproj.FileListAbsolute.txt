@@ -8,3 +8,4 @@ C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphi
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics-editor-cgs.csproj.CoreCompileInputs.cache
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics-editor-cgs.exe
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics-editor-cgs.pdb
+C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics-editor-cgs.csproj.SuggestedBindingRedirects.cache
