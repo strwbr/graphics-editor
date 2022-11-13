@@ -11,6 +11,7 @@ namespace graphics_editor_cgs
         Bitmap myBitmap;
         Figure figure = new Figure();
         List<Point> VertexList = new List<Point>();
+        List<Figure> FigureList = new List<Figure>();
 
         private int[] SetQ = new int[] { -1, -1 };
 
@@ -65,11 +66,21 @@ namespace graphics_editor_cgs
         }
 
         // Выделение фигуры = 1
-        private void SelectFigureBtn_Click(object sender, EventArgs e) => indexOperation = 1;
+        private void SelectFigureBtn_Click(object sender, EventArgs e)
+        {
+            indexOperation = 1;
+
+
+        }
+
         // Удаление фигуры = 2
         private void DeleteFigureBtn_Click(object sender, EventArgs e) => indexOperation = 2;
         // Очистка области рисования = 3
-        private void ClearPanelBtn_Click(object sender, EventArgs e) => indexOperation = 3;
+        private void ClearPanelBtn_Click(object sender, EventArgs e)
+        {
+            indexOperation = 3;
+            ClearPanel();
+        }
         // ТМО = 4
         private void TmoBtn_Click(object sender, EventArgs e)
         {
@@ -110,32 +121,69 @@ namespace graphics_editor_cgs
         {
             if (indexOperation == 0)
             {
+                Figure currentFigure = null;
                 switch (indexFigure)
                 {
                     case 0: debugLabel.Text = $"indexFigure = {indexFigure}"; break;
-                    case 1: 
-                        if (e.Button == MouseButtons.Left) 
-                            InputBezierPoints(e.Location);
-                    else if (e.Button == MouseButtons.Right) 
-                            DrawBezier(CurrentPen, Figure.Bezier(figure.VertexList, figure.VertexList.Count));
-                        break;
-                    case 2: g.DrawPolygon(CurrentPen, Figure.Arrow1(e.Location).ToArray()); break;
-                    case 3: g.DrawPolygon(CurrentPen, Figure.Arrow2(e.Location).ToArray()); break;
+                    case 1: debugLabel.Text = $"indexFigure = {indexFigure}"; break;
+                    case 2:
+                        currentFigure = Figures.Arrow1(e.Location);
+                        DrawFigure(currentFigure); break;
+                    case 3:
+                        currentFigure = Figures.Arrow2(e.Location);
+                        DrawFigure(currentFigure); break;
+                }
+                FigureList.Add(currentFigure);
+            }
+            else if (indexOperation == 1)
+            {
+                for (int i = 0; i < FigureList.Count; i++)
+                {
+                    if (FigureList[i].Select(e.Location))
+                    {
+                        DrawSelection(FigureList[i].Pmin, FigureList[i].Pmax);
+                        DrawCenter(FigureList[i].Center());
+                    }
                 }
             }
         }
 
-        private void DrawBezier(Pen color, List<Point> bezierPoints)
+        private void DrawSelection(Point Pmin, Point Pmax)
         {
-            for (int i = 0; i < bezierPoints.Count - 1; i ++)
+            int Xmin = Pmin.X,
+                Ymin = Pmin.Y;
+            int Xmax = Pmax.X,
+                Ymax = Pmax.Y;
+
+            Pen pen = new Pen(Color.Gray);
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash; // штрихованная линия
+            //pen.EndCap = System.Drawing.Drawing2D.LineCap.Round; 
+            g.DrawRectangle(pen, new Rectangle(Xmin, Ymin, Math.Abs(Xmax - Xmin), Math.Abs(Ymax - Ymin)));
+        }
+
+        private void DrawFigure(Figure figure)
+        {
+            for (int i = 0; i < figure.LinesList.Count - 1; i++)
             {
-                g.DrawLine(color, bezierPoints[i], bezierPoints[i + 1]);
+                int xl = figure.LinesList[i].xl;
+                int xr = figure.LinesList[i].xr;
+                int y = figure.LinesList[i].y;
+
+                g.DrawLine(CurrentPen, new Point(xl, y), new Point(xr, y));
             }
         }
 
-        private void InputBezierPoints(Point p)
+        private void DrawCenter(Point center)
         {
-            figure.VertexList.Add(p);
+            Pen pen = new Pen(Color.Red);
+            g.DrawLine(pen, center.X - 5, center.Y - 5, center.X + 5, center.Y + 5);
+            g.DrawLine(pen, center.X + 5, center.Y - 5, center.X - 5, center.Y + 5);
+        }
+
+        private void ClearPanel()
+        {
+            FigureList.Clear();
+            g.Clear(drawingPanel.BackColor);
         }
 
         // Получение выбранного пользователем цвета из спец ДО
@@ -145,30 +193,15 @@ namespace graphics_editor_cgs
                 currentColorPanel.BackColor = colorDialog.Color;
         }
 
-        private void RedBtn_Click(object sender, EventArgs e)
-        {
-            currentColorPanel.BackColor = redBtn.BackColor;
-        }
+        private void RedBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = redBtn.BackColor;
 
-        private void YellowBtn_Click(object sender, EventArgs e)
-        {
-            currentColorPanel.BackColor = yellowBtn.BackColor;
-        }
+        private void YellowBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = yellowBtn.BackColor;
 
-        private void GreenBtn_Click(object sender, EventArgs e)
-        {
-            currentColorPanel.BackColor = greenBtn.BackColor;
-        }
+        private void GreenBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = greenBtn.BackColor;
 
-        private void BlueBtn_Click(object sender, EventArgs e)
-        {
-            currentColorPanel.BackColor = blueBtn.BackColor;
-        }
+        private void BlueBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = blueBtn.BackColor;
 
-        private void WhiteBtn_Click(object sender, EventArgs e)
-        {
-            currentColorPanel.BackColor = whiteBtn.BackColor;
-        }
+        private void WhiteBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = whiteBtn.BackColor;
 
 
     }
