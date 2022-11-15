@@ -9,9 +9,9 @@ namespace graphics_editor_cgs
 {
     public class Figures
     {
-        public static Figure Arrow1(Point p0)
+        public static Polygon Arrow1(Point p0)
         {
-            Figure arrow = new Figure();
+            Polygon arrow = new Polygon();
             int x0 = p0.X;
             int y0 = p0.Y;
             const int w = 60;
@@ -30,9 +30,9 @@ namespace graphics_editor_cgs
             return arrow;
         }
 
-        public static Figure Arrow2(Point p0)
+        public static Polygon Arrow2(Point p0)
         {
-            Figure arrow = new Figure(Arrow1(p0));
+            Polygon arrow = new Polygon(Arrow1(p0));
             int x0 = p0.X;
             int y0 = p0.Y;
             const int w = 60;

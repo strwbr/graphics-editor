@@ -128,12 +128,13 @@ namespace graphics_editor_cgs
                     case 1: debugLabel.Text = $"indexFigure = {indexFigure}"; break;
                     case 2:
                         currentFigure = Figures.Arrow1(e.Location);
-                        DrawFigure(currentFigure); break;
+                        DrawPolygon((Polygon)currentFigure); break;
                     case 3:
                         currentFigure = Figures.Arrow2(e.Location);
-                        DrawFigure(currentFigure); break;
+                        DrawPolygon((Polygon)currentFigure); break;
                 }
                 FigureList.Add(currentFigure);
+                debugLabel.Text = FigureList.Count.ToString();
             }
             else if (indexOperation == 1)
             {
@@ -157,17 +158,16 @@ namespace graphics_editor_cgs
 
             Pen pen = new Pen(Color.Gray);
             pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash; // штрихованная линия
-            //pen.EndCap = System.Drawing.Drawing2D.LineCap.Round; 
             g.DrawRectangle(pen, new Rectangle(Xmin, Ymin, Math.Abs(Xmax - Xmin), Math.Abs(Ymax - Ymin)));
         }
 
-        private void DrawFigure(Figure figure)
+        private void DrawPolygon(Polygon polygon)
         {
-            for (int i = 0; i < figure.LinesList.Count - 1; i++)
+            for (int i = 0; i < polygon.LinesList.Count - 1; i++)
             {
-                int xl = figure.LinesList[i].xl;
-                int xr = figure.LinesList[i].xr;
-                int y = figure.LinesList[i].y;
+                int xl = polygon.LinesList[i].xl;
+                int xr = polygon.LinesList[i].xr;
+                int y = polygon.LinesList[i].y;
 
                 g.DrawLine(CurrentPen, new Point(xl, y), new Point(xr, y));
             }
@@ -176,8 +176,8 @@ namespace graphics_editor_cgs
         private void DrawCenter(Point center)
         {
             Pen pen = new Pen(Color.Red);
-            g.DrawLine(pen, center.X - 5, center.Y - 5, center.X + 5, center.Y + 5);
-            g.DrawLine(pen, center.X + 5, center.Y - 5, center.X - 5, center.Y + 5);
+            g.DrawLine(pen, center.X - 2, center.Y - 2, center.X + 2, center.Y + 2);
+            g.DrawLine(pen, center.X + 2, center.Y - 2, center.X - 2, center.Y + 2);
         }
 
         private void ClearPanel()

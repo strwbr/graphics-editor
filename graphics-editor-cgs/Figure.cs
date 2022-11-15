@@ -7,46 +7,26 @@ using System.Threading.Tasks;
 
 namespace graphics_editor_cgs
 {
-    public struct Line
-    {
-        public int xl;
-        public int xr;
-        public int y;
-
-        public Line(int xl, int xr, int y) : this()
-        {
-            this.xl = xl;
-            this.xr = xr;
-            this.y = y;
-        }
-        public Line(Line other)
-        {
-            this.xl = other.xl;
-            this.xr = other.xr;
-            this.y = other.y;
-        }
-    }
-
     // Фигура (многоугольник)
     public class Figure
     {
         public List<Point> VertexList { get; set; }
-        public List<Line> LinesList { get; set; }
+        //public List<HorizontalLine> LinesList { get; set; }
         public Point Pmin;
         public Point Pmax;
 
         public Figure()
         {
             VertexList = new List<Point>();
-            LinesList = new List<Line>();
+            //LinesList = new List<HorizontalLine>();
             Pmin = new Point();
             Pmax = new Point();
         }
 
-        public Figure(List<Point> vertexList, List<Line> linesList) : this()
+        public Figure(List<Point> vertexList/*, List<HorizontalLine> linesList*/) : this()
         {
             VertexList = vertexList;
-            LinesList = linesList;
+            //LinesList = linesList;
             Pmin = new Point();
             Pmax = new Point();
         }
@@ -55,8 +35,9 @@ namespace graphics_editor_cgs
         public Figure(Figure other) : this()
         {
             VertexList = other.VertexList.ConvertAll(item => new Point(item.X, item.Y));
-            LinesList = other.LinesList.ConvertAll(item => new Line(item));
-
+            //LinesList = other.LinesList.ConvertAll(item => new HorizontalLine(item));
+            Pmin = new Point(other.Pmin.X, other.Pmin.Y);
+            Pmax = new Point(other.Pmax.X, other.Pmax.Y);
             //for (int i = 0; i < other.VertexList.Count; i++)
             //{
             //    VertexList.Add(other.VertexList[i]);
@@ -116,47 +97,12 @@ namespace graphics_editor_cgs
             return isSelect;
         }
 
-        // Закрашивание фигуры и ее вывод? - разбить на 2 метода
-        public void Fill()
-        {
-            int Ymin = VertexList.Min(item => item.Y);
-            int Ymax = VertexList.Max(item => item.Y);
-
-            List<int> Xb = new List<int>();
-            for (int j = Ymin; j <= Ymax; j++)
-            {
-                Xb.Clear();
-                for (int i = 0; i < VertexList.Count; i++)
-                {
-                    int k;
-                    if (i < VertexList.Count - 1)
-                        k = i + 1;
-                    else k = 0;
-
-                    if ((VertexList[i].Y < j && VertexList[k].Y >= j)
-                        || (VertexList[i].Y >= j && VertexList[k].Y < j))
-                    {
-                        int x = (int)Math.Ceiling((double)(VertexList[k].X - VertexList[i].X)
-                            * (j - VertexList[i].Y) / (double)(VertexList[k].Y
-                            - VertexList[i].Y) + VertexList[i].X);
-                        Xb.Add(x);
-                    }
-                }
-                Xb.Sort();
-
-                for (int i = 0; i < Xb.Count - 1; i += 2)
-                {
-                    LinesList.Add(new Line(Xb[i], Xb[i + 1], j));
-                }
-            }
-        }
-
         // Центр фигуры
         public Point Center()
         {
             Point center = new Point();
-            center.X = (Pmax.X - Pmin.X) / 2;
-            center.Y = (Pmax.Y - Pmin.Y) / 2;
+            center.X =  (Pmax.X + Pmin.X) / 2;
+            center.Y = (Pmax.Y + Pmin.Y) / 2;
             return center;
         }
 
