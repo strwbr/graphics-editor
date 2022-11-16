@@ -23,9 +23,13 @@ namespace graphics_editor_cgs
         private int indexFigure = 0;
         private int indexOperation = 0;
 
+        private Point mousePoint = new Point();
+
         private int prevSelectedFigureIndex = -1;
         private int selectedFigureIndex = -1;
+
         private bool isSelectedFigure = false;
+        private bool isResizeMode = false;
 
         private Color CurrentColor => currentColorPanel.BackColor;
         private Pen CurrentPen => new Pen(CurrentColor);
@@ -138,11 +142,12 @@ namespace graphics_editor_cgs
             }
         }
 
-        private void DrawingPanel_MouseClick(object sender, MouseEventArgs e)
+        private void DrawingPanel_MouseDown(object sender, MouseEventArgs e)
         {
+            mousePoint = new Point(e.X, e.Y);
             if (indexOperation == 0)
             {
-                Figure currentFigure = null;
+                Figure currentFigure;
                 switch (indexFigure)
                 {
                     case 0: debugLabel.Text = $"indexFigure = {indexFigure}"; break;
@@ -164,7 +169,6 @@ namespace graphics_editor_cgs
                                 BezierPoints.Clear();
                             }
                         }
-
                         break;
 
                     case 2:
@@ -176,9 +180,6 @@ namespace graphics_editor_cgs
                         FigureList.Add(currentFigure);
                         DrawPolygon((Polygon)currentFigure); break;
                 }
-
-                
-                debugLabel.Text = FigureList.Count.ToString();
             }
             // Выделение
             else if (indexOperation == 1)
@@ -186,7 +187,7 @@ namespace graphics_editor_cgs
                 prevSelectedFigureIndex = selectedFigureIndex;
                 selectedFigureIndex = FindSelectedFigure(e.Location);
                 // Если до этого была уже выделена фигура
-                if(prevSelectedFigureIndex != -1)
+                if (prevSelectedFigureIndex != -1)
                 {
                     // то перерисовываем об-ть рис-я без выделения
                     UpdateDrawingPanel();
@@ -196,19 +197,10 @@ namespace graphics_editor_cgs
                     selectedFigure = FigureList[selectedFigureIndex];
                     DrawSelection(selectedFigure);
                     isSelectedFigure = true;
+                    if (CheckResize(e.X, e.Y)) isResizeMode = true;
+                    else isResizeMode = false;
                 }
                 else isSelectedFigure = false;
-
-
-                //for (int i = 0; i < FigureList.Count; i++)
-                //{
-                //    if (FigureList[i].Select(e.Location))
-                //    {
-                //        selectedFigure = FigureList[i];
-                //        DrawSelection(selectedFigure);
-                //    }
-                //}
-
             }
             drawingPanel.Image = myBitmap;
         }
@@ -216,15 +208,35 @@ namespace graphics_editor_cgs
 
         private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            //int x = e.Location.X;
-            //int y = e.Location.Y;
+            int x = e.Location.X;
+            int y = e.Location.Y;
 
+            if (indexOperation == 1)
+            {
+                if (selectedFigureIndex != -1)
+                {
+                    selectedFigure.Move(x - mousePoint.X);
+                }
 
-            //if (isSelectedFigure && CheckResize(x,y))
-            //{
-            //    Cursor.Current = Cursors.SizeWE;
-            //}
-            //Cursor.Current = Cursors.Default;
+                ////Cursor.Current = Cursors.SizeWE;
+                //if (isResizeMode)
+                //{
+                //    selectedFigure.Zoom();
+                //}
+                UpdateDrawingPanel();
+                // отрисовавать фигуру заново!!!!!!!!!!!!
+                //DrawSelection(selectedFigure);
+                drawingPanel.Image = myBitmap;
+
+            }
+
+            Cursor.Current = Cursors.Default;
+            mousePoint = new Point(x, y);
+        }
+
+        private void drawingPanel_MouseUp(object sender, MouseEventArgs e)
+        {
+
         }
 
         private bool CheckResize(int x, int y)
@@ -234,8 +246,8 @@ namespace graphics_editor_cgs
             int Xmax = selectedFigure.Pmax.X;
             int Yc = selectedFigure.Center().Y;
             return
-                (((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
-                && (y >= Yc - 7 && y <= Yc + 7));
+                ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
+                && (y >= Yc - 7 && y <= Yc + 7);
         }
 
         private int FindSelectedFigure(Point mouseClickPoint)

@@ -179,8 +179,9 @@ namespace graphics_editor_cgs
             this.drawingPanel.Size = new System.Drawing.Size(545, 342);
             this.drawingPanel.TabIndex = 2;
             this.drawingPanel.TabStop = false;
-            this.drawingPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseClick);
+            this.drawingPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseDown);
             this.drawingPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseMove);
+            this.drawingPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.drawingPanel_MouseUp);
             // 
             // segmentBtn
             // 

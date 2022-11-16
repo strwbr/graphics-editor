@@ -57,9 +57,16 @@ namespace graphics_editor_cgs
         }
 
         // Перемещение
-        public void Move()
+        public void Move(int dx)
         {
-
+            Point p = new Point();
+            for(int i = 0; i < VertexList.Count; i++)
+            {
+                p.X = VertexList[i].X + dx;
+                p.Y = VertexList[i].Y;
+                VertexList[i] = p;
+            }
+            GetBorders();
         }
         // Масштабирование
         public void Zoom()
