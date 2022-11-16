@@ -159,6 +159,7 @@ namespace graphics_editor_cgs
                             {
                                 currentFigure = Figures.Bezier(BezierPoints, countBezierPoints - 1);
                                 DrawBezier((BezierCurve)currentFigure);
+                                FigureList.Add(currentFigure);
                                 countBezierPoints = 0;
                                 BezierPoints.Clear();
                             }
@@ -168,13 +169,15 @@ namespace graphics_editor_cgs
 
                     case 2:
                         currentFigure = Figures.Arrow1(e.Location);
+                        FigureList.Add(currentFigure);
                         DrawPolygon((Polygon)currentFigure); break;
                     case 3:
                         currentFigure = Figures.Arrow2(e.Location);
+                        FigureList.Add(currentFigure);
                         DrawPolygon((Polygon)currentFigure); break;
                 }
 
-                FigureList.Add(currentFigure);
+                
                 debugLabel.Text = FigureList.Count.ToString();
             }
             // Выделение
@@ -240,9 +243,12 @@ namespace graphics_editor_cgs
             int index = -1;
             for (int i = 0; i < FigureList.Count; i++)
             {
-                if (FigureList[i].Select(mouseClickPoint))
+                if (FigureList[i].GetType() == typeof(Polygon))
                 {
-                    index = i;
+                    if (((Polygon)(FigureList[i])).Select(mouseClickPoint))
+                    {
+                        index = i;
+                    }
                 }
             }
             return index;

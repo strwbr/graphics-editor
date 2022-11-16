@@ -72,30 +72,7 @@ namespace graphics_editor_cgs
 
         }
 
-        // Выделение фигуры
-        public bool Select(Point p)
-        {
-            bool isSelect = false;
-            int mX = p.X;
-            int mY = p.Y;
-
-            int n = VertexList.Count - 1;
-            int k = 0, m = 0;
-            Point Pi, Pk;
-
-            for (int i = 0; i <= n; i++)
-            {
-                if (i < n) k = i + 1;
-                else k = 0;
-                Pi = VertexList[i];
-                Pk = VertexList[k];
-                if ((Pi.Y < mY) & (Pk.Y >= mY) | (Pi.Y >= mY) & (Pk.Y < mY))
-                    if ((mY - Pi.Y) * (Pk.X - Pi.X) / (Pk.Y - Pi.Y) + Pi.X < mX)
-                        m++;
-            }
-            if (m % 2 == 1) isSelect = true;
-            return isSelect;
-        }
+        
 
         // Центр фигуры
         public Point Center()
