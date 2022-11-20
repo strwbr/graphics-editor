@@ -7,25 +7,19 @@ using System.Threading.Tasks;
 
 namespace graphics_editor_cgs
 {
-    public class BezierCurve : Figure
+    public class LineSegment:Figure
     {
-        public BezierCurve()
+        public LineSegment()
         {
         }
 
-        public BezierCurve(List<Point> vertexList) : base(vertexList)
+        public LineSegment(List<Point> vertexList) : base(vertexList)
         {
             GetBorders();
         }
 
-        public BezierCurve(Figure other) : base(other)
+        public LineSegment(Figure other) : base(other)
         {
         }
-
-
-
-        
     }
-
-     
 }

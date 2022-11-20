@@ -12,6 +12,8 @@ namespace graphics_editor_cgs
         Figure figure = new Figure();
         List<Point> BezierPoints = new List<Point>();
         int countBezierPoints = 0;
+        List<Point> LineSegmentPoints = new List<Point>();
+        int countLineSegmentPoints = 0;
 
         List<Figure> FigureList = new List<Figure>();
         List<Figure> SelectedFiguresList = new List<Figure>();
@@ -150,12 +152,33 @@ namespace graphics_editor_cgs
                 Figure currentFigure;
                 switch (indexFigure)
                 {
-                    case 0: debugLabel.Text = $"indexFigure = {indexFigure}"; break;
+                    case 0:
+                        debugLabel.Text = $"indexFigure = {indexFigure}";
+                        //g.DrawEllipse(CurrentPen, e.X - 2, e.Y - 2, 5, 5);
+                        if (e.Button == MouseButtons.Left)
+                        {
+                            switch (countLineSegmentPoints)
+                            {
+                                case 0:
+                                    LineSegmentPoints.Add(mousePoint);
+                                    countLineSegmentPoints++;
+                                    break;
+                                case 1:
+                                    LineSegmentPoints.Add(mousePoint);
+                                    currentFigure = new LineSegment(LineSegmentPoints);
+                                    DrawLineSegment((LineSegment)currentFigure);
+                                    countLineSegmentPoints = 0;
+                                    LineSegmentPoints.Clear();
+                                    break;
+                            }
+                        }
+                        break;
+
                     case 1:
                         if (e.Button == MouseButtons.Left)
                         {
                             // g.DrawEllipse(new Pen(Color.Gray, 1), e.X - 2, e.Y - 2, 5, 5);
-                            BezierPoints.Add(e.Location);
+                            BezierPoints.Add(e.Location); // mousePoint!!!
                             countBezierPoints++;
                         }
                         else if (e.Button == MouseButtons.Right)
@@ -197,14 +220,18 @@ namespace graphics_editor_cgs
                     selectedFigure = FigureList[selectedFigureIndex];
                     DrawSelection(selectedFigure);
                     isSelectedFigure = true;
-                    if (CheckResize(e.X, e.Y)) isResizeMode = true;
-                    else isResizeMode = false;
+                    //if (CheckResize(e.X, e.Y)) isResizeMode = true;
+                    //else isResizeMode = false;
                 }
                 else isSelectedFigure = false;
             }
             drawingPanel.Image = myBitmap;
         }
 
+        private void DrawLineSegment(LineSegment currentFigure)
+        {
+            g.DrawLine(CurrentPen, currentFigure.VertexList[0], currentFigure.VertexList[1]);
+        }
 
         private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
         {
@@ -316,6 +343,8 @@ namespace graphics_editor_cgs
             FigureList.Clear();
             BezierPoints.Clear();
             countBezierPoints = 0;
+            countLineSegmentPoints = 0;
+            LineSegmentPoints.Clear();
             drawingPanel.Image = myBitmap;
         }
 

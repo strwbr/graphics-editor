@@ -80,7 +80,7 @@ namespace graphics_editor_cgs
             this.settingColorBox.Controls.Add(this.standartColorsPanel);
             this.settingColorBox.Controls.Add(this.colorDialogBtn);
             this.settingColorBox.Controls.Add(this.currentColorPanel);
-            this.settingColorBox.Location = new System.Drawing.Point(10, 365);
+            this.settingColorBox.Location = new System.Drawing.Point(12, 414);
             this.settingColorBox.Name = "settingColorBox";
             this.settingColorBox.Size = new System.Drawing.Size(215, 122);
             this.settingColorBox.TabIndex = 1;
@@ -174,9 +174,9 @@ namespace graphics_editor_cgs
             // 
             this.drawingPanel.BackColor = System.Drawing.Color.White;
             this.drawingPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.drawingPanel.Location = new System.Drawing.Point(339, 29);
+            this.drawingPanel.Location = new System.Drawing.Point(264, 12);
             this.drawingPanel.Name = "drawingPanel";
-            this.drawingPanel.Size = new System.Drawing.Size(545, 342);
+            this.drawingPanel.Size = new System.Drawing.Size(705, 369);
             this.drawingPanel.TabIndex = 2;
             this.drawingPanel.TabStop = false;
             this.drawingPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseDown);
@@ -196,7 +196,7 @@ namespace graphics_editor_cgs
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(267, 387);
+            this.label2.Location = new System.Drawing.Point(272, 414);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(191, 13);
             this.label2.TabIndex = 4;
@@ -204,7 +204,7 @@ namespace graphics_editor_cgs
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(267, 409);
+            this.label3.Location = new System.Drawing.Point(272, 436);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(168, 64);
             this.label3.TabIndex = 5;
@@ -214,7 +214,7 @@ namespace graphics_editor_cgs
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(267, 473);
+            this.label4.Location = new System.Drawing.Point(272, 500);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(294, 13);
             this.label4.TabIndex = 6;
@@ -317,7 +317,7 @@ namespace graphics_editor_cgs
             this.debugLabel.AutoSize = true;
             this.debugLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.debugLabel.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.debugLabel.Location = new System.Drawing.Point(573, 409);
+            this.debugLabel.Location = new System.Drawing.Point(578, 436);
             this.debugLabel.Name = "debugLabel";
             this.debugLabel.Size = new System.Drawing.Size(91, 21);
             this.debugLabel.TabIndex = 15;
@@ -327,7 +327,7 @@ namespace graphics_editor_cgs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(973, 518);
+            this.ClientSize = new System.Drawing.Size(996, 551);
             this.Controls.Add(this.debugLabel);
             this.Controls.Add(this.tmoBtn);
             this.Controls.Add(this.tmoCb);
