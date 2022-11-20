@@ -14,6 +14,7 @@ namespace graphics_editor_cgs
         //public List<HorizontalLine> LinesList { get; set; }
         public Point Pmin;
         public Point Pmax;
+        public Color Color { get; set; }
 
         public Figure()
         {
@@ -21,6 +22,7 @@ namespace graphics_editor_cgs
             //LinesList = new List<HorizontalLine>();
             Pmin = new Point();
             Pmax = new Point();
+            Color = new Color();
         }
 
         public Figure(List<Point> vertexList/*, List<HorizontalLine> linesList*/) : this()

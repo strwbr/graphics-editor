@@ -208,30 +208,31 @@ namespace graphics_editor_cgs
 
         private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            int x = e.Location.X;
-            int y = e.Location.Y;
+            //int x = e.Location.X;
+            //int y = e.Location.Y;
 
-            if (indexOperation == 1)
-            {
-                if (selectedFigureIndex != -1)
-                {
-                    selectedFigure.Move(x - mousePoint.X);
-                }
+            //if (indexOperation == 1)
+            //{
+            //    if (selectedFigureIndex != -1)
+            //    {
+            //        selectedFigure.Move(x - mousePoint.X);
+            //    }
 
-                ////Cursor.Current = Cursors.SizeWE;
-                //if (isResizeMode)
-                //{
-                //    selectedFigure.Zoom();
-                //}
-                UpdateDrawingPanel();
-                // отрисовавать фигуру заново!!!!!!!!!!!!
-                //DrawSelection(selectedFigure);
-                drawingPanel.Image = myBitmap;
+            //    ////Cursor.Current = Cursors.SizeWE;
+            //    //if (isResizeMode)
+            //    //{
+            //    //    selectedFigure.Zoom();
+            //    //}
+            //    UpdateDrawingPanel();
+            //    // отрисовавать фигуру заново!!!!!!!!!!!!
+            //    DrawPolygon((Polygon)selectedFigure); 
+            //    //DrawSelection(selectedFigure);
+            //    drawingPanel.Image = myBitmap;
 
-            }
+            //}
 
-            Cursor.Current = Cursors.Default;
-            mousePoint = new Point(x, y);
+            //Cursor.Current = Cursors.Default;
+            //mousePoint = new Point(x, y);
         }
 
         private void drawingPanel_MouseUp(object sender, MouseEventArgs e)
@@ -316,7 +317,6 @@ namespace graphics_editor_cgs
             BezierPoints.Clear();
             countBezierPoints = 0;
             drawingPanel.Image = myBitmap;
-
         }
 
         // Получение выбранного пользователем цвета из спец ДО
