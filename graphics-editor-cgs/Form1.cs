@@ -36,6 +36,9 @@ namespace graphics_editor_cgs
         private Color CurrentColor => currentColorPanel.BackColor;
         private Pen CurrentPen => new Pen(CurrentColor);
 
+        private TMO tmo = new TMO();
+        private int selectedFiguresCount = 0;
+
 
         public Form1()
         {
@@ -136,11 +139,11 @@ namespace graphics_editor_cgs
             foreach (Figure f in FigureList)
             {
                 if (f.GetType() == typeof(Polygon))
-                {
                     DrawPolygon((Polygon)f);
-                }
-                else
+                else if (f.GetType() == typeof(BezierCurve))
                     DrawBezier((BezierCurve)f);
+                else if (f.GetType() == typeof(LineSegment))
+                    DrawLineSegment((LineSegment)f);
             }
         }
 
@@ -166,6 +169,7 @@ namespace graphics_editor_cgs
                                 case 1:
                                     LineSegmentPoints.Add(mousePoint);
                                     currentFigure = new LineSegment(LineSegmentPoints);
+                                    FigureList.Add(currentFigure);
                                     DrawLineSegment((LineSegment)currentFigure);
                                     countLineSegmentPoints = 0;
                                     LineSegmentPoints.Clear();
@@ -208,7 +212,7 @@ namespace graphics_editor_cgs
             else if (indexOperation == 1)
             {
                 prevSelectedFigureIndex = selectedFigureIndex;
-                selectedFigureIndex = FindSelectedFigure(e.Location);
+                selectedFigureIndex = FindSelectedFigure(e.Location); // mousePoint
                 // Если до этого была уже выделена фигура
                 if (prevSelectedFigureIndex != -1)
                 {
@@ -224,6 +228,37 @@ namespace graphics_editor_cgs
                     //else isResizeMode = false;
                 }
                 else isSelectedFigure = false;
+            }
+            // ТМО
+            else if (indexOperation == 4)
+            {
+                // Добавить проверку на тип выбранного элемента
+                switch (selectedFiguresCount)
+                {
+                    case 0:
+                        int index = FindSelectedFigure(mousePoint);
+                        DrawSelection(FigureList[index]);
+                        tmo.Polygon_1 = (Polygon)FigureList[index];
+                        FigureList.RemoveAt(index);
+                        selectedFiguresCount++;
+                        break;
+                    case 1:
+                        index = FindSelectedFigure(mousePoint);
+                        DrawSelection(FigureList[index]);
+                        tmo.Polygon_2 = (Polygon)FigureList[index];
+                        FigureList.RemoveAt(index);
+                        if (SetQ[0] != -1)
+                        {
+                            tmo.SetQ = SetQ;
+                            Polygon newPolygon = tmo.MakeTMO(0, drawingPanel.Width - 1);
+                            newPolygon.GetBorders();
+                            FigureList.Add(newPolygon);
+                            UpdateDrawingPanel();
+                        }
+                        
+                        selectedFiguresCount = 0;
+                        break;
+                }
             }
             drawingPanel.Image = myBitmap;
         }

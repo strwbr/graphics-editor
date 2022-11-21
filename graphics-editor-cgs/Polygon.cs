@@ -20,7 +20,7 @@ namespace graphics_editor_cgs
 
         public Polygon(List<Point> VertexList, List<HorizontalLine> LinesList/*, Point Pmin, Point Pmax*/) : base(VertexList)
         {
-            this.LinesList = LinesList;
+            LinesList = LinesList.ConvertAll(item => new HorizontalLine(item));
             //this.Pmin = Pmin;
             //this.Pmax = Pmax;
         }
@@ -31,6 +31,27 @@ namespace graphics_editor_cgs
             //Pmin = new Point(other.Pmin.X, other.Pmin.Y);
             //Pmax = new Point(other.Pmax.X, other.Pmax.Y);
 
+        }
+
+        public void FindVertex()
+        {
+            List<Point> temp = new List<Point>();
+            Point prevP = new Point(LinesList[0].xl, LinesList[0].y);
+            Point currentP = new Point(LinesList[0].xl, LinesList[0].y);
+            int prevDX = currentP.X - prevP.X;
+            int currentDX = prevDX;
+            for (int i = 0; i < LinesList.Count; i++)
+            {
+                currentP = new Point(LinesList[i].xl, LinesList[i].y);
+                currentDX = currentP.X - prevP.X;
+                if (currentDX != prevDX)
+                {
+                    temp.Add(new Point(prevP.X, prevP.Y));
+                }
+                prevP = new Point(currentP.X, currentP.Y);
+                prevDX = currentDX;
+            }
+            VertexList = temp;
         }
 
         // Выделение фигуры

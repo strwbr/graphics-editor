@@ -108,43 +108,41 @@ namespace graphics_editor_cgs
 
                 if (nM > 0)
                 {
-                    if(M[0].x >= Xmin_e && M[0].dQ < 0)
+                    if (M[0].x >= Xmin_e && M[0].dQ < 0)
                     {
-                        if(M[0].x >= Xmin_e && M[0].dQ < 0)
-                        {
-                            Xrl.Add(Xmin_e);
-                            Q = -M[0].dQ;
-                        }
-                        int x;
-                        for(int i = 0; i < nM; i++)
-                        {
-                            x = M[i].x;
-                            Qnew = Q + M[i].dQ;
-
-                            if((Q < SetQ[0] || Q > SetQ[1]) && (Qnew >= SetQ[0] && Qnew <= SetQ[1]))
-                            {
-                                Xrl.Add(x);
-                            }
-
-                            if ((Q >= SetQ[0] && Q <= SetQ[1]) && (Qnew < SetQ[0] || Qnew > SetQ[1]))
-                            {
-                                Xrr.Add(x);
-                            }
-                            Q = Qnew;
-                        }
-                        if (Q >= SetQ[0] && Q <= SetQ[1])
-                        {
-                            Xrr.Add(Xmax_e);
-                        }
-
-                        for(int i =0; i < Xrl.Count; i++)
-                        {
-                            result.LinesList.Add(new HorizontalLine(Xrl[i], Xrr[i], j));
-                        }
+                        Xrl.Add(Xmin_e);
+                        Q = -M[0].dQ;
                     }
+                    int x;
+                    for (int i = 0; i < nM; i++)
+                    {
+                        x = M[i].x;
+                        Qnew = Q + M[i].dQ;
+
+                        if ((Q < SetQ[0] || Q > SetQ[1]) && (Qnew >= SetQ[0] && Qnew <= SetQ[1]))
+                        {
+                            Xrl.Add(x);
+                        }
+
+                        if ((Q >= SetQ[0] && Q <= SetQ[1]) && (Qnew < SetQ[0] || Qnew > SetQ[1]))
+                        {
+                            Xrr.Add(x);
+                        }
+                        Q = Qnew;
+                    }
+                    if (Q >= SetQ[0] && Q <= SetQ[1])
+                    {
+                        Xrr.Add(Xmax_e);
+                    }
+
+                    for (int i = 0; i < Xrl.Count; i++)
+                    {
+                        result.LinesList.Add(new HorizontalLine(Xrl[i], Xrr[i], j));
+                    }
+
                 }
             }
-
+            result.FindVertex();
             return result;
         }
     }

@@ -27,7 +27,8 @@ namespace graphics_editor_cgs
 
         public Figure(List<Point> vertexList/*, List<HorizontalLine> linesList*/) : this()
         {
-            VertexList = vertexList;
+            VertexList = vertexList.ConvertAll(item => new Point(item.X, item.Y));
+            //VertexList = vertexList;
             //LinesList = linesList;
             Pmin = new Point();
             Pmax = new Point();
