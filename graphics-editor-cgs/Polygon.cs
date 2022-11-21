@@ -33,16 +33,36 @@ namespace graphics_editor_cgs
 
         }
 
-        public void FindVertex()
+        // тестовый вариант - неотрефокторенный, но рабочий более менее
+        public void FindVertex2()
         {
             List<Point> temp = new List<Point>();
             Point prevP = new Point(LinesList[0].xl, LinesList[0].y);
             Point currentP = new Point(LinesList[0].xl, LinesList[0].y);
             int prevDX = currentP.X - prevP.X;
             int currentDX = prevDX;
+
             for (int i = 0; i < LinesList.Count; i++)
             {
                 currentP = new Point(LinesList[i].xl, LinesList[i].y);
+                currentDX = currentP.X - prevP.X;
+
+                if (currentDX != prevDX)
+                {
+                    temp.Add(new Point(prevP.X, prevP.Y));
+                }
+                prevP = new Point(currentP.X, currentP.Y);
+                prevDX = currentDX;
+            }
+
+            prevP = new Point(LinesList[0].xr, LinesList[0].y);
+            currentP = new Point(LinesList[0].xr, LinesList[0].y);
+            prevDX = currentP.X - prevP.X;
+            currentDX = prevDX;
+
+            for (int i = 0; i < LinesList.Count; i++)
+            {
+                currentP = new Point(LinesList[i].xr, LinesList[i].y);
                 currentDX = currentP.X - prevP.X;
                 if (currentDX != prevDX)
                 {
@@ -51,7 +71,33 @@ namespace graphics_editor_cgs
                 prevP = new Point(currentP.X, currentP.Y);
                 prevDX = currentDX;
             }
+
             VertexList = temp;
+        }
+
+        public void FindVertex()
+        {
+            HorizontalLine prevLine = new HorizontalLine(LinesList[0]);
+            int prevDX_l = prevLine.xl - LinesList[0].xl;
+            int prevDX_r = prevLine.xr - LinesList[0].xr;
+            int currentDX_l;
+            int currentDX_r;
+
+            foreach (HorizontalLine line in LinesList)
+            {
+                currentDX_l = line.xl - prevLine.xl;
+                if (currentDX_l != prevDX_l)
+                    VertexList.Add(new Point(prevLine.xl, prevLine.y));
+
+                currentDX_r = line.xr - prevLine.xr;
+                if (currentDX_r != prevDX_r)
+                    VertexList.Add(new Point(prevLine.xr, prevLine.y));
+
+                prevLine = new HorizontalLine(line);
+                prevDX_l = currentDX_l;
+                prevDX_r = currentDX_r;
+            }
+
         }
 
         // Выделение фигуры
