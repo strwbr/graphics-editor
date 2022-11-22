@@ -8,6 +8,7 @@ namespace graphics_editor_cgs
     public class Polygon : Figure
     {
         public List<HorizontalLine> LinesList { get; set; }
+        public List<Polygon> parents { get; set; }
         //public Point Pmin { get; set; }
         //public Point Pmax { get; set; }
 
@@ -18,7 +19,7 @@ namespace graphics_editor_cgs
             //Pmax = new Point();
         }
 
-        public Polygon(List<Point> VertexList, List<HorizontalLine> LinesList/*, Point Pmin, Point Pmax*/) : base(VertexList)
+        public Polygon(List<Point> VertexList, List<HorizontalLine> LinesList, Color color /*, Point Pmin, Point Pmax*/) : base(VertexList, color)
         {
             LinesList = LinesList.ConvertAll(item => new HorizontalLine(item));
             //this.Pmin = Pmin;
@@ -30,73 +31,6 @@ namespace graphics_editor_cgs
             LinesList = other.LinesList.ConvertAll(item => new HorizontalLine(item));
             //Pmin = new Point(other.Pmin.X, other.Pmin.Y);
             //Pmax = new Point(other.Pmax.X, other.Pmax.Y);
-
-        }
-
-        // тестовый вариант - неотрефокторенный, но рабочий более менее
-        public void FindVertex2()
-        {
-            List<Point> temp = new List<Point>();
-            Point prevP = new Point(LinesList[0].xl, LinesList[0].y);
-            Point currentP = new Point(LinesList[0].xl, LinesList[0].y);
-            int prevDX = currentP.X - prevP.X;
-            int currentDX = prevDX;
-
-            for (int i = 0; i < LinesList.Count; i++)
-            {
-                currentP = new Point(LinesList[i].xl, LinesList[i].y);
-                currentDX = currentP.X - prevP.X;
-
-                if (currentDX != prevDX)
-                {
-                    temp.Add(new Point(prevP.X, prevP.Y));
-                }
-                prevP = new Point(currentP.X, currentP.Y);
-                prevDX = currentDX;
-            }
-
-            prevP = new Point(LinesList[0].xr, LinesList[0].y);
-            currentP = new Point(LinesList[0].xr, LinesList[0].y);
-            prevDX = currentP.X - prevP.X;
-            currentDX = prevDX;
-
-            for (int i = 0; i < LinesList.Count; i++)
-            {
-                currentP = new Point(LinesList[i].xr, LinesList[i].y);
-                currentDX = currentP.X - prevP.X;
-                if (currentDX != prevDX)
-                {
-                    temp.Add(new Point(prevP.X, prevP.Y));
-                }
-                prevP = new Point(currentP.X, currentP.Y);
-                prevDX = currentDX;
-            }
-
-            VertexList = temp;
-        }
-
-        public void FindVertex()
-        {
-            HorizontalLine prevLine = new HorizontalLine(LinesList[0]);
-            int prevDX_l = prevLine.xl - LinesList[0].xl;
-            int prevDX_r = prevLine.xr - LinesList[0].xr;
-            int currentDX_l;
-            int currentDX_r;
-
-            foreach (HorizontalLine line in LinesList)
-            {
-                currentDX_l = line.xl - prevLine.xl;
-                if (currentDX_l != prevDX_l)
-                    VertexList.Add(new Point(prevLine.xl, prevLine.y));
-
-                currentDX_r = line.xr - prevLine.xr;
-                if (currentDX_r != prevDX_r)
-                    VertexList.Add(new Point(prevLine.xr, prevLine.y));
-
-                prevLine = new HorizontalLine(line);
-                prevDX_l = currentDX_l;
-                prevDX_r = currentDX_r;
-            }
 
         }
 

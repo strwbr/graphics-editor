@@ -46,10 +46,39 @@ namespace graphics_editor_cgs
             SetQ = setQ;
         }
 
+        private int MinY(List<HorizontalLine> lines)
+        {
+            int min = lines[0].y;
+            for(int i =0; i < lines.Count; i++)
+            {
+                if (lines[i].y < min)
+                    min = lines[i].y;
+            }
+            return min;
+        }
+
+        private int MaxY(List<HorizontalLine> lines)
+        {
+            int max = lines[0].y;
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (lines[i].y > max)
+                    max = lines[i].y;
+            }
+            return max;
+        }
+
         public Polygon MakeTMO(int Xmin_e, int Xmax_e)
         {
             Polygon result = new Polygon();
             List<Border> M = new List<Border>();
+
+            //int Ymin_1 = MinY(Polygon_1.LinesList);
+            //int Ymin_2 = MinY(Polygon_2.LinesList);
+            //int Ymax_1 = MaxY(Polygon_1.LinesList);
+            //int Ymax_2 = MaxY(Polygon_2.LinesList);
+
+
             int Ymin_1 = Polygon_1.LinesList.Min(item => item.y);
             int Ymax_1 = Polygon_1.LinesList.Max(item => item.y);
             int Ymin_2 = Polygon_2.LinesList.Min(item => item.y);
@@ -142,7 +171,6 @@ namespace graphics_editor_cgs
 
                 }
             }
-            result.FindVertex();
             return result;
         }
     }

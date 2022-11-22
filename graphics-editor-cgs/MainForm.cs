@@ -5,7 +5,7 @@ using System;
 
 namespace graphics_editor_cgs
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         Graphics g;
         Bitmap myBitmap;
@@ -37,10 +37,10 @@ namespace graphics_editor_cgs
         private Pen CurrentPen => new Pen(CurrentColor);
 
         private TMO tmo = new TMO();
-        private int selectedFiguresCount = 0;
+        private int countSelectedFigures = 0;
 
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             myBitmap = new Bitmap(drawingPanel.Width, drawingPanel.Height);
@@ -150,6 +150,7 @@ namespace graphics_editor_cgs
         private void DrawingPanel_MouseDown(object sender, MouseEventArgs e)
         {
             mousePoint = new Point(e.X, e.Y);
+            // 0 - Добавление фигуры на сцену
             if (indexOperation == 0)
             {
                 Figure currentFigure;
@@ -168,7 +169,7 @@ namespace graphics_editor_cgs
                                     break;
                                 case 1:
                                     LineSegmentPoints.Add(mousePoint);
-                                    currentFigure = new LineSegment(LineSegmentPoints);
+                                    currentFigure = new LineSegment(LineSegmentPoints, CurrentColor);
                                     FigureList.Add(currentFigure);
                                     DrawLineSegment((LineSegment)currentFigure);
                                     countLineSegmentPoints = 0;
@@ -189,7 +190,7 @@ namespace graphics_editor_cgs
                         {
                             if (countBezierPoints > 1)
                             {
-                                currentFigure = Figures.Bezier(BezierPoints, countBezierPoints - 1);
+                                currentFigure = Figures.Bezier(BezierPoints, countBezierPoints - 1, CurrentColor);
                                 DrawBezier((BezierCurve)currentFigure);
                                 FigureList.Add(currentFigure);
                                 countBezierPoints = 0;
@@ -199,11 +200,11 @@ namespace graphics_editor_cgs
                         break;
 
                     case 2:
-                        currentFigure = Figures.Arrow1(e.Location);
+                        currentFigure = Figures.Arrow1(e.Location, CurrentColor);
                         FigureList.Add(currentFigure);
                         DrawPolygon((Polygon)currentFigure); break;
                     case 3:
-                        currentFigure = Figures.Arrow2(e.Location);
+                        currentFigure = Figures.Arrow2(e.Location, CurrentColor);
                         FigureList.Add(currentFigure);
                         DrawPolygon((Polygon)currentFigure); break;
                 }
@@ -233,39 +234,40 @@ namespace graphics_editor_cgs
             else if (indexOperation == 4)
             {
                 // Добавить проверку на тип выбранного элемента
-                switch (selectedFiguresCount)
+                switch (countSelectedFigures)
                 {
                     case 0:
                         int index = FindSelectedFigure(mousePoint);
                         DrawSelection(FigureList[index]);
                         tmo.Polygon_1 = (Polygon)FigureList[index];
                         FigureList.RemoveAt(index);
-                        selectedFiguresCount++;
+                        countSelectedFigures++;
                         break;
                     case 1:
                         index = FindSelectedFigure(mousePoint);
-                        DrawSelection(FigureList[index]);
-                        tmo.Polygon_2 = (Polygon)FigureList[index];
-                        FigureList.RemoveAt(index);
-                        if (SetQ[0] != -1)
-                        {
-                            tmo.SetQ = SetQ;
-                            Polygon newPolygon = tmo.MakeTMO(0, drawingPanel.Width - 1);
-                            newPolygon.GetBorders();
-                            FigureList.Add(newPolygon);
-                            UpdateDrawingPanel();
-                        }
                         
-                        selectedFiguresCount = 0;
+                            DrawSelection(FigureList[index]);
+                            tmo.Polygon_2 = (Polygon)FigureList[index];
+                            FigureList.RemoveAt(index);
+                            if (SetQ[0] != -1)
+                            {
+                                tmo.SetQ = SetQ;
+                                Polygon newPolygon = tmo.MakeTMO(0, drawingPanel.Width - 1);
+                                FigureList.Add(newPolygon);
+                                UpdateDrawingPanel();
+                            }
+
+                            countSelectedFigures = 0;
+                        
                         break;
                 }
             }
             drawingPanel.Image = myBitmap;
         }
 
-        private void DrawLineSegment(LineSegment currentFigure)
+        private void DrawLineSegment(LineSegment lineSegment)
         {
-            g.DrawLine(CurrentPen, currentFigure.VertexList[0], currentFigure.VertexList[1]);
+            g.DrawLine(new Pen(lineSegment.Color), lineSegment.VertexList[0], lineSegment.VertexList[1]);
         }
 
         private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
@@ -351,7 +353,7 @@ namespace graphics_editor_cgs
                 int xr = polygon.LinesList[i].xr;
                 int y = polygon.LinesList[i].y;
 
-                g.DrawLine(CurrentPen, new Point(xl, y), new Point(xr, y));
+                g.DrawLine(new Pen(polygon.Color), new Point(xl, y), new Point(xr, y));
             }
         }
 
@@ -360,7 +362,7 @@ namespace graphics_editor_cgs
         {
             for (int i = 0; i < bezierCurve.VertexList.Count - 1; i++)
             {
-                g.DrawLine(CurrentPen, bezierCurve.VertexList[i], bezierCurve.VertexList[i + 1]);
+                g.DrawLine(new Pen(bezierCurve.Color), bezierCurve.VertexList[i], bezierCurve.VertexList[i + 1]);
             }
 
         }
@@ -379,7 +381,10 @@ namespace graphics_editor_cgs
             BezierPoints.Clear();
             countBezierPoints = 0;
             countLineSegmentPoints = 0;
+            countSelectedFigures = 0;
+
             LineSegmentPoints.Clear();
+            
             drawingPanel.Image = myBitmap;
         }
 

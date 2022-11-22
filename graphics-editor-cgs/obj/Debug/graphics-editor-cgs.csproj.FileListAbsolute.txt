@@ -2,9 +2,9 @@ C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\bin\Debug\graphi
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\bin\Debug\graphics-editor-cgs.exe
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\bin\Debug\graphics-editor-cgs.pdb
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics-editor-cgs.csproj.AssemblyReference.cache
-C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics_editor_cgs.Form1.resources
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics_editor_cgs.Properties.Resources.resources
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics-editor-cgs.csproj.GenerateResource.cache
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics-editor-cgs.csproj.CoreCompileInputs.cache
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics-editor-cgs.exe
 C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics-editor-cgs.pdb
+C:\Users\boris\source\repos\graphics-editor\graphics-editor-cgs\obj\Debug\graphics_editor_cgs.MainForm.resources

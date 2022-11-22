@@ -57,9 +57,10 @@ namespace graphics_editor_cgs
         //    return arrow;
         //} 
 
-        public static Polygon Arrow1(Point Pcenter)
+        public static Polygon Arrow1(Point Pcenter, Color color)
         {
             Polygon arrow = new Polygon();
+            arrow.Color = color;
             const int w = 90;
             const int h = 60;
 
@@ -79,9 +80,11 @@ namespace graphics_editor_cgs
             return arrow;
         }
 
-        public static Polygon Arrow2(Point Pcenter)
+        public static Polygon Arrow2(Point Pcenter, Color color)
         {
             Polygon arrow = new Polygon();
+            arrow.Color = color;
+
             const int w = 120;
             const int h = 60;
 
@@ -104,9 +107,10 @@ namespace graphics_editor_cgs
             return arrow;
         }
 
-        public static BezierCurve Bezier(List<Point> userPoints, int n)
+        public static BezierCurve Bezier(List<Point> userPoints, int n, Color color)
         {
             BezierCurve curve = new BezierCurve();
+            curve.Color = color;
 
             double nFact = Factorial(n);
 

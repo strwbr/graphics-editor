@@ -25,13 +25,14 @@ namespace graphics_editor_cgs
             Color = new Color();
         }
 
-        public Figure(List<Point> vertexList/*, List<HorizontalLine> linesList*/) : this()
+        public Figure(List<Point> vertexList, Color color/*, List<HorizontalLine> linesList*/) : this()
         {
             VertexList = vertexList.ConvertAll(item => new Point(item.X, item.Y));
             //VertexList = vertexList;
             //LinesList = linesList;
             Pmin = new Point();
             Pmax = new Point();
+            Color = color; //мб вылезет неглубокое копирование
         }
 
         // конструктор копии
@@ -41,6 +42,7 @@ namespace graphics_editor_cgs
             //LinesList = other.LinesList.ConvertAll(item => new HorizontalLine(item));
             Pmin = new Point(other.Pmin.X, other.Pmin.Y);
             Pmax = new Point(other.Pmax.X, other.Pmax.Y);
+            Color = other.Color;
             //for (int i = 0; i < other.VertexList.Count; i++)
             //{
             //    VertexList.Add(other.VertexList[i]);
