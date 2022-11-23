@@ -31,6 +31,7 @@ namespace graphics_editor_cgs
         private int selectedFigureIndex = -1;
 
         private bool isSelectedFigure = false;
+        private bool isMove = false;
         private bool isResizeMode = false;
 
         private Color CurrentColor => currentColorPanel.BackColor;
@@ -225,10 +226,15 @@ namespace graphics_editor_cgs
                     selectedFigure = FigureList[selectedFigureIndex];
                     DrawSelection(selectedFigure);
                     isSelectedFigure = true;
+                    isMove = true;
                     //if (CheckResize(e.X, e.Y)) isResizeMode = true;
                     //else isResizeMode = false;
                 }
-                else isSelectedFigure = false;
+                else
+                {
+                    isSelectedFigure = false;
+                    isMove = false;
+                }
             }
             // ТМО
             else if (indexOperation == 4)
@@ -238,31 +244,48 @@ namespace graphics_editor_cgs
                 {
                     case 0:
                         int index = FindSelectedFigure(mousePoint);
-                        DrawSelection(FigureList[index]);
-                        tmo.Polygon_1 = (Polygon)FigureList[index];
-                        FigureList.RemoveAt(index);
-                        countSelectedFigures++;
+                        if (index != -1)
+                        {
+                            DrawSelection(FigureList[index]);
+                            tmo.Polygon_1 = (Polygon)FigureList[index];
+                            FigureList.RemoveAt(index);
+                            countSelectedFigures++;
+                        }
                         break;
                     case 1:
                         index = FindSelectedFigure(mousePoint);
-
-                        DrawSelection(FigureList[index]);
-                        tmo.Polygon_2 = (Polygon)FigureList[index];
-                        FigureList.RemoveAt(index);
-                        if (SetQ[0] != -1)
+                        if (index != -1)
                         {
-                            tmo.SetQ = SetQ;
-                            Polygon newPolygon = tmo.MakeTMO(0, drawingPanel.Width - 1);
-                            newPolygon.Color = CurrentColor;
-                            FigureList.Add(newPolygon);
-                            UpdateDrawingPanel();
+                            DrawSelection(FigureList[index]);
+                            tmo.Polygon_2 = (Polygon)FigureList[index];
+                            FigureList.RemoveAt(index);
+                            if (SetQ[0] != -1)
+                            {
+                                tmo.SetQ = SetQ;
+                                Polygon newPolygon = tmo.MakeTMO(0, drawingPanel.Width - 1);
+                                newPolygon.Color = CurrentColor;
+                                FigureList.Add(newPolygon);
+                                UpdateDrawingPanel();
+                            }
+                            countSelectedFigures = 0;
                         }
-
-                        countSelectedFigures = 0;
 
                         break;
                 }
             }
+            drawingPanel.Image = myBitmap;
+        }
+
+        private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMove)
+            {
+                FigureList[selectedFigureIndex].Move(e.X - mousePoint.X);
+                if (FigureList[selectedFigureIndex].GetType() == typeof(Polygon))
+                    ((Polygon)FigureList[selectedFigureIndex]).Fill();
+                UpdateDrawingPanel();
+            }
+            mousePoint = e.Location;
             drawingPanel.Image = myBitmap;
         }
 
@@ -372,6 +395,9 @@ namespace graphics_editor_cgs
 
         private void WhiteBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = whiteBtn.BackColor;
 
-
+        private void drawingPanel_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMove = false;
+        }
     }
 }

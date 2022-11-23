@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -62,15 +63,16 @@ namespace graphics_editor_cgs
         }
 
         // Перемещение
-        public void Move(int dx)
+        public void Move(float dx)
         {
             PointF p = new PointF();
             for(int i = 0; i < VertexList.Count; i++)
             {
                 p.X = VertexList[i].X + dx;
                 p.Y = VertexList[i].Y;
-                VertexList[i] = p;
+                VertexList[i] = new PointF(p.X, p.Y);
             }
+            
             GetBorders();
         }
         // Масштабирование
@@ -84,8 +86,6 @@ namespace graphics_editor_cgs
 
         }
 
-        
-
         // Центр фигуры
         public PointF Center()
         {
@@ -93,63 +93,6 @@ namespace graphics_editor_cgs
             center.X =  (Pmax.X + Pmin.X) / 2;
             center.Y = (Pmax.Y + Pmin.Y) / 2;
             return center;
-        }
-
-
-        public static List<PointF> Bezier(List<PointF> points, int n)
-        {
-            List<PointF> bezierPoints = new List<PointF>();
-
-            double nFactorial = Factorial(n);
-            const double dt = 0.001;
-            double t = dt;
-
-            PointF Ppred = new PointF(points[0].X, points[0].Y);
-            PointF Pt = new PointF();
-
-            while (t < 1 + dt / 2)
-            {
-                double xt = 0;
-                double yt = 0;
-                int i = 0;
-                while (i <= n)
-                {
-                    double J = Math.Pow(t, i) * Math.Pow((1 - t), n - i) * nFactorial / (Factorial(i) * Factorial(n - i));
-                    xt += points[i].X * J;
-                    yt += points[i].Y * J;
-                    i++;
-                }
-                Pt.X = (int)Math.Round(xt);
-                Pt.Y = (int)Math.Round(yt);
-
-                // ----
-                bezierPoints.Add(Pt);
-
-                t += dt;
-                // ???
-                Ppred.X = (int)Math.Round(xt); // = Pt.X
-                Ppred.Y = (int)Math.Round(yt); // = Pt.Y
-
-            }
-            return bezierPoints;
-        }
-
-        public static Graphics DrawBezier(Graphics g, Pen color, List<PointF> bezierPoints)
-        {
-            Graphics temp = g;
-            for (int i = 0; i < bezierPoints.Count - 1; i += 2)
-            {
-                temp.DrawLine(color, bezierPoints[i], bezierPoints[i + 1]);
-            }
-            return temp;
-        }
-
-        private static double Factorial(int n)
-        {
-            double x = 1;
-            for (int i = 1; i <= n; i++)
-                x *= i;
-            return x;
         }
     }
 }

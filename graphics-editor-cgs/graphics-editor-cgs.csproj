@@ -49,6 +49,7 @@
     <Compile Include="BezierCurve.cs" />
     <Compile Include="Figure.cs" />
     <Compile Include="Figures.cs" />
+    <Compile Include="IFigure.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

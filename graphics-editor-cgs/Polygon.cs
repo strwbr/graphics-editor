@@ -9,8 +9,6 @@ namespace graphics_editor_cgs
     {
         public List<HorizontalLine> LinesList { get; set; }
         public List<Polygon> parents { get; set; }
-        //public Point Pmin { get; set; }
-        //public Point Pmax { get; set; }
 
         public Polygon() : base()
         {
@@ -22,15 +20,11 @@ namespace graphics_editor_cgs
         public Polygon(List<PointF> VertexList, List<HorizontalLine> LinesList, Color color /*, Point Pmin, Point Pmax*/) : base(VertexList, color)
         {
             LinesList = LinesList.ConvertAll(item => new HorizontalLine(item));
-            //this.Pmin = Pmin;
-            //this.Pmax = Pmax;
         }
 
         public Polygon(Polygon other) : base(other)
         {
             LinesList = other.LinesList.ConvertAll(item => new HorizontalLine(item));
-            //Pmin = new Point(other.Pmin.X, other.Pmin.Y);
-            //Pmax = new Point(other.Pmax.X, other.Pmax.Y);
 
         }
 
@@ -62,6 +56,7 @@ namespace graphics_editor_cgs
         // Закрашивание фигуры и ее вывод? - разбить на 2 метода
         public void Fill()
         {
+            LinesList.Clear();
             float Ymin = VertexList.Min(item => item.Y);
             float Ymax = VertexList.Max(item => item.Y);
 
