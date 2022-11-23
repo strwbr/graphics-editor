@@ -5,27 +5,34 @@ using System.Linq;
 
 namespace graphics_editor_cgs
 {
-    public class Polygon : Figure
+    public class Polygon : IFigure
     {
+        // из интерфейса
+        public List<PointF> VertexList { get; set; }
+        public Color Color { get; set; }
+
         public List<HorizontalLine> LinesList { get; set; }
-        public List<Polygon> parents { get; set; }
 
-        public Polygon() : base()
+        public Polygon()
         {
+            VertexList = new List<PointF>();
+            Color = Color.Black; // по умолчанию черный
+
             LinesList = new List<HorizontalLine>();
-            //Pmin = new Point();
-            //Pmax = new Point();
         }
 
-        public Polygon(List<PointF> VertexList, List<HorizontalLine> LinesList, Color color /*, Point Pmin, Point Pmax*/) : base(VertexList, color)
+        public Polygon(List<PointF> vertexList, List<HorizontalLine> linesList, Color color) : this()
         {
-            LinesList = LinesList.ConvertAll(item => new HorizontalLine(item));
+            vertexList = vertexList.ConvertAll(item => new PointF(item.X, item.Y));
+            Color = color;
+            linesList = linesList.ConvertAll(item => new HorizontalLine(item));
         }
 
-        public Polygon(Polygon other) : base(other)
+        public Polygon(Polygon other)
         {
+            VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
+            Color = other.Color;
             LinesList = other.LinesList.ConvertAll(item => new HorizontalLine(item));
-
         }
 
         // Выделение фигуры
@@ -53,12 +60,12 @@ namespace graphics_editor_cgs
             return isSelect;
         }
 
-        // Закрашивание фигуры и ее вывод? - разбить на 2 метода
+        // Закрашивание фигуры
         public void Fill()
         {
             LinesList.Clear();
-            float Ymin = VertexList.Min(item => item.Y);
-            float Ymax = VertexList.Max(item => item.Y);
+            float Ymin = Min().Y;
+            float Ymax = Max().Y;
 
             List<int> Xb = new List<int>();
             for (float j = Ymin; j <= Ymax; j++)
@@ -87,6 +94,53 @@ namespace graphics_editor_cgs
                     LinesList.Add(new HorizontalLine(Xb[i], Xb[i + 1], j));
                 }
             }
+        }
+
+        public PointF Min()
+        {
+            PointF p = new PointF();
+            p.X = VertexList.Min(item => item.X);
+            p.Y = VertexList.Min(item => item.Y);
+            return p;
+        }
+
+        public PointF Max()
+        {
+            PointF p = new PointF();
+            p.X = VertexList.Max(item => item.X);
+            p.Y = VertexList.Max(item => item.Y);
+            return p;
+        }
+
+        public void Move(float dx, float dy)
+        {
+            PointF p = new PointF();
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                p.X = VertexList[i].X + dx;
+                p.Y = VertexList[i].Y + dy;
+                VertexList[i] = new PointF(p.X, p.Y);
+            }
+        }
+
+        public void Zoom()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Rotate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public PointF Center()
+        {
+            PointF center = new PointF();
+            PointF Pmin = Min();
+            PointF Pmax = Max();
+            center.X = (Pmax.X + Pmin.X) / 2;
+            center.Y = (Pmax.Y + Pmin.Y) / 2;
+            return center;
         }
     }
 }

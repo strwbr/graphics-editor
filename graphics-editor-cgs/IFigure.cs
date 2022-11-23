@@ -10,16 +10,14 @@ namespace graphics_editor_cgs
     public interface IFigure
     {
         List<PointF> VertexList { get; set; }
-        //public List<HorizontalLine> LinesList { get; set; }
-        PointF Pmin { get; set; }
-        PointF Pmax { get; set; }
         Color Color { get; set; }
 
-        void GetBorders();
-        void Select();
-        void Move();
+        bool Select(PointF p);
+        void Move(float dx, float dy);
         void Zoom();
         void Rotate();
         PointF Center();
+        PointF Min();
+        PointF Max();
     }
 }

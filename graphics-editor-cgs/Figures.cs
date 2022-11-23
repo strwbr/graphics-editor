@@ -76,7 +76,6 @@ namespace graphics_editor_cgs
             PointF p7 = new PointF(xc - w / 2, yc + h / 4); arrow.VertexList.Add(p7);
 
             arrow.Fill();
-            arrow.GetBorders();
             return arrow;
         }
 
@@ -103,7 +102,6 @@ namespace graphics_editor_cgs
             PointF p10 = new PointF(xc - w / 6, yc + h / 2); arrow.VertexList.Add(p10);
 
             arrow.Fill();
-            arrow.GetBorders();
             return arrow;
         }
 

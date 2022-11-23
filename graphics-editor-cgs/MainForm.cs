@@ -7,17 +7,16 @@ namespace graphics_editor_cgs
 {
     public partial class MainForm : Form
     {
-        Graphics g;
-        Bitmap myBitmap;
-        Figure figure = new Figure();
-        List<PointF> BezierPoints = new List<PointF>();
-        int countBezierPoints = 0;
-        List<PointF> LineSegmentPoints = new List<PointF>();
-        int countLineSegmentPoints = 0;
+        private Graphics g;
+        private Bitmap myBitmap;
+        private List<PointF> BezierPoints = new List<PointF>();
+        private int countBezierPoints = 0;
+        private List<PointF> LineSegmentPoints = new List<PointF>();
+        private int countLineSegmentPoints = 0;
 
-        List<Figure> FigureList = new List<Figure>();
-        List<Figure> SelectedFiguresList = new List<Figure>();
-        Figure selectedFigure = null;
+        private List<IFigure> FigureList = new List<IFigure>();
+        private List<IFigure> SelectedFiguresList = new List<IFigure>();
+        private IFigure selectedFigure = null;
 
         private int[] SetQ = new int[] { -1, -1 };
 
@@ -32,7 +31,7 @@ namespace graphics_editor_cgs
 
         private bool isSelectedFigure = false;
         private bool isMove = false;
-        private bool isResizeMode = false;
+        //private bool isResizeMode = false;
 
         private Color CurrentColor => currentColorPanel.BackColor;
         private Pen CurrentPen => new Pen(CurrentColor);
@@ -137,7 +136,7 @@ namespace graphics_editor_cgs
         private void UpdateDrawingPanel()
         {
             g.Clear(drawingPanel.BackColor);
-            foreach (Figure f in FigureList)
+            foreach (IFigure f in FigureList)
             {
                 if (f.GetType() == typeof(Polygon))
                     DrawPolygon((Polygon)f);
@@ -154,7 +153,7 @@ namespace graphics_editor_cgs
             // 0 - Добавление фигуры на сцену
             if (indexOperation == 0)
             {
-                Figure currentFigure;
+                IFigure currentFigure;
                 switch (indexFigure)
                 {
                     case 0:
@@ -269,7 +268,6 @@ namespace graphics_editor_cgs
                             }
                             countSelectedFigures = 0;
                         }
-
                         break;
                 }
             }
@@ -280,7 +278,7 @@ namespace graphics_editor_cgs
         {
             if (isMove)
             {
-                FigureList[selectedFigureIndex].Move(e.X - mousePoint.X);
+                FigureList[selectedFigureIndex].Move(e.X - mousePoint.X, e.Y - mousePoint.Y);
                 if (FigureList[selectedFigureIndex].GetType() == typeof(Polygon))
                     ((Polygon)FigureList[selectedFigureIndex]).Fill();
                 UpdateDrawingPanel();
@@ -297,8 +295,8 @@ namespace graphics_editor_cgs
         private bool CheckResize(float x, float y)
         {
             //Figure selectedFigure = FigureList[selectedFigureIndex];
-            float Xmin = selectedFigure.Pmin.X;
-            float Xmax = selectedFigure.Pmax.X;
+            float Xmin = selectedFigure.Min().X;
+            float Xmax = selectedFigure.Min().X;
             float Yc = selectedFigure.Center().Y;
             return
                 ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
@@ -321,12 +319,12 @@ namespace graphics_editor_cgs
             return index;
         }
 
-        private void DrawSelection(Figure selectedFigure)
+        private void DrawSelection(IFigure selectedFigure)
         {
-            int Xmin = (int)selectedFigure.Pmin.X,
-                Ymin = (int)selectedFigure.Pmin.Y;
-            int Xmax = (int)selectedFigure.Pmax.X,
-                Ymax = (int)selectedFigure.Pmax.Y;
+            int Xmin = (int)selectedFigure.Min().X,
+                Ymin = (int)selectedFigure.Min().Y;
+            int Xmax = (int)selectedFigure.Max().X,
+                Ymax = (int)selectedFigure.Max().Y;
 
             Pen pen = new Pen(Color.Gray);
             g.DrawRectangle(pen, new Rectangle(Xmax, (int)(selectedFigure.Center().Y - 3), 6, 6));
