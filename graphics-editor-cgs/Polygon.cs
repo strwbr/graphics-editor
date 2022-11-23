@@ -135,12 +135,9 @@ namespace graphics_editor_cgs
 
         public PointF Center()
         {
-            PointF center = new PointF();
             PointF Pmin = Min();
             PointF Pmax = Max();
-            center.X = (Pmax.X + Pmin.X) / 2;
-            center.Y = (Pmax.Y + Pmin.Y) / 2;
-            return center;
+            return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
         }
     }
 }

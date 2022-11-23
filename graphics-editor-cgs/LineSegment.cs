@@ -29,7 +29,14 @@ namespace graphics_editor_cgs
 
         public bool Select(PointF p)
         {
-            throw new NotImplementedException();
+            PointF p1 = VertexList[0];
+            PointF p2 = VertexList[1];
+
+            float distance1 = (float)Math.Sqrt(Math.Pow(p1.X - p.X, 2) + Math.Pow(p1.Y - p.Y, 2));
+            float distance2 = (float)Math.Sqrt(Math.Pow(p2.X - p.X, 2) + Math.Pow(p2.Y - p.Y, 2));
+            float distance3 = (float)Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2));
+
+            return distance1 + distance2 - distance3 < 1f;
         }
 
         public void Move(float dx, float dy)

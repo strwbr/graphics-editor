@@ -308,12 +308,9 @@ namespace graphics_editor_cgs
             int index = -1;
             for (int i = 0; i < FigureList.Count; i++)
             {
-                if (FigureList[i].GetType() == typeof(Polygon))
+                if (FigureList[i].Select(mouseClickPoint))
                 {
-                    if (((Polygon)FigureList[i]).Select(mouseClickPoint))
-                    {
-                        index = i;
-                    }
+                    index = i; 
                 }
             }
             return index;
