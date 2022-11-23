@@ -10,9 +10,9 @@ namespace graphics_editor_cgs
         Graphics g;
         Bitmap myBitmap;
         Figure figure = new Figure();
-        List<Point> BezierPoints = new List<Point>();
+        List<PointF> BezierPoints = new List<PointF>();
         int countBezierPoints = 0;
-        List<Point> LineSegmentPoints = new List<Point>();
+        List<PointF> LineSegmentPoints = new List<PointF>();
         int countLineSegmentPoints = 0;
 
         List<Figure> FigureList = new List<Figure>();
@@ -25,7 +25,7 @@ namespace graphics_editor_cgs
         private int indexFigure = 0;
         private int indexOperation = 0;
 
-        private Point mousePoint = new Point();
+        private PointF mousePoint = new Point();
 
         private int prevSelectedFigureIndex = -1;
         private int selectedFigureIndex = -1;
@@ -149,7 +149,7 @@ namespace graphics_editor_cgs
 
         private void DrawingPanel_MouseDown(object sender, MouseEventArgs e)
         {
-            mousePoint = new Point(e.X, e.Y);
+            mousePoint = new PointF(e.X, e.Y);
             // 0 - Добавление фигуры на сцену
             if (indexOperation == 0)
             {
@@ -245,20 +245,21 @@ namespace graphics_editor_cgs
                         break;
                     case 1:
                         index = FindSelectedFigure(mousePoint);
-                        
-                            DrawSelection(FigureList[index]);
-                            tmo.Polygon_2 = (Polygon)FigureList[index];
-                            FigureList.RemoveAt(index);
-                            if (SetQ[0] != -1)
-                            {
-                                tmo.SetQ = SetQ;
-                                Polygon newPolygon = tmo.MakeTMO(0, drawingPanel.Width - 1);
-                                FigureList.Add(newPolygon);
-                                UpdateDrawingPanel();
-                            }
 
-                            countSelectedFigures = 0;
-                        
+                        DrawSelection(FigureList[index]);
+                        tmo.Polygon_2 = (Polygon)FigureList[index];
+                        FigureList.RemoveAt(index);
+                        if (SetQ[0] != -1)
+                        {
+                            tmo.SetQ = SetQ;
+                            Polygon newPolygon = tmo.MakeTMO(0, drawingPanel.Width - 1);
+                            newPolygon.Color = CurrentColor;
+                            FigureList.Add(newPolygon);
+                            UpdateDrawingPanel();
+                        }
+
+                        countSelectedFigures = 0;
+
                         break;
                 }
             }
@@ -270,59 +271,25 @@ namespace graphics_editor_cgs
             g.DrawLine(new Pen(lineSegment.Color), lineSegment.VertexList[0], lineSegment.VertexList[1]);
         }
 
-        private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
-        {
-            //int x = e.Location.X;
-            //int y = e.Location.Y;
-
-            //if (indexOperation == 1)
-            //{
-            //    if (selectedFigureIndex != -1)
-            //    {
-            //        selectedFigure.Move(x - mousePoint.X);
-            //    }
-
-            //    ////Cursor.Current = Cursors.SizeWE;
-            //    //if (isResizeMode)
-            //    //{
-            //    //    selectedFigure.Zoom();
-            //    //}
-            //    UpdateDrawingPanel();
-            //    // отрисовавать фигуру заново!!!!!!!!!!!!
-            //    DrawPolygon((Polygon)selectedFigure); 
-            //    //DrawSelection(selectedFigure);
-            //    drawingPanel.Image = myBitmap;
-
-            //}
-
-            //Cursor.Current = Cursors.Default;
-            //mousePoint = new Point(x, y);
-        }
-
-        private void drawingPanel_MouseUp(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private bool CheckResize(int x, int y)
+        private bool CheckResize(float x, float y)
         {
             //Figure selectedFigure = FigureList[selectedFigureIndex];
-            int Xmin = selectedFigure.Pmin.X;
-            int Xmax = selectedFigure.Pmax.X;
-            int Yc = selectedFigure.Center().Y;
+            float Xmin = selectedFigure.Pmin.X;
+            float Xmax = selectedFigure.Pmax.X;
+            float Yc = selectedFigure.Center().Y;
             return
                 ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
                 && (y >= Yc - 7 && y <= Yc + 7);
         }
 
-        private int FindSelectedFigure(Point mouseClickPoint)
+        private int FindSelectedFigure(PointF mouseClickPoint)
         {
             int index = -1;
             for (int i = 0; i < FigureList.Count; i++)
             {
                 if (FigureList[i].GetType() == typeof(Polygon))
                 {
-                    if (((Polygon)(FigureList[i])).Select(mouseClickPoint))
+                    if (((Polygon)FigureList[i]).Select(mouseClickPoint))
                     {
                         index = i;
                     }
@@ -333,14 +300,14 @@ namespace graphics_editor_cgs
 
         private void DrawSelection(Figure selectedFigure)
         {
-            int Xmin = selectedFigure.Pmin.X,
-                Ymin = selectedFigure.Pmin.Y;
-            int Xmax = selectedFigure.Pmax.X,
-                Ymax = selectedFigure.Pmax.Y;
+            int Xmin = (int)selectedFigure.Pmin.X,
+                Ymin = (int)selectedFigure.Pmin.Y;
+            int Xmax = (int)selectedFigure.Pmax.X,
+                Ymax = (int)selectedFigure.Pmax.Y;
 
             Pen pen = new Pen(Color.Gray);
-            g.DrawRectangle(pen, new Rectangle(Xmax, selectedFigure.Center().Y - 3, 6, 6));
-            g.DrawRectangle(pen, new Rectangle(Xmin - 6, selectedFigure.Center().Y - 3, 6, 6));
+            g.DrawRectangle(pen, new Rectangle(Xmax, (int)(selectedFigure.Center().Y - 3), 6, 6));
+            g.DrawRectangle(pen, new Rectangle(Xmin - 6, (int)(selectedFigure.Center().Y - 3), 6, 6));
             pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash; // штрихованная линия
             g.DrawRectangle(pen, new Rectangle(Xmin, Ymin, Xmax - Xmin, Ymax - Ymin));
         }
@@ -349,11 +316,11 @@ namespace graphics_editor_cgs
         {
             for (int i = 0; i < polygon.LinesList.Count - 1; i++)
             {
-                int xl = polygon.LinesList[i].xl;
-                int xr = polygon.LinesList[i].xr;
-                int y = polygon.LinesList[i].y;
+                float xl = polygon.LinesList[i].xl;
+                float xr = polygon.LinesList[i].xr;
+                float y = polygon.LinesList[i].y;
 
-                g.DrawLine(new Pen(polygon.Color), new Point(xl, y), new Point(xr, y));
+                g.DrawLine(new Pen(polygon.Color), new PointF(xl, y), new PointF(xr, y));
             }
         }
 
@@ -367,7 +334,7 @@ namespace graphics_editor_cgs
 
         }
 
-        private void DrawCenter(Point center)
+        private void DrawCenter(PointF center)
         {
             Pen pen = new Pen(Color.Red);
             g.DrawLine(pen, center.X - 2, center.Y - 2, center.X + 2, center.Y + 2);
@@ -384,7 +351,7 @@ namespace graphics_editor_cgs
             countSelectedFigures = 0;
 
             LineSegmentPoints.Clear();
-            
+
             drawingPanel.Image = myBitmap;
         }
 

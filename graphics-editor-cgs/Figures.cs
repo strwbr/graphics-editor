@@ -57,30 +57,30 @@ namespace graphics_editor_cgs
         //    return arrow;
         //} 
 
-        public static Polygon Arrow1(Point Pcenter, Color color)
+        public static Polygon Arrow1(PointF Pcenter, Color color)
         {
             Polygon arrow = new Polygon();
             arrow.Color = color;
             const int w = 90;
             const int h = 60;
 
-            int xc = Pcenter.X;
-            int yc = Pcenter.Y;
+            float xc = Pcenter.X;
+            float yc = Pcenter.Y;
 
-            Point p1 = new Point(xc - w / 2, yc - h / 4); arrow.VertexList.Add(p1);
-            Point p2 = new Point(xc + w / 6, yc - h / 4); arrow.VertexList.Add(p2);
-            Point p3 = new Point(xc + w / 6, yc - h / 2); arrow.VertexList.Add(p3);
-            Point p4 = new Point(xc + w / 2, yc);         arrow.VertexList.Add(p4);
-            Point p5 = new Point(xc + w / 6, yc + h / 2); arrow.VertexList.Add(p5);
-            Point p6 = new Point(xc + w / 6, yc + h / 4); arrow.VertexList.Add(p6);
-            Point p7 = new Point(xc - w / 2, yc + h / 4); arrow.VertexList.Add(p7);
+            PointF p1 = new PointF(xc - w / 2, yc - h / 4); arrow.VertexList.Add(p1);
+            PointF p2 = new PointF(xc + w / 6, yc - h / 4); arrow.VertexList.Add(p2);
+            PointF p3 = new PointF(xc + w / 6, yc - h / 2); arrow.VertexList.Add(p3);
+            PointF p4 = new PointF(xc + w / 2, yc);         arrow.VertexList.Add(p4);
+            PointF p5 = new PointF(xc + w / 6, yc + h / 2); arrow.VertexList.Add(p5);
+            PointF p6 = new PointF(xc + w / 6, yc + h / 4); arrow.VertexList.Add(p6);
+            PointF p7 = new PointF(xc - w / 2, yc + h / 4); arrow.VertexList.Add(p7);
 
             arrow.Fill();
             arrow.GetBorders();
             return arrow;
         }
 
-        public static Polygon Arrow2(Point Pcenter, Color color)
+        public static Polygon Arrow2(PointF Pcenter, Color color)
         {
             Polygon arrow = new Polygon();
             arrow.Color = color;
@@ -88,26 +88,26 @@ namespace graphics_editor_cgs
             const int w = 120;
             const int h = 60;
 
-            int xc = Pcenter.X;
-            int yc = Pcenter.Y;
+            float xc = Pcenter.X;
+            float yc = Pcenter.Y;
 
-            Point p1 = new Point(xc - w / 2, yc);         arrow.VertexList.Add(p1);
-            Point p2 = new Point(xc - w / 6, yc - h / 2); arrow.VertexList.Add(p2);
-            Point p3 = new Point(xc - w / 6, yc - h / 4); arrow.VertexList.Add(p3);
-            Point p4 = new Point(xc + w / 6, yc - h / 4); arrow.VertexList.Add(p4);
-            Point p5 = new Point(xc + w / 6, yc - h / 2); arrow.VertexList.Add(p5);
-            Point p6 = new Point(xc + w / 2, yc);         arrow.VertexList.Add(p6);
-            Point p7 = new Point(xc + w / 6, yc + h / 2); arrow.VertexList.Add(p7);
-            Point p8 = new Point(xc + w / 6, yc + h / 4); arrow.VertexList.Add(p8);
-            Point p9 = new Point(xc - w / 6, yc + h / 4); arrow.VertexList.Add(p9);
-            Point p10 = new Point(xc - w / 6, yc + h / 2); arrow.VertexList.Add(p10);
+            PointF p1 = new PointF(xc - w / 2, yc);         arrow.VertexList.Add(p1);
+            PointF p2 = new PointF(xc - w / 6, yc - h / 2); arrow.VertexList.Add(p2);
+            PointF p3 = new PointF(xc - w / 6, yc - h / 4); arrow.VertexList.Add(p3);
+            PointF p4 = new PointF(xc + w / 6, yc - h / 4); arrow.VertexList.Add(p4);
+            PointF p5 = new PointF(xc + w / 6, yc - h / 2); arrow.VertexList.Add(p5);
+            PointF p6 = new PointF(xc + w / 2, yc);         arrow.VertexList.Add(p6);
+            PointF p7 = new PointF(xc + w / 6, yc + h / 2); arrow.VertexList.Add(p7);
+            PointF p8 = new PointF(xc + w / 6, yc + h / 4); arrow.VertexList.Add(p8);
+            PointF p9 = new PointF(xc - w / 6, yc + h / 4); arrow.VertexList.Add(p9);
+            PointF p10 = new PointF(xc - w / 6, yc + h / 2); arrow.VertexList.Add(p10);
 
             arrow.Fill();
             arrow.GetBorders();
             return arrow;
         }
 
-        public static BezierCurve Bezier(List<Point> userPoints, int n, Color color)
+        public static BezierCurve Bezier(List<PointF> userPoints, int n, Color color)
         {
             BezierCurve curve = new BezierCurve();
             curve.Color = color;
@@ -117,10 +117,10 @@ namespace graphics_editor_cgs
             const double dt = 0.0001;
             // Постоянный шаг табуляции
             double t = dt;
-            Point Ppred = new Point();
+            PointF Ppred = new PointF();
             Ppred.X = userPoints[0].X;
             Ppred.Y = userPoints[0].Y;
-            Point Pt = new Point();
+            PointF Pt = new PointF();
 
             while (t < 1 + dt / 2)
             {
@@ -136,13 +136,13 @@ namespace graphics_editor_cgs
                     yt += userPoints[i].Y * J;
                     i++;
                 }
-                Pt.X = (int)Math.Round(xt);
-                Pt.Y = (int)Math.Round(yt);
+                Pt.X = (float)Math.Round(xt);
+                Pt.Y = (float)Math.Round(yt);
                 curve.VertexList.Add(Pt);
 
                 t += dt;
-                Ppred.X = (int)Math.Round(xt);
-                Ppred.Y = (int)Math.Round(yt);
+                Ppred.X = (float)Math.Round(xt);
+                Ppred.Y = (float)Math.Round(yt);
             }
             return curve;
         }

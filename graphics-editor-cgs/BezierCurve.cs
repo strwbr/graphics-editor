@@ -13,7 +13,7 @@ namespace graphics_editor_cgs
         {
         }
 
-        public BezierCurve(List<Point> vertexList, Color color) : base(vertexList, color)
+        public BezierCurve(List<PointF> vertexList, Color color) : base(vertexList, color)
         {
             GetBorders();
         }

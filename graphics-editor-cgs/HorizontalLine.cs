@@ -8,11 +8,11 @@ namespace graphics_editor_cgs
 {
     public class HorizontalLine
     {
-        public int xl;
-        public int xr;
-        public int y;
+        public float xl;
+        public float xr;
+        public float y;
 
-        public HorizontalLine(int xl, int xr, int y) : this()
+        public HorizontalLine(float xl, float xr, float y) : this()
         {
             this.xl = xl;
             this.xr = xr;

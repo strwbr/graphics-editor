@@ -9,10 +9,10 @@ namespace graphics_editor_cgs
     // Для хранения границ сегментов и приращений пороговых функций
     public struct Border
     {
-        public int x;
+        public float x;
         public int dQ;
 
-        public Border(int x, int dQ) : this()
+        public Border(float x, int dQ) : this()
         {
             this.x = x;
             this.dQ = dQ;
@@ -46,29 +46,29 @@ namespace graphics_editor_cgs
             SetQ = setQ;
         }
 
-        private int MinY(List<HorizontalLine> lines)
-        {
-            int min = lines[0].y;
-            for(int i =0; i < lines.Count; i++)
-            {
-                if (lines[i].y < min)
-                    min = lines[i].y;
-            }
-            return min;
-        }
+        //private int MinY(List<HorizontalLine> lines)
+        //{
+        //    int min = lines[0].y;
+        //    for(int i =0; i < lines.Count; i++)
+        //    {
+        //        if (lines[i].y < min)
+        //            min = lines[i].y;
+        //    }
+        //    return min;
+        //}
 
-        private int MaxY(List<HorizontalLine> lines)
-        {
-            int max = lines[0].y;
-            for (int i = 0; i < lines.Count; i++)
-            {
-                if (lines[i].y > max)
-                    max = lines[i].y;
-            }
-            return max;
-        }
+        //private int MaxY(List<HorizontalLine> lines)
+        //{
+        //    int max = lines[0].y;
+        //    for (int i = 0; i < lines.Count; i++)
+        //    {
+        //        if (lines[i].y > max)
+        //            max = lines[i].y;
+        //    }
+        //    return max;
+        //}
 
-        public Polygon MakeTMO(int Xmin_e, int Xmax_e)
+        public Polygon MakeTMO(float Xmin_e, float Xmax_e)
         {
             Polygon result = new Polygon();
             List<Border> M = new List<Border>();
@@ -79,18 +79,18 @@ namespace graphics_editor_cgs
             //int Ymax_2 = MaxY(Polygon_2.LinesList);
 
 
-            int Ymin_1 = Polygon_1.LinesList.Min(item => item.y);
-            int Ymax_1 = Polygon_1.LinesList.Max(item => item.y);
-            int Ymin_2 = Polygon_2.LinesList.Min(item => item.y);
-            int Ymax_2 = Polygon_2.LinesList.Max(item => item.y);
+            float Ymin_1 = Polygon_1.LinesList.Min(item => item.y);
+            float Ymax_1 = Polygon_1.LinesList.Max(item => item.y);
+            float Ymin_2 = Polygon_2.LinesList.Min(item => item.y);
+            float Ymax_2 = Polygon_2.LinesList.Max(item => item.y);
 
-            int Ymin = Math.Min(Ymin_1, Ymin_2);
-            int Ymax = Math.Max(Ymax_1, Ymax_2);
+            float Ymin = Math.Min(Ymin_1, Ymin_2);
+            float Ymax = Math.Max(Ymax_1, Ymax_2);
 
-            List<int> Xrl = new List<int>();
-            List<int> Xrr = new List<int>();
+            List<float> Xrl = new List<float>();
+            List<float> Xrr = new List<float>();
 
-            for (int j = Ymin; j < Ymax; j++)
+            for (float j = Ymin; j < Ymax; j++)
             {
                 List<HorizontalLine> Xlines_1 = new List<HorizontalLine>();
                 List<HorizontalLine> Xlines_2 = new List<HorizontalLine>();
@@ -142,7 +142,7 @@ namespace graphics_editor_cgs
                         Xrl.Add(Xmin_e);
                         Q = -M[0].dQ;
                     }
-                    int x;
+                    float x;
                     for (int i = 0; i < nM; i++)
                     {
                         x = M[i].x;

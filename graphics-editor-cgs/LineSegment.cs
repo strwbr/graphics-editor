@@ -13,7 +13,7 @@ namespace graphics_editor_cgs
         {
         }
 
-        public LineSegment(List<Point> vertexList, Color color) : base(vertexList, color)
+        public LineSegment(List<PointF> vertexList, Color color) : base(vertexList, color)
         {
             GetBorders();
         }

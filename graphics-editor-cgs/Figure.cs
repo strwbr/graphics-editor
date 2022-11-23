@@ -10,38 +10,38 @@ namespace graphics_editor_cgs
     // Фигура (многоугольник)
     public class Figure
     {
-        public List<Point> VertexList { get; set; }
+        public List<PointF> VertexList { get; set; }
         //public List<HorizontalLine> LinesList { get; set; }
-        public Point Pmin;
-        public Point Pmax;
+        public PointF Pmin;
+        public PointF Pmax;
         public Color Color { get; set; }
 
         public Figure()
         {
-            VertexList = new List<Point>();
+            VertexList = new List<PointF>();
             //LinesList = new List<HorizontalLine>();
-            Pmin = new Point();
-            Pmax = new Point();
+            Pmin = new PointF();
+            Pmax = new PointF();
             Color = new Color();
         }
 
-        public Figure(List<Point> vertexList, Color color/*, List<HorizontalLine> linesList*/) : this()
+        public Figure(List<PointF> vertexList, Color color/*, List<HorizontalLine> linesList*/) : this()
         {
-            VertexList = vertexList.ConvertAll(item => new Point(item.X, item.Y));
+            VertexList = vertexList.ConvertAll(item => new PointF(item.X, item.Y));
             //VertexList = vertexList;
             //LinesList = linesList;
-            Pmin = new Point();
-            Pmax = new Point();
+            Pmin = new PointF();
+            Pmax = new PointF();
             Color = color; //мб вылезет неглубокое копирование
         }
 
         // конструктор копии
         public Figure(Figure other) : this()
         {
-            VertexList = other.VertexList.ConvertAll(item => new Point(item.X, item.Y));
+            VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
             //LinesList = other.LinesList.ConvertAll(item => new HorizontalLine(item));
-            Pmin = new Point(other.Pmin.X, other.Pmin.Y);
-            Pmax = new Point(other.Pmax.X, other.Pmax.Y);
+            Pmin = new PointF(other.Pmin.X, other.Pmin.Y);
+            Pmax = new PointF(other.Pmax.X, other.Pmax.Y);
             Color = other.Color;
             //for (int i = 0; i < other.VertexList.Count; i++)
             //{
@@ -64,7 +64,7 @@ namespace graphics_editor_cgs
         // Перемещение
         public void Move(int dx)
         {
-            Point p = new Point();
+            PointF p = new PointF();
             for(int i = 0; i < VertexList.Count; i++)
             {
                 p.X = VertexList[i].X + dx;
@@ -87,25 +87,25 @@ namespace graphics_editor_cgs
         
 
         // Центр фигуры
-        public Point Center()
+        public PointF Center()
         {
-            Point center = new Point();
+            PointF center = new PointF();
             center.X =  (Pmax.X + Pmin.X) / 2;
             center.Y = (Pmax.Y + Pmin.Y) / 2;
             return center;
         }
 
 
-        public static List<Point> Bezier(List<Point> points, int n)
+        public static List<PointF> Bezier(List<PointF> points, int n)
         {
-            List<Point> bezierPoints = new List<Point>();
+            List<PointF> bezierPoints = new List<PointF>();
 
             double nFactorial = Factorial(n);
             const double dt = 0.001;
             double t = dt;
 
-            Point Ppred = new Point(points[0].X, points[0].Y);
-            Point Pt = new Point();
+            PointF Ppred = new PointF(points[0].X, points[0].Y);
+            PointF Pt = new PointF();
 
             while (t < 1 + dt / 2)
             {
@@ -134,7 +134,7 @@ namespace graphics_editor_cgs
             return bezierPoints;
         }
 
-        public static Graphics DrawBezier(Graphics g, Pen color, List<Point> bezierPoints)
+        public static Graphics DrawBezier(Graphics g, Pen color, List<PointF> bezierPoints)
         {
             Graphics temp = g;
             for (int i = 0; i < bezierPoints.Count - 1; i += 2)

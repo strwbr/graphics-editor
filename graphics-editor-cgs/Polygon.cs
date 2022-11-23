@@ -19,7 +19,7 @@ namespace graphics_editor_cgs
             //Pmax = new Point();
         }
 
-        public Polygon(List<Point> VertexList, List<HorizontalLine> LinesList, Color color /*, Point Pmin, Point Pmax*/) : base(VertexList, color)
+        public Polygon(List<PointF> VertexList, List<HorizontalLine> LinesList, Color color /*, Point Pmin, Point Pmax*/) : base(VertexList, color)
         {
             LinesList = LinesList.ConvertAll(item => new HorizontalLine(item));
             //this.Pmin = Pmin;
@@ -35,15 +35,15 @@ namespace graphics_editor_cgs
         }
 
         // Выделение фигуры
-        public bool Select(Point p)
+        public bool Select(PointF p)
         {
             bool isSelect = false;
-            int mX = p.X;
-            int mY = p.Y;
+            float mX = p.X;
+            float mY = p.Y;
 
             int n = VertexList.Count - 1;
             int k = 0, m = 0;
-            Point Pi, Pk;
+            PointF Pi, Pk;
 
             for (int i = 0; i <= n; i++)
             {
@@ -62,11 +62,11 @@ namespace graphics_editor_cgs
         // Закрашивание фигуры и ее вывод? - разбить на 2 метода
         public void Fill()
         {
-            int Ymin = VertexList.Min(item => item.Y);
-            int Ymax = VertexList.Max(item => item.Y);
+            float Ymin = VertexList.Min(item => item.Y);
+            float Ymax = VertexList.Max(item => item.Y);
 
             List<int> Xb = new List<int>();
-            for (int j = Ymin; j <= Ymax; j++)
+            for (float j = Ymin; j <= Ymax; j++)
             {
                 Xb.Clear();
                 for (int i = 0; i < VertexList.Count; i++)
