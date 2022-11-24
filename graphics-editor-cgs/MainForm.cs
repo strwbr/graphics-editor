@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System;
+using System.Drawing.Drawing2D;
 
 namespace graphics_editor_cgs
 {
@@ -30,8 +31,8 @@ namespace graphics_editor_cgs
         private int selectedFigureIndex = -1;
 
         private bool isSelectedFigure = false;
-        private bool isMove = false;
-        //private bool isResizeMode = false;
+        private bool isMoveMode = false;
+        private bool isResizeMode = false;
 
         private Color CurrentColor => currentColorPanel.BackColor;
         private Pen CurrentPen => new Pen(CurrentColor);
@@ -45,6 +46,7 @@ namespace graphics_editor_cgs
             InitializeComponent();
             myBitmap = new Bitmap(drawingPanel.Width, drawingPanel.Height);
             g = Graphics.FromImage(myBitmap);
+            g.SmoothingMode = SmoothingMode.HighQuality;
             currentColorPanel.BackColor = Color.Black;
         }
 
@@ -214,25 +216,33 @@ namespace graphics_editor_cgs
             {
                 prevSelectedFigureIndex = selectedFigureIndex;
                 selectedFigureIndex = FindSelectedFigure(e.Location); // mousePoint
+
+
+
                 // Если до этого была уже выделена фигура
                 if (prevSelectedFigureIndex != -1)
                 {
                     // то перерисовываем об-ть рис-я без выделения
                     UpdateDrawingPanel();
+                    if (FigureList[prevSelectedFigureIndex].CheckResize(e.X, e.Y)) isResizeMode = true;
+                    else isResizeMode = false;
                 }
                 if (selectedFigureIndex != -1)
                 {
                     selectedFigure = FigureList[selectedFigureIndex];
                     DrawSelection(selectedFigure);
                     isSelectedFigure = true;
-                    isMove = true;
+
+
+
+                    isMoveMode = true;
                     //if (CheckResize(e.X, e.Y)) isResizeMode = true;
                     //else isResizeMode = false;
                 }
                 else
                 {
                     isSelectedFigure = false;
-                    isMove = false;
+                    isMoveMode = false;
                 }
             }
             // ТМО
@@ -276,15 +286,28 @@ namespace graphics_editor_cgs
 
         private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isMove)
+            if (isResizeMode && prevSelectedFigureIndex != -1)
+            {
+                DrawCenter(FigureList[prevSelectedFigureIndex].Center());
+                FigureList[prevSelectedFigureIndex].Resize(e.Location, FigureList[prevSelectedFigureIndex].Center());
+                UpdateDrawingPanel();
+            }
+
+            if (isMoveMode)
             {
                 FigureList[selectedFigureIndex].Move(e.X - mousePoint.X, e.Y - mousePoint.Y);
-                if (FigureList[selectedFigureIndex].GetType() == typeof(Polygon))
-                    ((Polygon)FigureList[selectedFigureIndex]).Fill();
+                //if (FigureList[selectedFigureIndex].GetType() == typeof(Polygon))
+                //    ((Polygon)FigureList[selectedFigureIndex]).Fill();
                 UpdateDrawingPanel();
             }
             mousePoint = e.Location;
             drawingPanel.Image = myBitmap;
+        }
+
+        private void DrawingPanel_MouseUp(object sender, MouseEventArgs e)
+        {
+            isMoveMode = false;
+            isResizeMode = false;
         }
 
         private void DrawLineSegment(LineSegment lineSegment)
@@ -292,16 +315,16 @@ namespace graphics_editor_cgs
             g.DrawLine(new Pen(lineSegment.Color), lineSegment.VertexList[0], lineSegment.VertexList[1]);
         }
 
-        private bool CheckResize(float x, float y)
-        {
-            //Figure selectedFigure = FigureList[selectedFigureIndex];
-            float Xmin = selectedFigure.Min().X;
-            float Xmax = selectedFigure.Min().X;
-            float Yc = selectedFigure.Center().Y;
-            return
-                ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
-                && (y >= Yc - 7 && y <= Yc + 7);
-        }
+        //private bool CheckResize(float x, float y)
+        //{
+        //    //Figure selectedFigure = FigureList[selectedFigureIndex];
+        //    float Xmin = FigureList[selectedFigureIndex].Min().X;
+        //    float Xmax = FigureList[selectedFigureIndex].Min().X;
+        //    float Yc = FigureList[selectedFigureIndex].Center().Y;
+        //    return
+        //        ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
+        //        && (y >= Yc - 7 && y <= Yc + 7);
+        //}
 
         private int FindSelectedFigure(PointF mouseClickPoint)
         {
@@ -310,7 +333,7 @@ namespace graphics_editor_cgs
             {
                 if (FigureList[i].Select(mouseClickPoint))
                 {
-                    index = i; 
+                    index = i;
                 }
             }
             return index;
@@ -354,9 +377,10 @@ namespace graphics_editor_cgs
 
         private void DrawCenter(PointF center)
         {
-            Pen pen = new Pen(Color.Red);
-            g.DrawLine(pen, center.X - 2, center.Y - 2, center.X + 2, center.Y + 2);
-            g.DrawLine(pen, center.X + 2, center.Y - 2, center.X - 2, center.Y + 2);
+            //Pen pen1 = new Pen(Color.White);
+            Pen pen2 = new Pen(Color.Red);
+            g.DrawLine(pen2, center.X - 2, center.Y - 2, center.X + 2, center.Y + 2);
+            g.DrawLine(pen2, center.X + 2, center.Y - 2, center.X - 2, center.Y + 2);
         }
 
         private void ClearPanel()
@@ -388,11 +412,8 @@ namespace graphics_editor_cgs
 
         private void BlueBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = blueBtn.BackColor;
 
-        private void WhiteBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = whiteBtn.BackColor;
+        private void BlackBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = blackBtn.BackColor;
 
-        private void drawingPanel_MouseUp(object sender, MouseEventArgs e)
-        {
-            isMove = false;
-        }
+
     }
 }

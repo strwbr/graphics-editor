@@ -37,7 +37,7 @@ namespace graphics_editor_cgs
             throw new NotImplementedException();
         }
 
-        public void Zoom()
+        public void Resize(PointF mP, PointF center)
         {
             throw new NotImplementedException();
         }
@@ -58,6 +58,11 @@ namespace graphics_editor_cgs
         }
 
         public PointF Max()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CheckResize(float x, float y)
         {
             throw new NotImplementedException();
         }

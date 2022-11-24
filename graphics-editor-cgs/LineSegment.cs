@@ -41,12 +41,26 @@ namespace graphics_editor_cgs
 
         public void Move(float dx, float dy)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                PointF newPoint = new PointF();
+                newPoint.X = VertexList[i].X + dx;
+                newPoint.Y = VertexList[i].Y + dy;
+                VertexList[i] = newPoint; //new PointF(newPoint.X, newPoint.Y);
+            }
         }
 
-        public void Zoom()
+        public void Resize(PointF mP, PointF center)
         {
-            throw new NotImplementedException();
+            float bx = (mP.X >= Min().X && mP.X <= Max().X) ? -0.03f : 0.03f;
+            bx += 1;
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                PointF newPoint = new PointF();
+                newPoint.X = (VertexList[i].X - center.X) * bx + center.X;
+                newPoint.Y = VertexList[i].Y;
+                VertexList[i] = newPoint;
+            }
         }
 
         public void Rotate()
@@ -75,6 +89,16 @@ namespace graphics_editor_cgs
             p.X = VertexList[0].X > VertexList[1].X ? VertexList[0].X : VertexList[1].X;
             p.Y = VertexList[0].Y > VertexList[1].Y ? VertexList[0].Y : VertexList[1].Y;
             return p;
+        }
+
+        public bool CheckResize(float x, float y)
+        {
+            float Xmin = Min().X;
+            float Xmax = Max().X;
+            float Yc = Center().Y;
+            return
+                ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
+                && (y >= Yc - 7 && y <= Yc + 7);
         }
     }
 }

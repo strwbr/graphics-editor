@@ -39,7 +39,7 @@ namespace graphics_editor_cgs
             this.yellowBtn = new System.Windows.Forms.Button();
             this.greenBtn = new System.Windows.Forms.Button();
             this.blueBtn = new System.Windows.Forms.Button();
-            this.whiteBtn = new System.Windows.Forms.Button();
+            this.blackBtn = new System.Windows.Forms.Button();
             this.currentColorPanel = new System.Windows.Forms.Panel();
             this.drawingPanel = new System.Windows.Forms.PictureBox();
             this.segmentBtn = new System.Windows.Forms.Button();
@@ -103,7 +103,7 @@ namespace graphics_editor_cgs
             this.standartColorsPanel.Controls.Add(this.yellowBtn);
             this.standartColorsPanel.Controls.Add(this.greenBtn);
             this.standartColorsPanel.Controls.Add(this.blueBtn);
-            this.standartColorsPanel.Controls.Add(this.whiteBtn);
+            this.standartColorsPanel.Controls.Add(this.blackBtn);
             this.standartColorsPanel.Location = new System.Drawing.Point(5, 19);
             this.standartColorsPanel.Name = "standartColorsPanel";
             this.standartColorsPanel.Size = new System.Drawing.Size(117, 23);
@@ -153,16 +153,16 @@ namespace graphics_editor_cgs
             this.blueBtn.UseVisualStyleBackColor = false;
             this.blueBtn.Click += new System.EventHandler(this.BlueBtn_Click);
             // 
-            // whiteBtn
+            // blackBtn
             // 
-            this.whiteBtn.BackColor = System.Drawing.Color.White;
-            this.whiteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.whiteBtn.Location = new System.Drawing.Point(95, 3);
-            this.whiteBtn.Name = "whiteBtn";
-            this.whiteBtn.Size = new System.Drawing.Size(17, 17);
-            this.whiteBtn.TabIndex = 4;
-            this.whiteBtn.UseVisualStyleBackColor = false;
-            this.whiteBtn.Click += new System.EventHandler(this.WhiteBtn_Click);
+            this.blackBtn.BackColor = System.Drawing.Color.Black;
+            this.blackBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.blackBtn.Location = new System.Drawing.Point(95, 3);
+            this.blackBtn.Name = "blackBtn";
+            this.blackBtn.Size = new System.Drawing.Size(17, 17);
+            this.blackBtn.TabIndex = 4;
+            this.blackBtn.UseVisualStyleBackColor = false;
+            this.blackBtn.Click += new System.EventHandler(this.BlackBtn_Click);
             // 
             // currentColorPanel
             // 
@@ -182,7 +182,7 @@ namespace graphics_editor_cgs
             this.drawingPanel.TabStop = false;
             this.drawingPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseDown);
             this.drawingPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseMove);
-            this.drawingPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.drawingPanel_MouseUp);
+            this.drawingPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseUp);
             // 
             // segmentBtn
             // 
@@ -197,7 +197,8 @@ namespace graphics_editor_cgs
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(272, 414);
+            this.label2.ForeColor = System.Drawing.Color.Green;
+            this.label2.Location = new System.Drawing.Point(272, 405);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(191, 13);
             this.label2.TabIndex = 4;
@@ -205,9 +206,9 @@ namespace graphics_editor_cgs
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(272, 436);
+            this.label3.Location = new System.Drawing.Point(272, 427);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(168, 64);
+            this.label3.Size = new System.Drawing.Size(168, 77);
             this.label3.TabIndex = 5;
             this.label3.Text = "Поворот вокруг з.ц. на произвольный угол, на 30 гр., масштабирование относительно" +
     " ц.ф. по Х, перемещение";
@@ -378,7 +379,7 @@ namespace graphics_editor_cgs
         private Button yellowBtn;
         private Button greenBtn;
         private Button blueBtn;
-        private Button whiteBtn;
+        private Button blackBtn;
         private Panel currentColorPanel;
         private PictureBox drawingPanel;
         private Button segmentBtn;
