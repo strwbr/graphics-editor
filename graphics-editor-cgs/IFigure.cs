@@ -15,7 +15,7 @@ namespace graphics_editor_cgs
         bool Select(PointF p);
         void Move(float dx, float dy);
         void Resize(PointF mP, PointF center);
-        void Rotate();
+        void Rotate(float angle, PointF center);
         PointF Center();
         PointF Min();
         PointF Max();

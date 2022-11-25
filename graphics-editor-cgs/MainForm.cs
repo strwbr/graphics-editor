@@ -26,6 +26,8 @@ namespace graphics_editor_cgs
         private int indexOperation = 0;
 
         private PointF mousePoint = new Point();
+        private PointF rotateCenter = new Point();
+        private float prevRotateAngle = 0; 
 
         private int prevSelectedFigureIndex = -1;
         private int selectedFigureIndex = -1;
@@ -33,6 +35,7 @@ namespace graphics_editor_cgs
         private bool isSelectedFigure = false;
         private bool isMoveMode = false;
         private bool isResizeMode = false;
+        private bool isRotateMode = false;
 
         private Color CurrentColor => currentColorPanel.BackColor;
         private Pen CurrentPen => new Pen(CurrentColor);
@@ -48,7 +51,11 @@ namespace graphics_editor_cgs
             g = Graphics.FromImage(myBitmap);
             g.SmoothingMode = SmoothingMode.HighQuality;
             currentColorPanel.BackColor = Color.Black;
+
+            MouseWheel += MainForm_MouseWheel;
         }
+
+
 
         // Добавление фигуры = 1
         // Отрезок = 0
@@ -217,37 +224,42 @@ namespace graphics_editor_cgs
                 prevSelectedFigureIndex = selectedFigureIndex;
                 selectedFigureIndex = FindSelectedFigure(e.Location); // mousePoint
 
-
-
-                // Если до этого была уже выделена фигура
-                if (prevSelectedFigureIndex != -1)
+                if (e.Button == MouseButtons.Right)
                 {
-                    // то перерисовываем об-ть рис-я без выделения
-                    UpdateDrawingPanel();
-                    if (FigureList[prevSelectedFigureIndex].CheckResize(e.X, e.Y)) isResizeMode = true;
-                    else isResizeMode = false;
+                    rotateCenter = e.Location;
+                    DrawCenter(rotateCenter);
+                    isRotateMode = true;
                 }
-                if (selectedFigureIndex != -1)
+
+                if (e.Button == MouseButtons.Left)
                 {
-                    selectedFigure = FigureList[selectedFigureIndex];
-                    DrawSelection(selectedFigure);
-                    isSelectedFigure = true;
-
-
-
-                    isMoveMode = true;
-                    //if (CheckResize(e.X, e.Y)) isResizeMode = true;
-                    //else isResizeMode = false;
-                }
-                else
-                {
-                    isSelectedFigure = false;
-                    isMoveMode = false;
+                    isRotateMode = false;
+                    // Если до этого была уже выделена фигура
+                    if (prevSelectedFigureIndex != -1)
+                    {
+                        // то перерисовываем об-ть рис-я без выделения
+                        UpdateDrawingPanel();
+                        if (FigureList[prevSelectedFigureIndex].CheckResize(e.X, e.Y)) isResizeMode = true;
+                        else isResizeMode = false;
+                    }
+                    if (selectedFigureIndex != -1)
+                    {
+                        selectedFigure = FigureList[selectedFigureIndex];
+                        DrawSelection(selectedFigure);
+                        isSelectedFigure = true;
+                        isMoveMode = true;
+                    }
+                    else
+                    {
+                        isSelectedFigure = false;
+                        isMoveMode = false;
+                    }
                 }
             }
             // ТМО
             else if (indexOperation == 4)
             {
+                IFigure currenFigure = new PolygonTMO();
                 // Добавить проверку на тип выбранного элемента
                 switch (countSelectedFigures)
                 {
@@ -284,8 +296,44 @@ namespace graphics_editor_cgs
             drawingPanel.Image = myBitmap;
         }
 
+        private float Angle(PointF p1, PointF p2)
+        {
+            float x1 = p1.X;
+            float y1 = p1.Y;
+            float x2 = p2.X;
+            float y2 = p2.Y;
+            double angle = (x1 * x2 + y1 * y1) /
+                (Math.Sqrt(x1 * x1 + y1 * y1) * Math.Sqrt(x2 * x2 + y2 * y2));
+
+            return (float)Math.Acos(angle);
+        }
+
+        private void MainForm_MouseWheel(object sender, MouseEventArgs e)
+        {
+            //if (isRotateMode && prevSelectedFigureIndex != -1)
+            //{
+            //    float angle = e.Delta/120;
+            //    FigureList[prevSelectedFigureIndex].Rotate(Math.Abs(angle - prevRotateAngle), rotateCenter);
+            //    prevRotateAngle = angle;
+            //    UpdateDrawingPanel();
+            //    DrawCenter(rotateCenter);
+            //    drawingPanel.Image = myBitmap;
+
+            //}
+
+        }
+
         private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
         {
+            //// проверку на предыдущий индекс мб убрать
+            //if (isRotateMode && prevSelectedFigureIndex != -1)
+            //{
+            //    float angle = Angle(mousePoint, e.Location) - prevRotateAngle;
+            //    FigureList[prevSelectedFigureIndex].Rotate(angle, rotateCenter);
+            //    prevRotateAngle = angle;
+            //    UpdateDrawingPanel();
+            //}
+
             if (isResizeMode && prevSelectedFigureIndex != -1)
             {
                 DrawCenter(FigureList[prevSelectedFigureIndex].Center());
@@ -349,7 +397,7 @@ namespace graphics_editor_cgs
             Pen pen = new Pen(Color.Gray);
             g.DrawRectangle(pen, new Rectangle(Xmax, (int)(selectedFigure.Center().Y - 3), 6, 6));
             g.DrawRectangle(pen, new Rectangle(Xmin - 6, (int)(selectedFigure.Center().Y - 3), 6, 6));
-            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash; // штрихованная линия
+            pen.DashStyle = DashStyle.Dash; // штрихованная линия
             g.DrawRectangle(pen, new Rectangle(Xmin, Ymin, Xmax - Xmin, Ymax - Ymin));
         }
 

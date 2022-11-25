@@ -42,7 +42,7 @@ namespace graphics_editor_cgs
             throw new NotImplementedException();
         }
 
-        public void Rotate()
+        public void Rotate(float angle, PointF center)
         {
             throw new NotImplementedException();
         }

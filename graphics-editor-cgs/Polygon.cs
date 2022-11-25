@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace graphics_editor_cgs
 {
@@ -58,6 +60,18 @@ namespace graphics_editor_cgs
             }
             if (m % 2 == 1) isSelect = true;
             return isSelect;
+
+            //for (int i = 0; i < LinesList.Count; i++)
+            //{
+            //    if (p.Y == LinesList[i].y)
+            //    {
+            //        if (p.X >= LinesList[i].xl && p.X <= LinesList[i].xr)
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //}
+            //return false;
         }
 
         // Закрашивание фигуры
@@ -138,9 +152,20 @@ namespace graphics_editor_cgs
             Fill();
         }
 
-        public void Rotate()
+        public void Rotate(float angle, PointF center)
         {
-            throw new NotImplementedException();
+            //double cos = Math.Cos(angle);
+            double cos = Math.Cos(angle * Math.PI / 180);
+            //double sin = Math.Sin(angle);
+            double sin = Math.Sin(angle * Math.PI / 180);
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                PointF p = new PointF();
+                p.X = (float)((VertexList[i].X - center.X) * cos - (VertexList[i].Y - center.Y) * sin + center.X);
+                p.Y = (float)((VertexList[i].X - center.X) * sin + (VertexList[i].Y - center.Y) * cos + center.Y);
+                VertexList[i] = p;
+            }
+            Fill();
         }
 
         public PointF Center()
@@ -152,7 +177,7 @@ namespace graphics_editor_cgs
 
         public bool CheckResize(float x, float y)
         {
-            float Xmin = Min().X; 
+            float Xmin = Min().X;
             float Xmax = Max().X;
             float Yc = Center().Y;
             return
