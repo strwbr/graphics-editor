@@ -10,7 +10,8 @@ namespace graphics_editor_cgs
     public class PolygonTMO : IFigure
     {
         public int[] SetQ { get; set; }
-        public List<Polygon> ParentsPolygons { get; set; }
+        public Polygon Polygon_1 { get; set; }
+        public Polygon Polygon_2 { get; set; }
         public List<HorizontalLine> ResultLines { get; set; }
 
         public List<PointF> VertexList { get; set; }
@@ -18,30 +19,130 @@ namespace graphics_editor_cgs
 
         public PolygonTMO()
         {
-            SetQ = new int[0];
-            ParentsPolygons = new List<Polygon>();
+            SetQ = new int[] { -1, -1 };
+            Polygon_1 = new Polygon();
+            Polygon_2 = new Polygon();
             ResultLines = new List<HorizontalLine>();
             VertexList = new List<PointF>();
             Color = Color.Black;
         }
 
-        public PolygonTMO(int[] setQ, List<Polygon> parentsPolygons, Color color) : this()
+        public PolygonTMO(int[] setQ, Polygon polygon_1, Polygon polygon_2, Color color) : this()
         {
             for (int i = 0; i < setQ.Length; i++)
             {
                 SetQ[i] = setQ[i];
             }
-            ParentsPolygons = parentsPolygons.ConvertAll(item => new Polygon(item));
+            Polygon_1 = new Polygon(polygon_1);
+            Polygon_2 = new Polygon(polygon_2);
             Color = color;
         }
 
-        public PolygonTMO(PolygonTMO other): this(other.SetQ, other.ParentsPolygons, other.Color)
+        public PolygonTMO(PolygonTMO other) : this(other.SetQ, other.Polygon_1, other.Polygon_2, other.Color)
         {
             //for (int i = 0; i < other.SetQ.Length; i++)
             //{
             //    SetQ[i] = other.SetQ[i];
             //}
             //ParentsPolygons = other.ParentsPolygons.ConvertAll(item => new Polygon(item));
+        }
+
+        public void MakeTMO()
+        {
+            List<Border> M = new List<Border>();
+
+            float Ymin_1 = Polygon_1.Min().Y;
+            float Ymax_1 = Polygon_1.Max().Y;
+            float Ymin_2 = Polygon_2.Min().Y;
+            float Ymax_2 = Polygon_2.Max().Y;
+
+            float Ymin = Math.Min(Ymin_1, Ymin_2);
+            float Ymax = Math.Max(Ymax_1, Ymax_2);
+
+            List<float> Xrl = new List<float>();
+            List<float> Xrr = new List<float>();
+
+            for (float j = Ymin; j < Ymax; j++)
+            {
+                List<HorizontalLine> Xlines_1 = new List<HorizontalLine>();
+                List<HorizontalLine> Xlines_2 = new List<HorizontalLine>();
+
+                M.Clear();
+
+                if (Polygon_1.LinesList.Any(item => item.y == j))
+                {
+                    Xlines_1 = Polygon_1.LinesList.FindAll(item => item.y == j);
+                }
+                if (Polygon_2.LinesList.Any(item => item.y == j))
+                {
+                    Xlines_2 = Polygon_2.LinesList.FindAll(item => item.y == j);
+                }
+                int n = Xlines_1.Count;
+
+                for (int i = 0; i < n; i++)
+                {
+                    M.Add(new Border(Xlines_1[i].xl, 2));
+                }
+                int nM = n;
+                for (int i = 0; i < n; i++)
+                {
+                    M.Add(new Border(Xlines_1[i].xr, -2));
+                }
+                nM += n;
+                n = Xlines_2.Count;
+                for (int i = 0; i < n; i++)
+                {
+                    M.Add(new Border(Xlines_2[i].xl, 1));
+                }
+                nM += n;
+                for (int i = 0; i < n; i++)
+                {
+                    M.Add(new Border(Xlines_2[i].xr, -1));
+                }
+                nM += n;
+
+                M.Sort((e1, e2) => e1.x.CompareTo(e2.x));
+                int Q = 0;
+                int Qnew = 0;
+                Xrl.Clear();
+                Xrr.Clear();
+
+                if (nM > 0)
+                {
+                    //if (M[0].x >= Xmin_e && M[0].dQ < 0)
+                    //{
+                    //    Xrl.Add(Xmin_e);
+                    //    Q = -M[0].dQ;
+                    //}
+                    float x;
+                    for (int i = 0; i < nM; i++)
+                    {
+                        x = M[i].x;
+                        Qnew = Q + M[i].dQ;
+
+                        if ((Q < SetQ[0] || Q > SetQ[1]) && (Qnew >= SetQ[0] && Qnew <= SetQ[1]))
+                        {
+                            Xrl.Add(x);
+                        }
+
+                        if ((Q >= SetQ[0] && Q <= SetQ[1]) && (Qnew < SetQ[0] || Qnew > SetQ[1]))
+                        {
+                            Xrr.Add(x);
+                        }
+                        Q = Qnew;
+                    }
+                    //if (Q >= SetQ[0] && Q <= SetQ[1])
+                    //{
+                    //    Xrr.Add(Xmax_e);
+                    //}
+
+                    for (int i = 0; i < Xrl.Count; i++)
+                    {
+                        ResultLines.Add(new HorizontalLine(Xrl[i], Xrr[i], j));
+                    }
+
+                }
+            }
         }
 
         public bool Select(PointF p)
@@ -61,37 +162,59 @@ namespace graphics_editor_cgs
 
         public void Move(float dx, float dy)
         {
-            throw new NotImplementedException();
+            ResultLines.Clear();
+            Polygon_1.Move(dx, dy);
+            Polygon_2.Move(dx, dy);
+            MakeTMO();
         }
 
-        public void Resize(PointF mP, PointF center)
+        public void Resize(PointF mP)
         {
-            throw new NotImplementedException();
+            ResultLines.Clear();
+            Polygon_1.Resize(mP);
+            Polygon_2.Resize(mP);
+            MakeTMO();
         }
 
         public void Rotate(float angle, PointF center)
         {
-            throw new NotImplementedException();
+            ResultLines.Clear();
+            Polygon_1.Rotate(angle, center);
+            Polygon_2.Rotate(angle, center);
+            MakeTMO();
         }
 
         public PointF Center()
         {
-            throw new NotImplementedException();
+            PointF Pmin = Min();
+            PointF Pmax = Max();
+            return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
         }
 
         public PointF Min()
         {
-            throw new NotImplementedException();
+            PointF p = new PointF();
+            p.X = ResultLines.Min(item => item.xl);
+            p.Y = ResultLines.Min(item => item.y);
+            return p;
         }
 
         public PointF Max()
         {
-            throw new NotImplementedException();
+            PointF p = new PointF();
+            p.X = ResultLines.Max(item => item.xr);
+            p.Y = ResultLines.Max(item => item.y);
+            return p;
         }
 
         public bool CheckResize(float x, float y)
         {
-            throw new NotImplementedException();
+            float Xmin = Min().X;
+            float Xmax = Max().X;
+            float Yc = Center().Y;
+            return
+                ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
+                && (y >= Yc - 7 && y <= Yc + 7);
         }
     }
 }

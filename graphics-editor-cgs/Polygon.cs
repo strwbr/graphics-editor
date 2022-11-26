@@ -81,7 +81,7 @@ namespace graphics_editor_cgs
             float Ymin = Min().Y;
             float Ymax = Max().Y;
 
-            List<int> Xb = new List<int>();
+            List<float> Xb = new List<float>();
             for (float j = Ymin; j <= Ymax; j++)
             {
                 Xb.Clear();
@@ -95,7 +95,7 @@ namespace graphics_editor_cgs
                     if ((VertexList[i].Y < j && VertexList[k].Y >= j)
                         || (VertexList[i].Y >= j && VertexList[k].Y < j))
                     {
-                        int x = (int)Math.Ceiling((double)(VertexList[k].X - VertexList[i].X)
+                        float x = (float)Math.Ceiling((double)(VertexList[k].X - VertexList[i].X)
                             * (j - VertexList[i].Y) / (double)(VertexList[k].Y
                             - VertexList[i].Y) + VertexList[i].X);
                         Xb.Add(x);
@@ -138,8 +138,9 @@ namespace graphics_editor_cgs
             Fill();
         }
 
-        public void Resize(PointF mP, PointF center)
+        public void Resize(PointF mP)
         {
+            PointF center = Center();
             float bx = (mP.X >= Min().X && mP.X <= Max().X) ? -0.03f : 0.03f;
             bx += 1;
             for (int i = 0; i < VertexList.Count; i++)
@@ -163,7 +164,7 @@ namespace graphics_editor_cgs
                 PointF p = new PointF();
                 p.X = (float)((VertexList[i].X - center.X) * cos - (VertexList[i].Y - center.Y) * sin + center.X);
                 p.Y = (float)((VertexList[i].X - center.X) * sin + (VertexList[i].Y - center.Y) * cos + center.Y);
-                VertexList[i] = p;
+                VertexList[i] = new PointF(p.X, p.Y);
             }
             Fill();
         }

@@ -56,9 +56,12 @@ namespace graphics_editor_cgs
             this.tmoBtn = new System.Windows.Forms.Button();
             this.debugLabel = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.rotationTb = new System.Windows.Forms.TrackBar();
+            this.rotationAngleMode = new System.Windows.Forms.CheckBox();
             this.settingColorBox.SuspendLayout();
             this.standartColorsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rotationTb)).BeginInit();
             this.SuspendLayout();
             // 
             // colorDialog
@@ -336,11 +339,33 @@ namespace graphics_editor_cgs
             this.label5.TabIndex = 16;
             this.label5.Text = "label5";
             // 
+            // rotationTb
+            // 
+            this.rotationTb.Enabled = false;
+            this.rotationTb.Location = new System.Drawing.Point(10, 307);
+            this.rotationTb.Maximum = 360;
+            this.rotationTb.Name = "rotationTb";
+            this.rotationTb.Size = new System.Drawing.Size(231, 45);
+            this.rotationTb.TabIndex = 17;
+            this.rotationTb.Scroll += new System.EventHandler(this.RotationTb_Scroll);
+            // 
+            // rotationAngleMode
+            // 
+            this.rotationAngleMode.AutoSize = true;
+            this.rotationAngleMode.Location = new System.Drawing.Point(20, 344);
+            this.rotationAngleMode.Name = "rotationAngleMode";
+            this.rotationAngleMode.Size = new System.Drawing.Size(177, 17);
+            this.rotationAngleMode.TabIndex = 18;
+            this.rotationAngleMode.Text = "Поворачивать на 30 градусов";
+            this.rotationAngleMode.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(996, 551);
+            this.Controls.Add(this.rotationAngleMode);
+            this.Controls.Add(this.rotationTb);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.debugLabel);
             this.Controls.Add(this.tmoBtn);
@@ -363,6 +388,7 @@ namespace graphics_editor_cgs
             this.settingColorBox.PerformLayout();
             this.standartColorsPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.drawingPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rotationTb)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -396,5 +422,7 @@ namespace graphics_editor_cgs
         private Button tmoBtn;
         private Label debugLabel;
         private Label label5;
+        private TrackBar rotationTb;
+        private CheckBox rotationAngleMode;
     }
 }

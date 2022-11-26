@@ -27,7 +27,7 @@ namespace graphics_editor_cgs
 
         private PointF mousePoint = new Point();
         private PointF rotateCenter = new Point();
-        private float prevRotateAngle = 0; 
+        private float prevRotationAngle = 0;
 
         private int prevSelectedFigureIndex = -1;
         private int selectedFigureIndex = -1;
@@ -41,6 +41,7 @@ namespace graphics_editor_cgs
         private Pen CurrentPen => new Pen(CurrentColor);
 
         private TMO tmo = new TMO();
+        private PolygonTMO polygonTMO = new PolygonTMO();
         private int countSelectedFigures = 0;
 
 
@@ -51,8 +52,6 @@ namespace graphics_editor_cgs
             g = Graphics.FromImage(myBitmap);
             g.SmoothingMode = SmoothingMode.HighQuality;
             currentColorPanel.BackColor = Color.Black;
-
-            MouseWheel += MainForm_MouseWheel;
         }
 
 
@@ -153,6 +152,9 @@ namespace graphics_editor_cgs
                     DrawBezier((BezierCurve)f);
                 else if (f.GetType() == typeof(LineSegment))
                     DrawLineSegment((LineSegment)f);
+                else if (f.GetType() == typeof(PolygonTMO))
+                    DrawPolygonTMO((PolygonTMO)f);
+
             }
         }
 
@@ -229,6 +231,7 @@ namespace graphics_editor_cgs
                     rotateCenter = e.Location;
                     DrawCenter(rotateCenter);
                     isRotateMode = true;
+                    rotationTb.Enabled = true;
                 }
 
                 if (e.Button == MouseButtons.Left)
@@ -259,7 +262,6 @@ namespace graphics_editor_cgs
             // ТМО
             else if (indexOperation == 4)
             {
-                IFigure currenFigure = new PolygonTMO();
                 // Добавить проверку на тип выбранного элемента
                 switch (countSelectedFigures)
                 {
@@ -268,7 +270,7 @@ namespace graphics_editor_cgs
                         if (index != -1)
                         {
                             DrawSelection(FigureList[index]);
-                            tmo.Polygon_1 = (Polygon)FigureList[index];
+                            polygonTMO.Polygon_1 = new Polygon((Polygon)FigureList[index]);
                             FigureList.RemoveAt(index);
                             countSelectedFigures++;
                         }
@@ -278,17 +280,18 @@ namespace graphics_editor_cgs
                         if (index != -1)
                         {
                             DrawSelection(FigureList[index]);
-                            tmo.Polygon_2 = (Polygon)FigureList[index];
+                            polygonTMO.Polygon_2 = new Polygon((Polygon)FigureList[index]);
                             FigureList.RemoveAt(index);
                             if (SetQ[0] != -1)
                             {
-                                tmo.SetQ = SetQ;
-                                Polygon newPolygon = tmo.MakeTMO(0, drawingPanel.Width - 1);
-                                newPolygon.Color = CurrentColor;
-                                FigureList.Add(newPolygon);
+                                polygonTMO.SetQ = SetQ;
+                                polygonTMO.MakeTMO();
+                                polygonTMO.Color = CurrentColor;
+                                FigureList.Add(polygonTMO);
                                 UpdateDrawingPanel();
                             }
                             countSelectedFigures = 0;
+                            polygonTMO = new PolygonTMO();
                         }
                         break;
                 }
@@ -302,25 +305,12 @@ namespace graphics_editor_cgs
             float y1 = p1.Y;
             float x2 = p2.X;
             float y2 = p2.Y;
-            double angle = (x1 * x2 + y1 * y1) /
-                (Math.Sqrt(x1 * x1 + y1 * y1) * Math.Sqrt(x2 * x2 + y2 * y2));
 
-            return (float)Math.Acos(angle);
-        }
 
-        private void MainForm_MouseWheel(object sender, MouseEventArgs e)
-        {
-            //if (isRotateMode && prevSelectedFigureIndex != -1)
-            //{
-            //    float angle = e.Delta/120;
-            //    FigureList[prevSelectedFigureIndex].Rotate(Math.Abs(angle - prevRotateAngle), rotateCenter);
-            //    prevRotateAngle = angle;
-            //    UpdateDrawingPanel();
-            //    DrawCenter(rotateCenter);
-            //    drawingPanel.Image = myBitmap;
+            //double angle = (x1 * x2 + y1 * y1) /
+            //  (Math.Sqrt(x1 * x1 + y1 * y1) * Math.Sqrt(x2 * x2 + y2 * y2));
 
-            //}
-
+            return (float)Math.Atan2(y1 - y2, x1 - x2);
         }
 
         private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
@@ -328,17 +318,23 @@ namespace graphics_editor_cgs
             //// проверку на предыдущий индекс мб убрать
             //if (isRotateMode && prevSelectedFigureIndex != -1)
             //{
-            //    float angle = Angle(mousePoint, e.Location) - prevRotateAngle;
+            //    float angle = Angle(rotateCenter, e.Location);
             //    FigureList[prevSelectedFigureIndex].Rotate(angle, rotateCenter);
             //    prevRotateAngle = angle;
+
+            //    //float angle = Angle(mousePoint, e.Location) - prevRotateAngle;
+            //    //FigureList[prevSelectedFigureIndex].Rotate(angle, rotateCenter);
+            //    //prevRotateAngle = angle;
             //    UpdateDrawingPanel();
+            //    DrawCenter(rotateCenter);
             //}
 
             if (isResizeMode && prevSelectedFigureIndex != -1)
             {
-                DrawCenter(FigureList[prevSelectedFigureIndex].Center());
-                FigureList[prevSelectedFigureIndex].Resize(e.Location, FigureList[prevSelectedFigureIndex].Center());
+                FigureList[prevSelectedFigureIndex].Resize(e.Location);
                 UpdateDrawingPanel();
+                DrawCenter(FigureList[prevSelectedFigureIndex].Center());
+
             }
 
             if (isMoveMode)
@@ -356,6 +352,25 @@ namespace graphics_editor_cgs
         {
             isMoveMode = false;
             isResizeMode = false;
+        }
+
+        private void RotationTb_Scroll(object sender, EventArgs e)
+        {
+            if (isRotateMode && prevSelectedFigureIndex != -1)
+            {
+                float rotationAngle = (rotationAngleMode.Checked) ? 30f : rotationTb.Value - prevRotationAngle;
+
+                //DrawPolygon(((PolygonTMO)FigureList[prevSelectedFigureIndex]).Polygon_1);
+                //DrawPolygon(((PolygonTMO)FigureList[prevSelectedFigureIndex]).Polygon_2);
+                FigureList[prevSelectedFigureIndex].Rotate(rotationAngle, rotateCenter);
+                UpdateDrawingPanel();
+
+
+                DrawCenter(rotateCenter);
+                
+            }
+            prevRotationAngle = rotationTb.Value;
+            drawingPanel.Image = myBitmap;
         }
 
         private void DrawLineSegment(LineSegment lineSegment)
@@ -413,6 +428,18 @@ namespace graphics_editor_cgs
             }
         }
 
+        private void DrawPolygonTMO(PolygonTMO polygon)
+        {
+            for (int i = 0; i < polygon.ResultLines.Count - 1; i++)
+            {
+                float xl = polygon.ResultLines[i].xl;
+                float xr = polygon.ResultLines[i].xr;
+                float y = polygon.ResultLines[i].y;
+
+                g.DrawLine(new Pen(polygon.Color), new PointF(xl, y), new PointF(xr, y));
+            }
+        }
+
         // МБ ПЕРЕНЕСТИ ЭТИ МЕТОДЫ В КЛАССЫ 
         private void DrawBezier(BezierCurve bezierCurve)
         {
@@ -427,8 +454,8 @@ namespace graphics_editor_cgs
         {
             //Pen pen1 = new Pen(Color.White);
             Pen pen2 = new Pen(Color.Red);
-            g.DrawLine(pen2, center.X - 2, center.Y - 2, center.X + 2, center.Y + 2);
-            g.DrawLine(pen2, center.X + 2, center.Y - 2, center.X - 2, center.Y + 2);
+            g.DrawLine(pen2, center.X - 4, center.Y - 4, center.X + 4, center.Y + 4);
+            g.DrawLine(pen2, center.X + 4, center.Y - 4, center.X - 4, center.Y + 4);
         }
 
         private void ClearPanel()

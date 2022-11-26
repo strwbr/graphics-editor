@@ -50,8 +50,9 @@ namespace graphics_editor_cgs
             }
         }
 
-        public void Resize(PointF mP, PointF center)
+        public void Resize(PointF mP)
         {
+            PointF center = Center();
             float bx = (mP.X >= Min().X && mP.X <= Max().X) ? -0.03f : 0.03f;
             bx += 1;
             for (int i = 0; i < VertexList.Count; i++)
@@ -65,7 +66,17 @@ namespace graphics_editor_cgs
 
         public void Rotate(float angle, PointF center)
         {
-            throw new NotImplementedException();
+            //double cos = Math.Cos(angle);
+            double cos = Math.Cos(angle * Math.PI / 180);
+            //double sin = Math.Sin(angle);
+            double sin = Math.Sin(angle * Math.PI / 180);
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                PointF p = new PointF();
+                p.X = (float)((VertexList[i].X - center.X) * cos - (VertexList[i].Y - center.Y) * sin + center.X);
+                p.Y = (float)((VertexList[i].X - center.X) * sin + (VertexList[i].Y - center.Y) * cos + center.Y);
+                VertexList[i] = p;
+            }
         }
 
         public PointF Center()
@@ -78,8 +89,8 @@ namespace graphics_editor_cgs
         public PointF Min()
         {
             PointF p = new PointF();
-            p.X = VertexList[0].X < VertexList[1].X ? VertexList[0].X : VertexList[1].X;
-            p.Y = VertexList[0].Y < VertexList[1].Y ? VertexList[0].Y : VertexList[1].Y;
+            p.X = (VertexList[0].X < VertexList[1].X) ? VertexList[0].X : VertexList[1].X;
+            p.Y = (VertexList[0].Y < VertexList[1].Y) ? VertexList[0].Y : VertexList[1].Y;
             return p;
         }
 
