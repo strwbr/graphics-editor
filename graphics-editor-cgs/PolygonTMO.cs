@@ -59,10 +59,10 @@ namespace graphics_editor_cgs
             float Ymin = Math.Min(Ymin_1, Ymin_2);
             float Ymax = Math.Max(Ymax_1, Ymax_2);
 
-            List<float> Xrl = new List<float>();
-            List<float> Xrr = new List<float>();
+            List<int> Xrl = new List<int>();
+            List<int> Xrr = new List<int>();
 
-            for (float j = Ymin; j < Ymax; j++)
+            for (int j = (int)Ymin; j < Ymax; j++)
             {
                 List<HorizontalLine> Xlines_1 = new List<HorizontalLine>();
                 List<HorizontalLine> Xlines_2 = new List<HorizontalLine>();
@@ -114,7 +114,7 @@ namespace graphics_editor_cgs
                     //    Xrl.Add(Xmin_e);
                     //    Q = -M[0].dQ;
                     //}
-                    float x;
+                    int x;
                     for (int i = 0; i < nM; i++)
                     {
                         x = M[i].x;

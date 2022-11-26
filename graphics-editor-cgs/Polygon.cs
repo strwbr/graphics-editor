@@ -81,8 +81,8 @@ namespace graphics_editor_cgs
             float Ymin = Min().Y;
             float Ymax = Max().Y;
 
-            List<float> Xb = new List<float>();
-            for (float j = Ymin; j <= Ymax; j++)
+            List<int> Xb = new List<int>();
+            for (int j = (int)Ymin; j <= Ymax; j++)
             {
                 Xb.Clear();
                 for (int i = 0; i < VertexList.Count; i++)
@@ -95,7 +95,7 @@ namespace graphics_editor_cgs
                     if ((VertexList[i].Y < j && VertexList[k].Y >= j)
                         || (VertexList[i].Y >= j && VertexList[k].Y < j))
                     {
-                        float x = (float)Math.Ceiling((double)(VertexList[k].X - VertexList[i].X)
+                        int x = (int)Math.Ceiling((double)(VertexList[k].X - VertexList[i].X)
                             * (j - VertexList[i].Y) / (double)(VertexList[k].Y
                             - VertexList[i].Y) + VertexList[i].X);
                         Xb.Add(x);
