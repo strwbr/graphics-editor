@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System;
 using System.Drawing.Drawing2D;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ToolTip = System.Windows.Forms.ToolTip;
 using Button = System.Windows.Forms.Button;
 
@@ -24,15 +23,15 @@ namespace graphics_editor_cgs
 
         private int[] SetQ = new int[] { -1, -1 };
 
-        private int indexTMO = 0;
+        private int indexTMO = -1;
         private int indexFigure = 0;
         private int indexOperation = 0;
 
-        private PointF mousePoint = new Point();
+        private PointF lastMouseClickPosition = new Point();
         private PointF rotateCenter = new Point();
         private float prevRotationAngle = 0;
 
-        private int prevSelectedFigureIndex = -1;
+        private int lastSelectedFigureIndex = -1;
         private int selectedFigureIndex = -1;
 
         private bool isSelectedFigure = false;
@@ -75,7 +74,7 @@ namespace graphics_editor_cgs
             isResizeMode = false;
             isRotateMode = false;
 
-            prevSelectedFigureIndex = -1;
+            lastSelectedFigureIndex = -1;
             selectedFigureIndex = -1;
 
             drawingPanel.Image = myBitmap;
@@ -115,17 +114,21 @@ namespace graphics_editor_cgs
         private void SelectFigureBtn_Click(object sender, EventArgs e)
         {
             indexOperation = 1;
+            tmoCb.Enabled = false;
         }
 
         // Удаление фигуры = 2
         private void DeleteFigureBtn_Click(object sender, EventArgs e)
         {
             indexOperation = 2;
+            tmoCb.Enabled = false;
             if (isSelectedFigure)
             {
                 //FigureList.RemoveAt(selectedFigureIndex);
                 FigureList.Remove(selectedFigure);
-                UpdateDrawingPanel();
+                selectedFigureIndex = -1;
+                lastSelectedFigureIndex = -1;
+                UpdateScene();
                 drawingPanel.Image = myBitmap;
             }
         }
@@ -133,36 +136,40 @@ namespace graphics_editor_cgs
         // Очистка области рисования = 3
         private void ClearPanelBtn_Click(object sender, EventArgs e)
         {
-            indexOperation = 3;
+            //indexOperation = 3;
+            tmoCb.Enabled = false;
             ClearPanel();
         }
-        // ТМО = 4
+
+        // ТМО = 3
         private void TmoBtn_Click(object sender, EventArgs e)
         {
             tmoCb.Enabled = true;
-            indexOperation = 4;
+            indexOperation = 3;
         }
+
         // Выбор ТМО
         private void TmoCb_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (tmoCb.SelectedIndex)
             {
                 case 0: // Сим разность
-                    SetQ = new int[] { 1, 2 };
+                    //SetQ = new int[] { 1, 2 };
                     indexTMO = 0;
                     break;
                 case 1: // Разность А/В
-                    SetQ = new int[] { 2, 2 };
+                    //SetQ = new int[] { 2, 2 };
                     indexTMO = 1;
                     break;
                 case 2: // Разность В/А
-                    SetQ = new int[] { 1, 1 };
+                    //SetQ = new int[] { 1, 1 };
                     indexTMO = 2;
                     break;
             }
         }
 
-        private void UpdateDrawingPanel()
+        // Перерисовка объектов на сцене (обозначение выделения и центра не перерисовываются)
+        private void UpdateScene()
         {
             g.Clear(drawingPanel.BackColor);
             foreach (IFigure f in FigureList)
@@ -171,6 +178,7 @@ namespace graphics_editor_cgs
             }
         }
 
+        // Рисование фигуры
         private void DrawFigure(IFigure f)
         {
             if (f.GetType() == typeof(Polygon))
@@ -194,171 +202,216 @@ namespace graphics_editor_cgs
             //}
         }
 
-        private void AddChosenFigure(PointF mP)
+        private void BuildLineSegment(MouseEventArgs e)
         {
-
-        }
-
-        private void DrawingPanel_MouseDown(object sender, MouseEventArgs e)
-        {
-            mousePoint = new PointF(e.X, e.Y);
-            // 0 - Добавление фигуры на сцену
-            if (indexOperation == 0)
+            if (e.Button == MouseButtons.Left)
             {
-                IFigure currentFigure;
-                switch (indexFigure)
+                switch (countLineSegmentPoints)
                 {
                     case 0:
-                        if (e.Button == MouseButtons.Left)
-                        {
-                            switch (countLineSegmentPoints)
-                            {
-                                case 0:
-                                    LineSegmentPoints.Add(mousePoint);
-                                    countLineSegmentPoints++;
-                                    break;
-                                case 1:
-                                    LineSegmentPoints.Add(mousePoint);
-                                    currentFigure = new LineSegment(LineSegmentPoints, CurrentColor);
-                                    FigureList.Add(currentFigure);
-                                    DrawLineSegment((LineSegment)currentFigure);
-                                    countLineSegmentPoints = 0;
-                                    LineSegmentPoints.Clear();
-                                    break;
-                            }
-                        }
+                        LineSegmentPoints.Add(lastMouseClickPosition);
+                        countLineSegmentPoints++;
                         break;
-
                     case 1:
-                        if (e.Button == MouseButtons.Left)
-                        {
-                            // g.DrawEllipse(new Pen(Color.Gray, 1), e.X - 2, e.Y - 2, 5, 5);
-                            BezierPoints.Add(mousePoint); // mousePoint!!!
-                            countBezierPoints++;
-                        }
-                        else if (e.Button == MouseButtons.Right)
-                        {
-                            if (countBezierPoints > 1)
-                            {
-                                currentFigure = Figures.Bezier(BezierPoints, countBezierPoints - 1, CurrentColor);
-                                DrawBezier((BezierCurve)currentFigure);
-                                FigureList.Add(currentFigure);
-                                countBezierPoints = 0;
-                                BezierPoints.Clear();
-                            }
-                        }
+                        LineSegmentPoints.Add(lastMouseClickPosition);
+                        LineSegment segment = new LineSegment(LineSegmentPoints, CurrentColor);
+                        FigureList.Add(segment);
+                        DrawLineSegment(segment);
+                        countLineSegmentPoints = 0;
+                        LineSegmentPoints.Clear();
                         break;
-
-                    case 2:
-                        currentFigure = Figures.Arrow1(e.Location, CurrentColor);
-                        FigureList.Add(currentFigure);
-                        DrawPolygon((Polygon)currentFigure); break;
-                    case 3:
-                        currentFigure = Figures.Arrow2(e.Location, CurrentColor);
-                        FigureList.Add(currentFigure);
-                        DrawPolygon((Polygon)currentFigure); break;
                 }
             }
-            // Выделение
-            else if (indexOperation == 1)
-            {
-                prevSelectedFigureIndex = selectedFigureIndex;
-                selectedFigureIndex = FindSelectedFigure(e.Location); // mousePoint
+        }
 
-                if (e.Button == MouseButtons.Right)
+        private void BuildBezierCurve(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                BezierPoints.Add(lastMouseClickPosition); // mousePoint!!!
+                countBezierPoints++;
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                if (countBezierPoints > 1)
                 {
+                    BezierCurve curve = Figures.Bezier(BezierPoints, countBezierPoints - 1, CurrentColor);
+                    FigureList.Add(curve);
+                    DrawBezier(curve);
+                    countBezierPoints = 0;
+                    BezierPoints.Clear();
+                }
+            }
+        }
+
+        private void BuildArrow1(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Polygon arrow = Figures.Arrow1(lastMouseClickPosition, CurrentColor);
+                FigureList.Add(arrow);
+                DrawPolygon(arrow);
+            }
+        }
+
+        private void BuildArrow2(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Polygon arrow = Figures.Arrow2(lastMouseClickPosition, CurrentColor);
+                FigureList.Add(arrow);
+                DrawPolygon(arrow);
+            }
+        }
+
+        private void AddChosenFigureToScene(MouseEventArgs e)
+        {
+            switch (indexFigure)
+            {
+                case 0:
+                    BuildLineSegment(e);
+                    break;
+                case 1:
+                    BuildBezierCurve(e);
+                    break;
+                case 2:
+                    BuildArrow1(e);
+                    break;
+                case 3:
+                    BuildArrow2(e);
+                    break;
+            }
+        }
+
+        private void SelectFigureOnScene(MouseEventArgs e)
+        {
+            lastSelectedFigureIndex = selectedFigureIndex;
+            selectedFigureIndex = FindSelectedFigure(lastMouseClickPosition); // mousePoint
+
+            if (e.Button == MouseButtons.Right)
+            {
+                if (lastSelectedFigureIndex != -1)
+                {
+                    UpdateScene();
+                    DrawSelection(FigureList[lastSelectedFigureIndex]);
+
                     rotateCenter = e.Location;
                     DrawCenter(rotateCenter);
                     isRotateMode = true;
                     rotationTb.Enabled = true;
                 }
+            }
 
-                if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
+            {
+                //isRotateMode = false;
+
+                // Если до этого была уже выделена фигура
+                if (lastSelectedFigureIndex != -1)
                 {
-                    isRotateMode = false;
-                    // Если до этого была уже выделена фигура
-                    if (prevSelectedFigureIndex != -1)
-                    {
-                        // то перерисовываем об-ть рис-я без выделения
-                        UpdateDrawingPanel();
-                        if (FigureList[prevSelectedFigureIndex].CheckResize(e.X, e.Y)) isResizeMode = true;
-                        else isResizeMode = false;
-                    }
-                    if (selectedFigureIndex != -1)
-                    {
-                        selectedFigure = FigureList[selectedFigureIndex];
-                        DrawSelection(selectedFigure);
-                        isSelectedFigure = true;
-                        isMoveMode = true;
-                    }
-                    else
-                    {
-                        isSelectedFigure = false;
-                        isMoveMode = false;
-                    }
+                    if (FigureList[lastSelectedFigureIndex].CheckResize(e.X, e.Y))
+                        isResizeMode = true; // тут происходит что-то странное (вроде исправила лол)
+                    else isResizeMode = false;
+                    // перерисовываем об-ть рис-я без выделения
+                    UpdateScene();
+                }
+                if (selectedFigureIndex != -1)
+                {
+                    selectedFigure = FigureList[selectedFigureIndex];
+                    DrawSelection(selectedFigure);
+                    isSelectedFigure = true;
+                    isMoveMode = true;
+                }
+                else
+                {
+                    isSelectedFigure = false;
+                    isMoveMode = false;
                 }
             }
-            // ТМО
-            else if (indexOperation == 4)
+        }
+
+        private void BuildPolygonTMO()
+        {
+            switch (countSelectedFigures)
             {
-                // Добавить проверку на тип выбранного элемента
-                switch (countSelectedFigures)
-                {
-                    case 0:
-                        int index = FindSelectedFigure(mousePoint);
-                        if (index != -1)
-                        {
-                            DrawSelection(FigureList[index]);
-                            polygonTMO.Polygon_1 = new Polygon((Polygon)FigureList[index]);
-                            FigureList.RemoveAt(index);
-                            countSelectedFigures++;
-                        }
-                        break;
-                    case 1:
-                        index = FindSelectedFigure(mousePoint);
-                        if (index != -1)
-                        {
-                            DrawSelection(FigureList[index]);
-                            polygonTMO.Polygon_2 = new Polygon((Polygon)FigureList[index]);
-                            FigureList.RemoveAt(index);
-                            if (SetQ[0] != -1)
-                            {
-                                polygonTMO.SetQ = SetQ;
-                                polygonTMO.MakeTMO();
-                                polygonTMO.Color = CurrentColor;
-                                FigureList.Add(polygonTMO);
-                                UpdateDrawingPanel();
-                            }
-                            countSelectedFigures = 0;
-                            polygonTMO = new PolygonTMO();
-                        }
-                        break;
-                }
+                case 0:
+                    int index = FindSelectedFigure(lastMouseClickPosition);
+                    if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
+                    {
+                        DrawSelection(FigureList[index]);
+                        polygonTMO.Polygon_1 = new Polygon((Polygon)FigureList[index]);
+                        FigureList.RemoveAt(index);
+                        countSelectedFigures++;
+                    }
+                    break;
+                case 1:
+                    index = FindSelectedFigure(lastMouseClickPosition);
+                    if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
+                    {
+                        DrawSelection(FigureList[index]);
+                        polygonTMO.Polygon_2 = new Polygon((Polygon)FigureList[index]);
+                        FigureList.RemoveAt(index);
+
+                        polygonTMO.IndexTMO = indexTMO;
+                        polygonTMO.MakeTMO();
+                        polygonTMO.Color = CurrentColor;
+                        FigureList.Add(polygonTMO);
+                        UpdateScene();
+
+                        countSelectedFigures = 0;
+                        polygonTMO = new PolygonTMO();
+                    }
+                    break;
+            }
+        }
+
+        private void DrawingPanel_MouseDown(object sender, MouseEventArgs e)
+        {
+            lastMouseClickPosition = new PointF(e.X, e.Y);
+            // 0 - Добавление фигуры на сцену
+            if (indexOperation == 0)
+            {
+                AddChosenFigureToScene(e);
+            }
+            // 1 - Выделение
+            else if (indexOperation == 1)
+            {
+                SelectFigureOnScene(e);
+            }
+            // 3 - ТМО
+            else if (indexOperation == 3)
+            {
+                // мб в метод ResetSelection() перенести 2 эти строки
+                lastSelectedFigureIndex = -1;
+                selectedFigureIndex = -1;
+
+                if (indexTMO != -1)
+                    BuildPolygonTMO();
+                // else Показывать предупреждение, что не выбран тип ТМО
             }
             drawingPanel.Image = myBitmap;
         }
 
-        
-
         private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
         {
-           
-            if (isResizeMode && prevSelectedFigureIndex != -1)
+            if (isResizeMode && lastSelectedFigureIndex != -1)
             {
-                FigureList[prevSelectedFigureIndex].Resize(e.Location);
-                UpdateDrawingPanel();
-                DrawCenter(FigureList[prevSelectedFigureIndex].Center());
+                FigureList[lastSelectedFigureIndex].Resize(e.Location);
+                UpdateScene();
+                DrawCenter(FigureList[lastSelectedFigureIndex].Center());
+                DrawSelection(FigureList[lastSelectedFigureIndex]);
+
 
             }
 
             if (isMoveMode)
             {
-                FigureList[selectedFigureIndex].Move(e.X - mousePoint.X, e.Y - mousePoint.Y);
+                FigureList[selectedFigureIndex].Move(e.X - lastMouseClickPosition.X, e.Y - lastMouseClickPosition.Y);
                 //if (FigureList[selectedFigureIndex].GetType() == typeof(Polygon))
                 //    ((Polygon)FigureList[selectedFigureIndex]).Fill();
-                UpdateDrawingPanel();
+                UpdateScene();
             }
-            mousePoint = e.Location;
+            lastMouseClickPosition = e.Location;
             drawingPanel.Image = myBitmap;
         }
 
@@ -366,21 +419,28 @@ namespace graphics_editor_cgs
         {
             isMoveMode = false;
             isResizeMode = false;
+
+            if (selectedFigureIndex != -1)
+                DrawSelection(FigureList[selectedFigureIndex]);
+            drawingPanel.Image = myBitmap;
+
+            //if (rotateCenter != null)
+            //    DrawCenter(rotateCenter);
+
         }
 
         private void RotationTb_Scroll(object sender, EventArgs e)
         {
-            if (isRotateMode && prevSelectedFigureIndex != -1)
+            if (isRotateMode && lastSelectedFigureIndex != -1)
             {
                 float rotationAngle = (rotationAngleMode.Checked) ? 30f : rotationTb.Value - prevRotationAngle;
 
-                //DrawPolygon(((PolygonTMO)FigureList[prevSelectedFigureIndex]).Polygon_1);
-                //DrawPolygon(((PolygonTMO)FigureList[prevSelectedFigureIndex]).Polygon_2);
-                FigureList[prevSelectedFigureIndex].Rotate(rotationAngle, rotateCenter);
-                UpdateDrawingPanel();
+                FigureList[lastSelectedFigureIndex].Rotate(rotationAngle, rotateCenter);
+                UpdateScene();
 
 
                 DrawCenter(rotateCenter);
+                DrawSelection(FigureList[lastSelectedFigureIndex]);
 
             }
             prevRotationAngle = rotationTb.Value;
@@ -513,6 +573,6 @@ namespace graphics_editor_cgs
             t.SetToolTip(btn, text);
         }
 
-        
+
     }
 }

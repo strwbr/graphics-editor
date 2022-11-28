@@ -70,9 +70,10 @@ namespace graphics_editor_cgs
             // 
             // colorDialogBtn
             // 
+            this.colorDialogBtn.AutoSize = true;
             this.colorDialogBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.colorDialogBtn.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.colorDialogBtn.Location = new System.Drawing.Point(196, 21);
+            this.colorDialogBtn.Location = new System.Drawing.Point(204, 29);
             this.colorDialogBtn.Name = "colorDialogBtn";
             this.colorDialogBtn.Size = new System.Drawing.Size(90, 30);
             this.colorDialogBtn.TabIndex = 0;
@@ -89,7 +90,7 @@ namespace graphics_editor_cgs
             this.settingColorBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.settingColorBox.Location = new System.Drawing.Point(12, 387);
             this.settingColorBox.Name = "settingColorBox";
-            this.settingColorBox.Size = new System.Drawing.Size(290, 149);
+            this.settingColorBox.Size = new System.Drawing.Size(309, 149);
             this.settingColorBox.TabIndex = 1;
             this.settingColorBox.TabStop = false;
             this.settingColorBox.Text = "Цвет";
@@ -98,7 +99,7 @@ namespace graphics_editor_cgs
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(6, 71);
+            this.label1.Location = new System.Drawing.Point(6, 81);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(128, 20);
             this.label1.TabIndex = 0;
@@ -106,12 +107,13 @@ namespace graphics_editor_cgs
             // 
             // standartColorsPanel
             // 
+            this.standartColorsPanel.AutoSize = true;
             this.standartColorsPanel.Controls.Add(this.redBtn);
             this.standartColorsPanel.Controls.Add(this.yellowBtn);
             this.standartColorsPanel.Controls.Add(this.greenBtn);
             this.standartColorsPanel.Controls.Add(this.blueBtn);
             this.standartColorsPanel.Controls.Add(this.blackBtn);
-            this.standartColorsPanel.Location = new System.Drawing.Point(5, 19);
+            this.standartColorsPanel.Location = new System.Drawing.Point(5, 26);
             this.standartColorsPanel.Name = "standartColorsPanel";
             this.standartColorsPanel.Size = new System.Drawing.Size(185, 49);
             this.standartColorsPanel.TabIndex = 1;
@@ -178,9 +180,9 @@ namespace graphics_editor_cgs
             // 
             // currentColorPanel
             // 
-            this.currentColorPanel.Location = new System.Drawing.Point(6, 94);
+            this.currentColorPanel.Location = new System.Drawing.Point(6, 104);
             this.currentColorPanel.Name = "currentColorPanel";
-            this.currentColorPanel.Size = new System.Drawing.Size(117, 30);
+            this.currentColorPanel.Size = new System.Drawing.Size(184, 30);
             this.currentColorPanel.TabIndex = 5;
             // 
             // label2
@@ -237,7 +239,7 @@ namespace graphics_editor_cgs
             "Разность В/А"});
             this.tmoCb.Location = new System.Drawing.Point(10, 270);
             this.tmoCb.Name = "tmoCb";
-            this.tmoCb.Size = new System.Drawing.Size(156, 28);
+            this.tmoCb.Size = new System.Drawing.Size(231, 28);
             this.tmoCb.TabIndex = 13;
             this.tmoCb.Text = "Выберите ТМО";
             this.tmoCb.SelectedIndexChanged += new System.EventHandler(this.TmoCb_SelectedIndexChanged);

@@ -9,7 +9,8 @@ namespace graphics_editor_cgs
 {
     public class PolygonTMO : IFigure
     {
-        public int[] SetQ { get; set; }
+        //public int[] SetQ { get; set; }
+        public int IndexTMO { get; set; }
         public Polygon Polygon_1 { get; set; }
         public Polygon Polygon_2 { get; set; }
         public List<HorizontalLine> ResultLines { get; set; }
@@ -19,7 +20,8 @@ namespace graphics_editor_cgs
 
         public PolygonTMO()
         {
-            SetQ = new int[] { -1, -1 };
+            //SetQ = new int[] { -1, -1 };
+            IndexTMO = -1;
             Polygon_1 = new Polygon();
             Polygon_2 = new Polygon();
             ResultLines = new List<HorizontalLine>();
@@ -27,24 +29,46 @@ namespace graphics_editor_cgs
             Color = Color.Black;
         }
 
-        public PolygonTMO(int[] setQ, Polygon polygon_1, Polygon polygon_2, Color color) : this()
+        public PolygonTMO(int indexTMO, Polygon polygon_1, Polygon polygon_2, Color color) : this()
         {
-            for (int i = 0; i < setQ.Length; i++)
-            {
-                SetQ[i] = setQ[i];
-            }
+            //for (int i = 0; i < setQ.Length; i++)
+            //{
+            //    SetQ[i] = setQ[i];
+            //}
+            IndexTMO = indexTMO;
             Polygon_1 = new Polygon(polygon_1);
             Polygon_2 = new Polygon(polygon_2);
             Color = color;
         }
 
-        public PolygonTMO(PolygonTMO other) : this(other.SetQ, other.Polygon_1, other.Polygon_2, other.Color)
+        public PolygonTMO(PolygonTMO other) : this(other.IndexTMO, other.Polygon_1, other.Polygon_2, other.Color)
         {
             //for (int i = 0; i < other.SetQ.Length; i++)
             //{
             //    SetQ[i] = other.SetQ[i];
             //}
             //ParentsPolygons = other.ParentsPolygons.ConvertAll(item => new Polygon(item));
+        }
+
+        public int[] SetQ
+        {
+            get
+            {
+                int[] setQ = new int[] { -1, -1 };
+                switch (IndexTMO)
+                {
+                    case 0: // Сим разность
+                        setQ = new int[] { 1, 2 };
+                        break;
+                    case 1: // Разность А/В
+                        setQ = new int[] { 2, 2 };
+                        break;
+                    case 2: // Разность В/А
+                        setQ = new int[] { 1, 1 };
+                        break;
+                }
+                return setQ;
+            }
         }
 
         public void MakeTMO()
@@ -61,6 +85,8 @@ namespace graphics_editor_cgs
 
             List<int> Xrl = new List<int>();
             List<int> Xrr = new List<int>();
+
+            int[] setQ = SetQ;
 
             for (int j = (int)Ymin; j < Ymax; j++)
             {
@@ -120,12 +146,12 @@ namespace graphics_editor_cgs
                         x = M[i].x;
                         Qnew = Q + M[i].dQ;
 
-                        if ((Q < SetQ[0] || Q > SetQ[1]) && (Qnew >= SetQ[0] && Qnew <= SetQ[1]))
+                        if ((Q < setQ[0] || Q > setQ[1]) && (Qnew >= setQ[0] && Qnew <= setQ[1]))
                         {
                             Xrl.Add(x);
                         }
 
-                        if ((Q >= SetQ[0] && Q <= SetQ[1]) && (Qnew < SetQ[0] || Qnew > SetQ[1]))
+                        if ((Q >= setQ[0] && Q <= setQ[1]) && (Qnew < setQ[0] || Qnew > setQ[1]))
                         {
                             Xrr.Add(x);
                         }
@@ -152,9 +178,7 @@ namespace graphics_editor_cgs
                 if (p.Y == ResultLines[i].y)
                 {
                     if (p.X >= ResultLines[i].xl && p.X <= ResultLines[i].xr)
-                    {
                         return true;
-                    }
                 }
             }
             return false;
