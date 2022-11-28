@@ -3,6 +3,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using System;
 using System.Drawing.Drawing2D;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using ToolTip = System.Windows.Forms.ToolTip;
+using Button = System.Windows.Forms.Button;
 
 namespace graphics_editor_cgs
 {
@@ -10,13 +13,13 @@ namespace graphics_editor_cgs
     {
         private Graphics g;
         private Bitmap myBitmap;
+
         private List<PointF> BezierPoints = new List<PointF>();
         private int countBezierPoints = 0;
         private List<PointF> LineSegmentPoints = new List<PointF>();
         private int countLineSegmentPoints = 0;
 
         private List<IFigure> FigureList = new List<IFigure>();
-        private List<IFigure> SelectedFiguresList = new List<IFigure>();
         private IFigure selectedFigure = null;
 
         private int[] SetQ = new int[] { -1, -1 };
@@ -38,9 +41,7 @@ namespace graphics_editor_cgs
         private bool isRotateMode = false;
 
         private Color CurrentColor => currentColorPanel.BackColor;
-        private Pen CurrentPen => new Pen(CurrentColor);
 
-        private TMO tmo = new TMO();
         private PolygonTMO polygonTMO = new PolygonTMO();
         private int countSelectedFigures = 0;
 
@@ -54,7 +55,31 @@ namespace graphics_editor_cgs
             currentColorPanel.BackColor = Color.Black;
         }
 
+        private void ClearPanel()
+        {
+            g.Clear(drawingPanel.BackColor);
 
+            countSelectedFigures = 0;
+            countBezierPoints = 0;
+            countLineSegmentPoints = 0;
+
+            FigureList.Clear();
+            BezierPoints.Clear();
+            LineSegmentPoints.Clear();
+
+            selectedFigure = null;
+            polygonTMO = new PolygonTMO();
+
+            isSelectedFigure = false;
+            isMoveMode = false;
+            isResizeMode = false;
+            isRotateMode = false;
+
+            prevSelectedFigureIndex = -1;
+            selectedFigureIndex = -1;
+
+            drawingPanel.Image = myBitmap;
+        }
 
         // Добавление фигуры = 1
         // Отрезок = 0
@@ -63,7 +88,6 @@ namespace graphics_editor_cgs
             indexOperation = 0; // перенести в другой метод, где будет проверять индекс операции (если 4, то отключить)
             indexFigure = 0;
             tmoCb.Enabled = false;
-            debugLabel.Text = $"Отрезок = {indexFigure} | [{indexOperation}]";
         }
         // Прямая Безье = 1
         private void BezierBtn_Click(object sender, EventArgs e)
@@ -71,7 +95,6 @@ namespace graphics_editor_cgs
             indexOperation = 0;
             indexFigure = 1;
             tmoCb.Enabled = false;
-            debugLabel.Text = $"Безье = {indexFigure} | [{indexOperation}]";
         }
         // Стрелка1 = 2
         private void Arrow1Btn_Click(object sender, EventArgs e)
@@ -79,7 +102,6 @@ namespace graphics_editor_cgs
             indexOperation = 0;
             indexFigure = 2;
             tmoCb.Enabled = false;
-            debugLabel.Text = $"Стрелка1 = {indexFigure} | [{indexOperation}]";
         }
         // Стрелка2 = 3
         private void Arrow2Btn_Click(object sender, EventArgs e)
@@ -87,7 +109,6 @@ namespace graphics_editor_cgs
             indexOperation = 0;
             indexFigure = 3;
             tmoCb.Enabled = false;
-            debugLabel.Text = $"Стрелка2 = {indexFigure} | [{indexOperation}]";
         }
 
         // Выделение фигуры = 1
@@ -146,16 +167,36 @@ namespace graphics_editor_cgs
             g.Clear(drawingPanel.BackColor);
             foreach (IFigure f in FigureList)
             {
-                if (f.GetType() == typeof(Polygon))
-                    DrawPolygon((Polygon)f);
-                else if (f.GetType() == typeof(BezierCurve))
-                    DrawBezier((BezierCurve)f);
-                else if (f.GetType() == typeof(LineSegment))
-                    DrawLineSegment((LineSegment)f);
-                else if (f.GetType() == typeof(PolygonTMO))
-                    DrawPolygonTMO((PolygonTMO)f);
-
+                DrawFigure(f);
             }
+        }
+
+        private void DrawFigure(IFigure f)
+        {
+            if (f.GetType() == typeof(Polygon))
+                DrawPolygon((Polygon)f);
+            else if (f.GetType() == typeof(BezierCurve))
+                DrawBezier((BezierCurve)f);
+            else if (f.GetType() == typeof(LineSegment))
+                DrawLineSegment((LineSegment)f);
+            else if (f.GetType() == typeof(PolygonTMO))
+                DrawPolygonTMO((PolygonTMO)f);
+        }
+
+        private void drawingPanel_MouseClick(object sender, MouseEventArgs e)
+        {
+            //mousePoint = new Point(e.X, e.Y);
+            //switch(indexOperation)
+            //{
+            //    case 0:
+
+            //        break;
+            //}
+        }
+
+        private void AddChosenFigure(PointF mP)
+        {
+
         }
 
         private void DrawingPanel_MouseDown(object sender, MouseEventArgs e)
@@ -168,8 +209,6 @@ namespace graphics_editor_cgs
                 switch (indexFigure)
                 {
                     case 0:
-                        debugLabel.Text = $"indexFigure = {indexFigure}";
-                        //g.DrawEllipse(CurrentPen, e.X - 2, e.Y - 2, 5, 5);
                         if (e.Button == MouseButtons.Left)
                         {
                             switch (countLineSegmentPoints)
@@ -194,7 +233,7 @@ namespace graphics_editor_cgs
                         if (e.Button == MouseButtons.Left)
                         {
                             // g.DrawEllipse(new Pen(Color.Gray, 1), e.X - 2, e.Y - 2, 5, 5);
-                            BezierPoints.Add(e.Location); // mousePoint!!!
+                            BezierPoints.Add(mousePoint); // mousePoint!!!
                             countBezierPoints++;
                         }
                         else if (e.Button == MouseButtons.Right)
@@ -299,36 +338,11 @@ namespace graphics_editor_cgs
             drawingPanel.Image = myBitmap;
         }
 
-        private float Angle(PointF p1, PointF p2)
-        {
-            float x1 = p1.X;
-            float y1 = p1.Y;
-            float x2 = p2.X;
-            float y2 = p2.Y;
-
-
-            //double angle = (x1 * x2 + y1 * y1) /
-            //  (Math.Sqrt(x1 * x1 + y1 * y1) * Math.Sqrt(x2 * x2 + y2 * y2));
-
-            return (float)Math.Atan2(y1 - y2, x1 - x2);
-        }
+        
 
         private void DrawingPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            //// проверку на предыдущий индекс мб убрать
-            //if (isRotateMode && prevSelectedFigureIndex != -1)
-            //{
-            //    float angle = Angle(rotateCenter, e.Location);
-            //    FigureList[prevSelectedFigureIndex].Rotate(angle, rotateCenter);
-            //    prevRotateAngle = angle;
-
-            //    //float angle = Angle(mousePoint, e.Location) - prevRotateAngle;
-            //    //FigureList[prevSelectedFigureIndex].Rotate(angle, rotateCenter);
-            //    //prevRotateAngle = angle;
-            //    UpdateDrawingPanel();
-            //    DrawCenter(rotateCenter);
-            //}
-
+           
             if (isResizeMode && prevSelectedFigureIndex != -1)
             {
                 FigureList[prevSelectedFigureIndex].Resize(e.Location);
@@ -367,7 +381,7 @@ namespace graphics_editor_cgs
 
 
                 DrawCenter(rotateCenter);
-                
+
             }
             prevRotationAngle = rotationTb.Value;
             drawingPanel.Image = myBitmap;
@@ -458,19 +472,7 @@ namespace graphics_editor_cgs
             g.DrawLine(pen2, center.X + 4, center.Y - 4, center.X - 4, center.Y + 4);
         }
 
-        private void ClearPanel()
-        {
-            g.Clear(drawingPanel.BackColor);
-            FigureList.Clear();
-            BezierPoints.Clear();
-            countBezierPoints = 0;
-            countLineSegmentPoints = 0;
-            countSelectedFigures = 0;
 
-            LineSegmentPoints.Clear();
-
-            drawingPanel.Image = myBitmap;
-        }
 
         // Получение выбранного пользователем цвета из спец ДО
         private void ColorDialogBtn_Click(object sender, EventArgs e)
@@ -490,5 +492,27 @@ namespace graphics_editor_cgs
         private void BlackBtn_Click(object sender, EventArgs e) => currentColorPanel.BackColor = blackBtn.BackColor;
 
 
+        private void SegmentBtn_MouseEnter(object sender, EventArgs e) => CreateToolTip(segmentBtn, "Отрезок");
+
+        private void BezierBtn_MouseEnter(object sender, EventArgs e) => CreateToolTip(bezierBtn, "Кривая Безье");
+
+        private void Arrow1Btn_MouseEnter(object sender, EventArgs e) => CreateToolTip(arrow1Btn, "Стрелка вправо");
+
+        private void Arrow2Btn_MouseEnter(object sender, EventArgs e) => CreateToolTip(arrow2Btn, "Двунаправленная стрелка");
+
+        private void SelectFigureBtn_MouseEnter(object sender, EventArgs e) => CreateToolTip(selectFigureBtn, "Выделить фигуру");
+
+        private void DeleteFigureBtn_MouseEnter(object sender, EventArgs e) => CreateToolTip(deleteFigureBtn, "Удалить фигуру");
+
+        private void ClearPanelBtn_MouseEnter(object sender, EventArgs e) => CreateToolTip(clearPanelBtn, "Очистить область рисования");
+
+        /* Создание всплывающей подсказки при наведении на кнопку btn */
+        private void CreateToolTip(Button btn, string text)
+        {
+            ToolTip t = new ToolTip();
+            t.SetToolTip(btn, text);
+        }
+
+        
     }
 }

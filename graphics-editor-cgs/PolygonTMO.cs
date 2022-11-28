@@ -216,5 +216,6 @@ namespace graphics_editor_cgs
                 ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
                 && (y >= Yc - 7 && y <= Yc + 7);
         }
+
     }
 }
