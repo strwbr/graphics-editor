@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace graphics_editor_cgs
 {
-    public class LineSegment : IFigure
+    public class LineSegment : Figure
     {
         public List<PointF> VertexList { get; set; }
         public Color Color { get; set; }

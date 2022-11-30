@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace graphics_editor_cgs
 {
-    public class PolygonTMO : IFigure
+    public class PolygonTMO : Figure
     {
         //public int[] SetQ { get; set; }
         public int IndexTMO { get; set; }

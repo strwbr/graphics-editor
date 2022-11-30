@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace graphics_editor_cgs
 {
-    public class BezierCurve : IFigure
+    public class BezierCurve : Figure
     {
         public List<PointF> VertexList { get; set; }
         public Color Color { get; set; }

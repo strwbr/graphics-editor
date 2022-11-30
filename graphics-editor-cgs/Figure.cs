@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace graphics_editor_cgs
 {
-    public interface IFigure
+    public interface Figure
     {
         List<PointF> VertexList { get; set; }
         Color Color { get; set; }

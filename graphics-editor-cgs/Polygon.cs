@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace graphics_editor_cgs
 {
-    public class Polygon : IFigure
+    public class Polygon : Figure
     {
         // из интерфейса
         public List<PointF> VertexList { get; set; }

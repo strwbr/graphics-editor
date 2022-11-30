@@ -18,8 +18,8 @@ namespace graphics_editor_cgs
         private List<PointF> LineSegmentPoints = new List<PointF>();
         private int countLineSegmentPoints = 0;
 
-        private List<IFigure> FigureList = new List<IFigure>();
-        private IFigure selectedFigure = null;
+        private List<Figure> FigureList = new List<Figure>();
+        private Figure selectedFigure = null;
 
         private int[] SetQ = new int[] { -1, -1 };
 
@@ -174,14 +174,14 @@ namespace graphics_editor_cgs
         private void UpdateScene()
         {
             g.Clear(drawingPanel.BackColor);
-            foreach (IFigure f in FigureList)
+            foreach (Figure f in FigureList)
             {
                 DrawFigure(f);
             }
         }
 
         // Рисование фигуры
-        private void DrawFigure(IFigure f)
+        private void DrawFigure(Figure f)
         {
             if (f.GetType() == typeof(Polygon))
                 DrawPolygon((Polygon)f);
@@ -452,7 +452,7 @@ namespace graphics_editor_cgs
 
         private bool CheckResize(int index, PointF p)
         {
-            IFigure selected = FigureList[index];
+            Figure selected = FigureList[index];
             float Xmin = selected.Min.X;
             float Xmax = selected.Max.X;
             float Yc = selected.Center.Y;
@@ -476,7 +476,7 @@ namespace graphics_editor_cgs
 
         private void DrawSelection(int index)
         {
-            IFigure selectedFigure = FigureList[index];
+            Figure selectedFigure = FigureList[index];
             int Xmin = (int)selectedFigure.Min.X,
                 Ymin = (int)selectedFigure.Min.Y;
             int Xmax = (int)selectedFigure.Max.X,
