@@ -41,9 +41,6 @@ namespace graphics_editor_cgs
             this.blueBtn = new System.Windows.Forms.Button();
             this.blackBtn = new System.Windows.Forms.Button();
             this.currentColorPanel = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.clearPanelBtn = new System.Windows.Forms.Button();
             this.tmoCb = new System.Windows.Forms.ComboBox();
             this.tmoBtn = new System.Windows.Forms.Button();
@@ -58,10 +55,12 @@ namespace graphics_editor_cgs
             this.bezierBtn = new System.Windows.Forms.Button();
             this.segmentBtn = new System.Windows.Forms.Button();
             this.drawingPanel = new System.Windows.Forms.PictureBox();
+            this.rotatoinControlsPanel = new System.Windows.Forms.Panel();
             this.settingColorBox.SuspendLayout();
             this.standartColorsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rotationTb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPanel)).BeginInit();
+            this.rotatoinControlsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // colorDialog
@@ -88,7 +87,7 @@ namespace graphics_editor_cgs
             this.settingColorBox.Controls.Add(this.colorDialogBtn);
             this.settingColorBox.Controls.Add(this.currentColorPanel);
             this.settingColorBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.settingColorBox.Location = new System.Drawing.Point(12, 387);
+            this.settingColorBox.Location = new System.Drawing.Point(10, 473);
             this.settingColorBox.Name = "settingColorBox";
             this.settingColorBox.Size = new System.Drawing.Size(309, 149);
             this.settingColorBox.TabIndex = 1;
@@ -99,7 +98,7 @@ namespace graphics_editor_cgs
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(6, 81);
+            this.label1.Location = new System.Drawing.Point(4, 71);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(128, 20);
             this.label1.TabIndex = 0;
@@ -115,7 +114,7 @@ namespace graphics_editor_cgs
             this.standartColorsPanel.Controls.Add(this.blackBtn);
             this.standartColorsPanel.Location = new System.Drawing.Point(5, 26);
             this.standartColorsPanel.Name = "standartColorsPanel";
-            this.standartColorsPanel.Size = new System.Drawing.Size(185, 49);
+            this.standartColorsPanel.Size = new System.Drawing.Size(185, 42);
             this.standartColorsPanel.TabIndex = 1;
             // 
             // redBtn
@@ -180,38 +179,10 @@ namespace graphics_editor_cgs
             // 
             // currentColorPanel
             // 
-            this.currentColorPanel.Location = new System.Drawing.Point(6, 104);
+            this.currentColorPanel.Location = new System.Drawing.Point(6, 94);
             this.currentColorPanel.Name = "currentColorPanel";
-            this.currentColorPanel.Size = new System.Drawing.Size(184, 30);
+            this.currentColorPanel.Size = new System.Drawing.Size(184, 40);
             this.currentColorPanel.TabIndex = 5;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.Color.Green;
-            this.label2.Location = new System.Drawing.Point(462, 403);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(191, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Безье, стрелка1, стрелка2, отрезок";
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(462, 425);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(168, 77);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Поворот вокруг з.ц. на произвольный угол, на 30 гр., масштабирование относительно" +
-    " ц.ф. по Х, перемещение";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(462, 498);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(294, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "ТМО: симметрическая разность, разность А/В и В/А (?)";
             // 
             // clearPanelBtn
             // 
@@ -230,7 +201,6 @@ namespace graphics_editor_cgs
             // 
             // tmoCb
             // 
-            this.tmoCb.Enabled = false;
             this.tmoCb.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tmoCb.FormattingEnabled = true;
             this.tmoCb.Items.AddRange(new object[] {
@@ -242,6 +212,7 @@ namespace graphics_editor_cgs
             this.tmoCb.Size = new System.Drawing.Size(231, 28);
             this.tmoCb.TabIndex = 13;
             this.tmoCb.Text = "Выберите ТМО";
+            this.tmoCb.Visible = false;
             this.tmoCb.SelectedIndexChanged += new System.EventHandler(this.TmoCb_SelectedIndexChanged);
             // 
             // tmoBtn
@@ -262,7 +233,7 @@ namespace graphics_editor_cgs
             this.debugLabel.AutoSize = true;
             this.debugLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.debugLabel.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.debugLabel.Location = new System.Drawing.Point(768, 434);
+            this.debugLabel.Location = new System.Drawing.Point(783, 511);
             this.debugLabel.Name = "debugLabel";
             this.debugLabel.Size = new System.Drawing.Size(91, 21);
             this.debugLabel.TabIndex = 15;
@@ -273,7 +244,7 @@ namespace graphics_editor_cgs
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.label5.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.label5.Location = new System.Drawing.Point(935, 412);
+            this.label5.Location = new System.Drawing.Point(979, 544);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(52, 21);
             this.label5.TabIndex = 16;
@@ -281,8 +252,7 @@ namespace graphics_editor_cgs
             // 
             // rotationTb
             // 
-            this.rotationTb.Enabled = false;
-            this.rotationTb.Location = new System.Drawing.Point(10, 307);
+            this.rotationTb.Location = new System.Drawing.Point(5, 3);
             this.rotationTb.Maximum = 360;
             this.rotationTb.Name = "rotationTb";
             this.rotationTb.Size = new System.Drawing.Size(231, 45);
@@ -293,7 +263,7 @@ namespace graphics_editor_cgs
             // 
             this.rotationAngleMode.AutoSize = true;
             this.rotationAngleMode.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.rotationAngleMode.Location = new System.Drawing.Point(20, 344);
+            this.rotationAngleMode.Location = new System.Drawing.Point(12, 54);
             this.rotationAngleMode.Name = "rotationAngleMode";
             this.rotationAngleMode.Size = new System.Drawing.Size(236, 24);
             this.rotationAngleMode.TabIndex = 18;
@@ -396,23 +366,31 @@ namespace graphics_editor_cgs
             | System.Windows.Forms.AnchorStyles.Right)));
             this.drawingPanel.BackColor = System.Drawing.Color.White;
             this.drawingPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.drawingPanel.Location = new System.Drawing.Point(264, 12);
+            this.drawingPanel.Location = new System.Drawing.Point(284, 12);
             this.drawingPanel.Name = "drawingPanel";
-            this.drawingPanel.Size = new System.Drawing.Size(705, 369);
+            this.drawingPanel.Size = new System.Drawing.Size(799, 455);
             this.drawingPanel.TabIndex = 2;
             this.drawingPanel.TabStop = false;
-            this.drawingPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.drawingPanel_MouseClick);
             this.drawingPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseDown);
             this.drawingPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseMove);
             this.drawingPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseUp);
+            // 
+            // rotatoinControlsPanel
+            // 
+            this.rotatoinControlsPanel.Controls.Add(this.rotationTb);
+            this.rotatoinControlsPanel.Controls.Add(this.rotationAngleMode);
+            this.rotatoinControlsPanel.Location = new System.Drawing.Point(10, 320);
+            this.rotatoinControlsPanel.Name = "rotatoinControlsPanel";
+            this.rotatoinControlsPanel.Size = new System.Drawing.Size(257, 93);
+            this.rotatoinControlsPanel.TabIndex = 19;
+            this.rotatoinControlsPanel.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(996, 551);
-            this.Controls.Add(this.rotationAngleMode);
-            this.Controls.Add(this.rotationTb);
+            this.ClientSize = new System.Drawing.Size(1110, 637);
+            this.Controls.Add(this.rotatoinControlsPanel);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.debugLabel);
             this.Controls.Add(this.tmoBtn);
@@ -423,9 +401,6 @@ namespace graphics_editor_cgs
             this.Controls.Add(this.arrow2Btn);
             this.Controls.Add(this.arrow1Btn);
             this.Controls.Add(this.bezierBtn);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.segmentBtn);
             this.Controls.Add(this.drawingPanel);
             this.Controls.Add(this.settingColorBox);
@@ -436,6 +411,8 @@ namespace graphics_editor_cgs
             this.standartColorsPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.rotationTb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.drawingPanel)).EndInit();
+            this.rotatoinControlsPanel.ResumeLayout(false);
+            this.rotatoinControlsPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -456,9 +433,6 @@ namespace graphics_editor_cgs
         private Panel currentColorPanel;
         private PictureBox drawingPanel;
         private Button segmentBtn;
-        private Label label2;
-        private Label label3;
-        private Label label4;
         private Button bezierBtn;
         private Button arrow1Btn;
         private Button arrow2Btn;
@@ -471,5 +445,6 @@ namespace graphics_editor_cgs
         private Label label5;
         private TrackBar rotationTb;
         private CheckBox rotationAngleMode;
+        private Panel rotatoinControlsPanel;
     }
 }

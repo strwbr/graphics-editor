@@ -11,14 +11,15 @@ namespace graphics_editor_cgs
     {
         List<PointF> VertexList { get; set; }
         Color Color { get; set; }
+        PointF Center { get; }
+        PointF Min { get; }
+        PointF Max { get; }
 
         bool Select(PointF p);
         void Move(float dx, float dy);
         void Resize(PointF mP);
         void Rotate(float angle, PointF center);
-        PointF Center();
-        PointF Min();
-        PointF Max();
+
 
         bool CheckResize(float x, float y);
     }

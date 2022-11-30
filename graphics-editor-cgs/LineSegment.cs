@@ -52,8 +52,8 @@ namespace graphics_editor_cgs
 
         public void Resize(PointF mP)
         {
-            PointF center = Center();
-            float bx = (mP.X >= Min().X && mP.X <= Max().X) ? -0.03f : 0.03f;
+            PointF center = Center;
+            float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.03f : 0.03f;
             bx += 1;
             for (int i = 0; i < VertexList.Count; i++)
             {
@@ -66,9 +66,7 @@ namespace graphics_editor_cgs
 
         public void Rotate(float angle, PointF center)
         {
-            //double cos = Math.Cos(angle);
             double cos = Math.Cos(angle * Math.PI / 180);
-            //double sin = Math.Sin(angle);
             double sin = Math.Sin(angle * Math.PI / 180);
             for (int i = 0; i < VertexList.Count; i++)
             {
@@ -79,39 +77,48 @@ namespace graphics_editor_cgs
             }
         }
 
-        public PointF Center()
+        public PointF Center
         {
-            PointF p1 = VertexList[0];
-            PointF p2 = VertexList[1];
-            return new PointF((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2);
+            get
+            {
+                PointF p1 = VertexList[0];
+                PointF p2 = VertexList[1];
+                return new PointF((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2);
+            }
         }
 
-        public PointF Min()
+        public PointF Min
         {
-            PointF p = new PointF();
-            p.X = (VertexList[0].X < VertexList[1].X) ? VertexList[0].X : VertexList[1].X;
-            p.Y = (VertexList[0].Y < VertexList[1].Y) ? VertexList[0].Y : VertexList[1].Y;
-            return p;
+            get
+            {
+                PointF p = new PointF();
+                p.X = (VertexList[0].X < VertexList[1].X) ? VertexList[0].X : VertexList[1].X;
+                p.Y = (VertexList[0].Y < VertexList[1].Y) ? VertexList[0].Y : VertexList[1].Y;
+                return p;
+            }
         }
 
-        public PointF Max()
+        public PointF Max
         {
-            PointF p = new PointF();
-            p.X = VertexList[0].X > VertexList[1].X ? VertexList[0].X : VertexList[1].X;
-            p.Y = VertexList[0].Y > VertexList[1].Y ? VertexList[0].Y : VertexList[1].Y;
-            return p;
+            get
+            {
+                PointF p = new PointF();
+                p.X = VertexList[0].X > VertexList[1].X ? VertexList[0].X : VertexList[1].X;
+                p.Y = VertexList[0].Y > VertexList[1].Y ? VertexList[0].Y : VertexList[1].Y;
+                return p;
+            }
         }
 
         public bool CheckResize(float x, float y)
         {
-            float Xmin = Min().X;
-            float Xmax = Max().X;
-            float Yc = Center().Y;
+            float Xmin = Min.X;
+            float Xmax = Max.X;
+            float Yc = Center.Y;
             return
                 ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
                 && (y >= Yc - 7 && y <= Yc + 7);
         }
 
-        
+
     }
 }

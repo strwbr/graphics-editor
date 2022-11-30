@@ -50,7 +50,7 @@ namespace graphics_editor_cgs
             InitializeComponent();
             myBitmap = new Bitmap(drawingPanel.Width, drawingPanel.Height);
             g = Graphics.FromImage(myBitmap);
-            g.SmoothingMode = SmoothingMode.HighQuality;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
             currentColorPanel.BackColor = Color.Black;
         }
 
@@ -86,43 +86,49 @@ namespace graphics_editor_cgs
         {
             indexOperation = 0; // перенести в другой метод, где будет проверять индекс операции (если 4, то отключить)
             indexFigure = 0;
-            tmoCb.Enabled = false;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
         }
         // Прямая Безье = 1
         private void BezierBtn_Click(object sender, EventArgs e)
         {
             indexOperation = 0;
             indexFigure = 1;
-            tmoCb.Enabled = false;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
         }
         // Стрелка1 = 2
         private void Arrow1Btn_Click(object sender, EventArgs e)
         {
             indexOperation = 0;
             indexFigure = 2;
-            tmoCb.Enabled = false;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
         }
         // Стрелка2 = 3
         private void Arrow2Btn_Click(object sender, EventArgs e)
         {
             indexOperation = 0;
             indexFigure = 3;
-            tmoCb.Enabled = false;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
         }
 
         // Выделение фигуры = 1
         private void SelectFigureBtn_Click(object sender, EventArgs e)
         {
             indexOperation = 1;
-            tmoCb.Enabled = false;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
         }
 
         // Удаление фигуры = 2
         private void DeleteFigureBtn_Click(object sender, EventArgs e)
         {
             indexOperation = 2;
-            tmoCb.Enabled = false;
-            if (isSelectedFigure)
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
+            if (selectedFigureIndex!=-1)
             {
                 //FigureList.RemoveAt(selectedFigureIndex);
                 FigureList.Remove(selectedFigure);
@@ -133,18 +139,17 @@ namespace graphics_editor_cgs
             }
         }
 
-        // Очистка области рисования = 3
         private void ClearPanelBtn_Click(object sender, EventArgs e)
         {
-            //indexOperation = 3;
-            tmoCb.Enabled = false;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
             ClearPanel();
         }
 
         // ТМО = 3
         private void TmoBtn_Click(object sender, EventArgs e)
         {
-            tmoCb.Enabled = true;
+            tmoCb.Visible = true;
             indexOperation = 3;
         }
 
@@ -154,15 +159,12 @@ namespace graphics_editor_cgs
             switch (tmoCb.SelectedIndex)
             {
                 case 0: // Сим разность
-                    //SetQ = new int[] { 1, 2 };
                     indexTMO = 0;
                     break;
                 case 1: // Разность А/В
-                    //SetQ = new int[] { 2, 2 };
                     indexTMO = 1;
                     break;
                 case 2: // Разность В/А
-                    //SetQ = new int[] { 1, 1 };
                     indexTMO = 2;
                     break;
             }
@@ -189,17 +191,6 @@ namespace graphics_editor_cgs
                 DrawLineSegment((LineSegment)f);
             else if (f.GetType() == typeof(PolygonTMO))
                 DrawPolygonTMO((PolygonTMO)f);
-        }
-
-        private void drawingPanel_MouseClick(object sender, MouseEventArgs e)
-        {
-            //mousePoint = new Point(e.X, e.Y);
-            //switch(indexOperation)
-            //{
-            //    case 0:
-
-            //        break;
-            //}
         }
 
         private void BuildLineSegment(MouseEventArgs e)
@@ -286,19 +277,21 @@ namespace graphics_editor_cgs
         private void SelectFigureOnScene(MouseEventArgs e)
         {
             lastSelectedFigureIndex = selectedFigureIndex;
-            selectedFigureIndex = FindSelectedFigure(lastMouseClickPosition); // mousePoint
+            selectedFigureIndex = FindSelectedFigure(lastMouseClickPosition);
 
             if (e.Button == MouseButtons.Right)
             {
                 if (lastSelectedFigureIndex != -1)
                 {
-                    UpdateScene();
-                    DrawSelection(FigureList[lastSelectedFigureIndex]);
-
                     rotateCenter = e.Location;
+
+                    UpdateScene();
+                    DrawSelection(lastSelectedFigureIndex);
                     DrawCenter(rotateCenter);
                     isRotateMode = true;
-                    rotationTb.Enabled = true;
+                    rotatoinControlsPanel.Visible = true;
+                    rotationTb.Value = 0;
+                    prevRotationAngle = 0;
                 }
             }
 
@@ -309,16 +302,16 @@ namespace graphics_editor_cgs
                 // Если до этого была уже выделена фигура
                 if (lastSelectedFigureIndex != -1)
                 {
-                    if (FigureList[lastSelectedFigureIndex].CheckResize(e.X, e.Y))
+                    //if (FigureList[lastSelectedFigureIndex].CheckResize(e.X, e.Y))
+                    if(CheckResize(lastSelectedFigureIndex, e.Location))
                         isResizeMode = true; // тут происходит что-то странное (вроде исправила лол)
                     else isResizeMode = false;
-                    // перерисовываем об-ть рис-я без выделения
-                    UpdateScene();
                 }
                 if (selectedFigureIndex != -1)
                 {
                     selectedFigure = FigureList[selectedFigureIndex];
-                    DrawSelection(selectedFigure);
+                    UpdateScene(); 
+                    DrawSelection(selectedFigureIndex);
                     isSelectedFigure = true;
                     isMoveMode = true;
                 }
@@ -338,7 +331,8 @@ namespace graphics_editor_cgs
                     int index = FindSelectedFigure(lastMouseClickPosition);
                     if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
                     {
-                        DrawSelection(FigureList[index]);
+                        DrawSelection(index);
+                        //DrawSelection(FigureList[index]);
                         polygonTMO.Polygon_1 = new Polygon((Polygon)FigureList[index]);
                         FigureList.RemoveAt(index);
                         countSelectedFigures++;
@@ -348,7 +342,8 @@ namespace graphics_editor_cgs
                     index = FindSelectedFigure(lastMouseClickPosition);
                     if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
                     {
-                        DrawSelection(FigureList[index]);
+                        DrawSelection(index);
+                        //DrawSelection(FigureList[index]);
                         polygonTMO.Polygon_2 = new Polygon((Polygon)FigureList[index]);
                         FigureList.RemoveAt(index);
 
@@ -381,13 +376,13 @@ namespace graphics_editor_cgs
             // 3 - ТМО
             else if (indexOperation == 3)
             {
-                // мб в метод ResetSelection() перенести 2 эти строки
                 lastSelectedFigureIndex = -1;
                 selectedFigureIndex = -1;
 
                 if (indexTMO != -1)
                     BuildPolygonTMO();
-                // else Показывать предупреждение, что не выбран тип ТМО
+                else MessageBox.Show("Выберите тип ТМО", "Не выбран тип ТМО", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             drawingPanel.Image = myBitmap;
         }
@@ -398,10 +393,9 @@ namespace graphics_editor_cgs
             {
                 FigureList[lastSelectedFigureIndex].Resize(e.Location);
                 UpdateScene();
-                DrawCenter(FigureList[lastSelectedFigureIndex].Center());
-                DrawSelection(FigureList[lastSelectedFigureIndex]);
-
-
+                DrawCenter(FigureList[lastSelectedFigureIndex].Center);
+                //DrawSelection(lastSelectedFigureIndex);
+                //DrawSelection(FigureList[lastSelectedFigureIndex]);
             }
 
             if (isMoveMode)
@@ -420,8 +414,11 @@ namespace graphics_editor_cgs
             isMoveMode = false;
             isResizeMode = false;
 
+           if(indexOperation!=3) UpdateScene();
+
             if (selectedFigureIndex != -1)
-                DrawSelection(FigureList[selectedFigureIndex]);
+                DrawSelection(selectedFigureIndex);
+            //DrawSelection(FigureList[selectedFigureIndex]);
             drawingPanel.Image = myBitmap;
 
             //if (rotateCenter != null)
@@ -431,7 +428,7 @@ namespace graphics_editor_cgs
 
         private void RotationTb_Scroll(object sender, EventArgs e)
         {
-            if (isRotateMode && lastSelectedFigureIndex != -1)
+            if (isRotateMode /*&& lastSelectedFigureIndex != -1*/)
             {
                 float rotationAngle = (rotationAngleMode.Checked) ? 30f : rotationTb.Value - prevRotationAngle;
 
@@ -440,7 +437,8 @@ namespace graphics_editor_cgs
 
 
                 DrawCenter(rotateCenter);
-                DrawSelection(FigureList[lastSelectedFigureIndex]);
+                //DrawSelection(FigureList[lastSelectedFigureIndex]);
+                DrawSelection(lastSelectedFigureIndex);
 
             }
             prevRotationAngle = rotationTb.Value;
@@ -452,16 +450,16 @@ namespace graphics_editor_cgs
             g.DrawLine(new Pen(lineSegment.Color), lineSegment.VertexList[0], lineSegment.VertexList[1]);
         }
 
-        //private bool CheckResize(float x, float y)
-        //{
-        //    //Figure selectedFigure = FigureList[selectedFigureIndex];
-        //    float Xmin = FigureList[selectedFigureIndex].Min().X;
-        //    float Xmax = FigureList[selectedFigureIndex].Min().X;
-        //    float Yc = FigureList[selectedFigureIndex].Center().Y;
-        //    return
-        //        ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
-        //        && (y >= Yc - 7 && y <= Yc + 7);
-        //}
+        private bool CheckResize(int index, PointF p)
+        {
+            IFigure selected = FigureList[index];
+            float Xmin = selected.Min.X;
+            float Xmax = selected.Max.X;
+            float Yc = selected.Center.Y;
+            return
+                ((p.X >= Xmin - 10 && p.X <= Xmin + 4) || (p.X >= Xmax - 4 && p.X <= Xmax + 10))
+                && (p.Y >= Yc - 7 && p.Y <= Yc + 7);
+        }
 
         private int FindSelectedFigure(PointF mouseClickPoint)
         {
@@ -476,16 +474,17 @@ namespace graphics_editor_cgs
             return index;
         }
 
-        private void DrawSelection(IFigure selectedFigure)
+        private void DrawSelection(int index)
         {
-            int Xmin = (int)selectedFigure.Min().X,
-                Ymin = (int)selectedFigure.Min().Y;
-            int Xmax = (int)selectedFigure.Max().X,
-                Ymax = (int)selectedFigure.Max().Y;
+            IFigure selectedFigure = FigureList[index];
+            int Xmin = (int)selectedFigure.Min.X,
+                Ymin = (int)selectedFigure.Min.Y;
+            int Xmax = (int)selectedFigure.Max.X,
+                Ymax = (int)selectedFigure.Max.Y;
 
             Pen pen = new Pen(Color.Gray);
-            g.DrawRectangle(pen, new Rectangle(Xmax, (int)(selectedFigure.Center().Y - 3), 6, 6));
-            g.DrawRectangle(pen, new Rectangle(Xmin - 6, (int)(selectedFigure.Center().Y - 3), 6, 6));
+            g.DrawRectangle(pen, new Rectangle(Xmax, (int)(selectedFigure.Center.Y - 3), 6, 6));
+            g.DrawRectangle(pen, new Rectangle(Xmin - 6, (int)(selectedFigure.Center.Y - 3), 6, 6));
             pen.DashStyle = DashStyle.Dash; // штрихованная линия
             g.DrawRectangle(pen, new Rectangle(Xmin, Ymin, Xmax - Xmin, Ymax - Ymin));
         }
@@ -531,8 +530,6 @@ namespace graphics_editor_cgs
             g.DrawLine(pen2, center.X - 4, center.Y - 4, center.X + 4, center.Y + 4);
             g.DrawLine(pen2, center.X + 4, center.Y - 4, center.X - 4, center.Y + 4);
         }
-
-
 
         // Получение выбранного пользователем цвета из спец ДО
         private void ColorDialogBtn_Click(object sender, EventArgs e)

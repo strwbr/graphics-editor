@@ -13,28 +13,28 @@ namespace graphics_editor_cgs
         public List<PointF> VertexList { get; set; }
         public Color Color { get; set; }
 
-        public List<HorizontalLine> LinesList { get; set; }
+        public List<InteriorSegment> LinesList { get; set; }
 
         public Polygon()
         {
             VertexList = new List<PointF>();
             Color = Color.Black; // по умолчанию черный
 
-            LinesList = new List<HorizontalLine>();
+            LinesList = new List<InteriorSegment>();
         }
 
-        public Polygon(List<PointF> vertexList, List<HorizontalLine> linesList, Color color) : this()
+        public Polygon(List<PointF> vertexList, List<InteriorSegment> linesList, Color color) : this()
         {
             vertexList = vertexList.ConvertAll(item => new PointF(item.X, item.Y));
             Color = color;
-            linesList = linesList.ConvertAll(item => new HorizontalLine(item));
+            linesList = linesList.ConvertAll(item => new InteriorSegment(item));
         }
 
         public Polygon(Polygon other)
         {
             VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
             Color = other.Color;
-            LinesList = other.LinesList.ConvertAll(item => new HorizontalLine(item));
+            LinesList = other.LinesList.ConvertAll(item => new InteriorSegment(item));
         }
 
         // Выделение фигуры
@@ -78,8 +78,8 @@ namespace graphics_editor_cgs
         public void Fill()
         {
             LinesList.Clear();
-            float Ymin = Min().Y;
-            float Ymax = Max().Y;
+            float Ymin = Min.Y;
+            float Ymax = Max.Y;
 
             List<int> Xb = new List<int>();
             for (int j = (int)Ymin; j <= Ymax; j++)
@@ -105,25 +105,31 @@ namespace graphics_editor_cgs
 
                 for (int i = 0; i < Xb.Count - 1; i += 2)
                 {
-                    LinesList.Add(new HorizontalLine(Xb[i], Xb[i + 1], j));
+                    LinesList.Add(new InteriorSegment(Xb[i], Xb[i + 1], j));
                 }
             }
         }
 
-        public PointF Min()
+        public PointF Min
         {
-            PointF p = new PointF();
-            p.X = VertexList.Min(item => item.X);
-            p.Y = VertexList.Min(item => item.Y);
-            return p;
+            get
+            {
+                PointF p = new PointF();
+                p.X = VertexList.Min(item => item.X);
+                p.Y = VertexList.Min(item => item.Y);
+                return p;
+            }
         }
 
-        public PointF Max()
+        public PointF Max
         {
-            PointF p = new PointF();
-            p.X = VertexList.Max(item => item.X);
-            p.Y = VertexList.Max(item => item.Y);
-            return p;
+            get
+            {
+                PointF p = new PointF();
+                p.X = VertexList.Max(item => item.X);
+                p.Y = VertexList.Max(item => item.Y);
+                return p;
+            }
         }
 
         public void Move(float dx, float dy)
@@ -140,8 +146,8 @@ namespace graphics_editor_cgs
 
         public void Resize(PointF mP)
         {
-            PointF center = Center();
-            float bx = (mP.X >= Min().X && mP.X <= Max().X) ? -0.03f : 0.03f;
+            PointF center = Center;
+            float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.02f : 0.02f;
             bx += 1;
             for (int i = 0; i < VertexList.Count; i++)
             {
@@ -169,18 +175,21 @@ namespace graphics_editor_cgs
             Fill();
         }
 
-        public PointF Center()
+        public PointF Center
         {
-            PointF Pmin = Min();
-            PointF Pmax = Max();
-            return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
+            get
+            {
+                PointF Pmin = Min;
+                PointF Pmax = Max;
+                return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
+            }
         }
 
         public bool CheckResize(float x, float y)
         {
-            float Xmin = Min().X;
-            float Xmax = Max().X;
-            float Yc = Center().Y;
+            float Xmin = Min.X;
+            float Xmax = Max.X;
+            float Yc = Center.Y;
             return
                 ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
                 && (y >= Yc - 7 && y <= Yc + 7);

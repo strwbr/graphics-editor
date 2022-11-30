@@ -29,27 +29,29 @@ namespace graphics_editor_cgs
             Color = other.Color;
         }
 
+        private bool CheckHitting(PointF p1, PointF p2, PointF pClick)
+        {
+            float xmin = p1.X > p2.X ? p2.X : p1.X;
+            float ymin = p1.Y > p2.Y ? p2.Y : p1.Y;
+            float xmax = p1.X < p2.X ? p2.X : p1.X;
+            float ymax = p1.Y < p2.Y ? p2.Y : p1.Y;
+
+            return (Math.Abs(pClick.X - xmin) < 3f || Math.Abs(pClick.X - xmax) < 3f)
+                && (Math.Abs(pClick.Y - ymin) < 3f || Math.Abs(pClick.Y - ymax) < 3f);
+        }
+
         public bool Select(PointF p)
         {
-            //for(int i = 0; i < VertexList.Count-1; i++)
-            //{
-            //    PointF p1 = VertexList[i];
-            //    PointF p2 = VertexList[i + 1];
-            //    float distance1 = (float)Math.Sqrt(Math.Pow(p1.X - p.X, 2) + Math.Pow(p1.Y - p.Y, 2));
-            //    float distance2 = (float)Math.Sqrt(Math.Pow(p2.X - p.X, 2) + Math.Pow(p2.Y - p.Y, 2));
-            //    float distance3 = (float)Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2));
-            //    if(distance1 + distance2 - distance3 < 1f) return true;
-            //}
-            float xmin = Min().X;
-            float xmax = Max().X;
-            float ymin = Min().Y;
-            float ymax = Max().Y;
+            for (int i = 0; i < VertexList.Count - 1; i++)
+            {
+                if (VertexList[i].X == p.X && VertexList[i].Y == p.Y) 
+                    return true;
 
-            //if(p.X>=xmin && p.X <=xmax)
-            //    if(p.Y>=ymin && p.Y <=ymax)
-            //        return true;
-            // Клик попал в описанный прямоугольник
-            return p.X >= xmin && p.X <= xmax && p.Y >= ymin && p.Y <= ymax;
+                if (CheckHitting(VertexList[i], VertexList[i+1], p))
+                    return true;
+            }
+            return false;
+
         }
 
         public void Move(float dx, float dy)
@@ -65,8 +67,8 @@ namespace graphics_editor_cgs
 
         public void Resize(PointF mP)
         {
-            PointF center = Center();
-            float bx = (mP.X >= Min().X && mP.X <= Max().X) ? -0.03f : 0.03f;
+            PointF center = Center;
+            float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.03f : 0.03f;
             bx += 1;
             for (int i = 0; i < VertexList.Count; i++)
             {
@@ -92,41 +94,50 @@ namespace graphics_editor_cgs
             }
         }
 
-        public PointF Center()
+        public PointF Center
         {
-            PointF Pmin = Min();
-            PointF Pmax = Max();
-            return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
+            get
+            {
+                PointF Pmin = Min;
+                PointF Pmax = Max;
+                return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
+            }
         }
 
-        public PointF Min()
+        public PointF Min
         {
-            PointF p = new PointF();
-            p.X = VertexList.Min(item => item.X);
-            p.Y = VertexList.Min(item => item.Y);
-            return p;
+            get
+            {
+                PointF p = new PointF();
+                p.X = VertexList.Min(item => item.X);
+                p.Y = VertexList.Min(item => item.Y);
+                return p;
+            }
         }
 
-        public PointF Max()
+        public PointF Max
         {
-            PointF p = new PointF();
-            p.X = VertexList.Max(item => item.X);
-            p.Y = VertexList.Max(item => item.Y);
-            return p;
+            get
+            {
+                PointF p = new PointF();
+                p.X = VertexList.Max(item => item.X);
+                p.Y = VertexList.Max(item => item.Y);
+                return p;
+            }
         }
 
         public bool CheckResize(float x, float y)
         {
-            float Xmin = Min().X;
-            float Xmax = Max().X;
-            float Yc = Center().Y;
+            float Xmin = Min.X;
+            float Xmax = Max.X;
+            float Yc = Center.Y;
             return
                 ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
                 && (y >= Yc - 7 && y <= Yc + 7);
         }
 
-        
+
     }
 
-     
+
 }

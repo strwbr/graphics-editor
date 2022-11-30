@@ -13,7 +13,7 @@ namespace graphics_editor_cgs
         public int IndexTMO { get; set; }
         public Polygon Polygon_1 { get; set; }
         public Polygon Polygon_2 { get; set; }
-        public List<HorizontalLine> ResultLines { get; set; }
+        public List<InteriorSegment> ResultLines { get; set; }
 
         public List<PointF> VertexList { get; set; }
         public Color Color { get; set; }
@@ -24,7 +24,7 @@ namespace graphics_editor_cgs
             IndexTMO = -1;
             Polygon_1 = new Polygon();
             Polygon_2 = new Polygon();
-            ResultLines = new List<HorizontalLine>();
+            ResultLines = new List<InteriorSegment>();
             VertexList = new List<PointF>();
             Color = Color.Black;
         }
@@ -73,12 +73,12 @@ namespace graphics_editor_cgs
 
         public void MakeTMO()
         {
-            List<Border> M = new List<Border>();
+            List<SegmentTMO> M = new List<SegmentTMO>();
 
-            float Ymin_1 = Polygon_1.Min().Y;
-            float Ymax_1 = Polygon_1.Max().Y;
-            float Ymin_2 = Polygon_2.Min().Y;
-            float Ymax_2 = Polygon_2.Max().Y;
+            float Ymin_1 = Polygon_1.Min.Y;
+            float Ymax_1 = Polygon_1.Max.Y;
+            float Ymin_2 = Polygon_2.Min.Y;
+            float Ymax_2 = Polygon_2.Max.Y;
 
             float Ymin = Math.Min(Ymin_1, Ymin_2);
             float Ymax = Math.Max(Ymax_1, Ymax_2);
@@ -90,8 +90,8 @@ namespace graphics_editor_cgs
 
             for (int j = (int)Ymin; j < Ymax; j++)
             {
-                List<HorizontalLine> Xlines_1 = new List<HorizontalLine>();
-                List<HorizontalLine> Xlines_2 = new List<HorizontalLine>();
+                List<InteriorSegment> Xlines_1 = new List<InteriorSegment>();
+                List<InteriorSegment> Xlines_2 = new List<InteriorSegment>();
 
                 M.Clear();
 
@@ -107,23 +107,23 @@ namespace graphics_editor_cgs
 
                 for (int i = 0; i < n; i++)
                 {
-                    M.Add(new Border(Xlines_1[i].xl, 2));
+                    M.Add(new SegmentTMO(Xlines_1[i].xl, 2));
                 }
                 int nM = n;
                 for (int i = 0; i < n; i++)
                 {
-                    M.Add(new Border(Xlines_1[i].xr, -2));
+                    M.Add(new SegmentTMO(Xlines_1[i].xr, -2));
                 }
                 nM += n;
                 n = Xlines_2.Count;
                 for (int i = 0; i < n; i++)
                 {
-                    M.Add(new Border(Xlines_2[i].xl, 1));
+                    M.Add(new SegmentTMO(Xlines_2[i].xl, 1));
                 }
                 nM += n;
                 for (int i = 0; i < n; i++)
                 {
-                    M.Add(new Border(Xlines_2[i].xr, -1));
+                    M.Add(new SegmentTMO(Xlines_2[i].xr, -1));
                 }
                 nM += n;
 
@@ -164,7 +164,7 @@ namespace graphics_editor_cgs
 
                     for (int i = 0; i < Xrl.Count; i++)
                     {
-                        ResultLines.Add(new HorizontalLine(Xrl[i], Xrr[i], j));
+                        ResultLines.Add(new InteriorSegment(Xrl[i], Xrr[i], j));
                     }
 
                 }
@@ -208,34 +208,43 @@ namespace graphics_editor_cgs
             MakeTMO();
         }
 
-        public PointF Center()
+        public PointF Center
         {
-            PointF Pmin = Min();
-            PointF Pmax = Max();
-            return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
+            get
+            {
+                PointF Pmin = Min;
+                PointF Pmax = Max;
+                return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
+            }
         }
 
-        public PointF Min()
+        public PointF Min
         {
-            PointF p = new PointF();
-            p.X = ResultLines.Min(item => item.xl);
-            p.Y = ResultLines.Min(item => item.y);
-            return p;
+            get
+            {
+                PointF p = new PointF();
+                p.X = ResultLines.Min(item => item.xl);
+                p.Y = ResultLines.Min(item => item.y);
+                return p;
+            }
         }
 
-        public PointF Max()
+        public PointF Max
         {
-            PointF p = new PointF();
-            p.X = ResultLines.Max(item => item.xr);
-            p.Y = ResultLines.Max(item => item.y);
-            return p;
+            get
+            {
+                PointF p = new PointF();
+                p.X = ResultLines.Max(item => item.xr);
+                p.Y = ResultLines.Max(item => item.y);
+                return p;
+            }
         }
 
         public bool CheckResize(float x, float y)
         {
-            float Xmin = Min().X;
-            float Xmax = Max().X;
-            float Yc = Center().Y;
+            float Xmin = Min.X;
+            float Xmax = Max.X;
+            float Yc = Center.Y;
             return
                 ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
                 && (y >= Yc - 7 && y <= Yc + 7);
