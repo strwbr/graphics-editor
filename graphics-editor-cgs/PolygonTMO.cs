@@ -9,7 +9,6 @@ namespace graphics_editor_cgs
 {
     public class PolygonTMO : Figure
     {
-        //public int[] SetQ { get; set; }
         public int IndexTMO { get; set; }
         public Polygon Polygon_1 { get; set; }
         public Polygon Polygon_2 { get; set; }
