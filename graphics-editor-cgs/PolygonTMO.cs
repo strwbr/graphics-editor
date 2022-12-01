@@ -9,9 +9,9 @@ namespace graphics_editor_cgs
 {
     public class PolygonTMO : Figure
     {
-        public int IndexTMO { get; set; }
-        public Polygon Polygon_1 { get; set; }
-        public Polygon Polygon_2 { get; set; }
+        public int IndexTMO { get; set; }// Мб сделать get приватным
+        public Polygon Polygon_1 { get; set; } // Мб сделать get приватным
+        public Polygon Polygon_2 { get; set; }// Мб сделать get приватным
         public List<InteriorSegment> ResultLines { get; set; }
 
         public List<PointF> VertexList { get; set; }
@@ -19,7 +19,6 @@ namespace graphics_editor_cgs
 
         public PolygonTMO()
         {
-            //SetQ = new int[] { -1, -1 };
             IndexTMO = -1;
             Polygon_1 = new Polygon();
             Polygon_2 = new Polygon();
@@ -30,10 +29,6 @@ namespace graphics_editor_cgs
 
         public PolygonTMO(int indexTMO, Polygon polygon_1, Polygon polygon_2, Color color) : this()
         {
-            //for (int i = 0; i < setQ.Length; i++)
-            //{
-            //    SetQ[i] = setQ[i];
-            //}
             IndexTMO = indexTMO;
             Polygon_1 = new Polygon(polygon_1);
             Polygon_2 = new Polygon(polygon_2);
@@ -42,11 +37,6 @@ namespace graphics_editor_cgs
 
         public PolygonTMO(PolygonTMO other) : this(other.IndexTMO, other.Polygon_1, other.Polygon_2, other.Color)
         {
-            //for (int i = 0; i < other.SetQ.Length; i++)
-            //{
-            //    SetQ[i] = other.SetQ[i];
-            //}
-            //ParentsPolygons = other.ParentsPolygons.ConvertAll(item => new Polygon(item));
         }
 
         public int[] SetQ
@@ -94,35 +84,35 @@ namespace graphics_editor_cgs
 
                 M.Clear();
 
-                if (Polygon_1.LinesList.Any(item => item.y == j))
+                if (Polygon_1.LinesList.Any(item => item.Y == j))
                 {
-                    Xlines_1 = Polygon_1.LinesList.FindAll(item => item.y == j);
+                    Xlines_1 = Polygon_1.LinesList.FindAll(item => item.Y == j);
                 }
-                if (Polygon_2.LinesList.Any(item => item.y == j))
+                if (Polygon_2.LinesList.Any(item => item.Y == j))
                 {
-                    Xlines_2 = Polygon_2.LinesList.FindAll(item => item.y == j);
+                    Xlines_2 = Polygon_2.LinesList.FindAll(item => item.Y == j);
                 }
                 int n = Xlines_1.Count;
 
                 for (int i = 0; i < n; i++)
                 {
-                    M.Add(new SegmentTMO(Xlines_1[i].xl, 2));
+                    M.Add(new SegmentTMO(Xlines_1[i].Xl, 2));
                 }
                 int nM = n;
                 for (int i = 0; i < n; i++)
                 {
-                    M.Add(new SegmentTMO(Xlines_1[i].xr, -2));
+                    M.Add(new SegmentTMO(Xlines_1[i].Xr, -2));
                 }
                 nM += n;
                 n = Xlines_2.Count;
                 for (int i = 0; i < n; i++)
                 {
-                    M.Add(new SegmentTMO(Xlines_2[i].xl, 1));
+                    M.Add(new SegmentTMO(Xlines_2[i].Xl, 1));
                 }
                 nM += n;
                 for (int i = 0; i < n; i++)
                 {
-                    M.Add(new SegmentTMO(Xlines_2[i].xr, -1));
+                    M.Add(new SegmentTMO(Xlines_2[i].Xr, -1));
                 }
                 nM += n;
 
@@ -174,9 +164,9 @@ namespace graphics_editor_cgs
         {
             for (int i = 0; i < ResultLines.Count; i++)
             {
-                if (p.Y == ResultLines[i].y)
+                if (p.Y == ResultLines[i].Y)
                 {
-                    if (p.X >= ResultLines[i].xl && p.X <= ResultLines[i].xr)
+                    if (p.X >= ResultLines[i].Xl && p.X <= ResultLines[i].Xr)
                         return true;
                 }
             }
@@ -222,8 +212,8 @@ namespace graphics_editor_cgs
             get
             {
                 PointF p = new PointF();
-                p.X = ResultLines.Min(item => item.xl);
-                p.Y = ResultLines.Min(item => item.y);
+                p.X = ResultLines.Min(item => item.Xl);
+                p.Y = ResultLines.Min(item => item.Y);
                 return p;
             }
         }
@@ -233,8 +223,8 @@ namespace graphics_editor_cgs
             get
             {
                 PointF p = new PointF();
-                p.X = ResultLines.Max(item => item.xr);
-                p.Y = ResultLines.Max(item => item.y);
+                p.X = ResultLines.Max(item => item.Xr);
+                p.Y = ResultLines.Max(item => item.Y);
                 return p;
             }
         }

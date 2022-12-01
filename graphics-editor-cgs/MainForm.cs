@@ -493,9 +493,9 @@ namespace graphics_editor_cgs
         {
             for (int i = 0; i < polygon.LinesList.Count - 1; i++)
             {
-                float xl = polygon.LinesList[i].xl;
-                float xr = polygon.LinesList[i].xr;
-                float y = polygon.LinesList[i].y;
+                float xl = polygon.LinesList[i].Xl;
+                float xr = polygon.LinesList[i].Xr;
+                float y = polygon.LinesList[i].Y;
 
                 g.DrawLine(new Pen(polygon.Color), new PointF(xl, y), new PointF(xr, y));
             }
@@ -505,9 +505,9 @@ namespace graphics_editor_cgs
         {
             for (int i = 0; i < polygon.ResultLines.Count - 1; i++)
             {
-                float xl = polygon.ResultLines[i].xl;
-                float xr = polygon.ResultLines[i].xr;
-                float y = polygon.ResultLines[i].y;
+                float xl = polygon.ResultLines[i].Xl;
+                float xr = polygon.ResultLines[i].Xr;
+                float y = polygon.ResultLines[i].Y;
 
                 g.DrawLine(new Pen(polygon.Color), new PointF(xl, y), new PointF(xr, y));
             }
