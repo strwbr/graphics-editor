@@ -30,11 +30,11 @@ namespace graphics_editor_cgs
             linesList = linesList.ConvertAll(item => new InteriorSegment(item));
         }
 
-        public Polygon(Polygon other)
+        public Polygon(Polygon other):this(other.VertexList, other.LinesList, other.Color)
         {
-            VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
-            Color = other.Color;
-            LinesList = other.LinesList.ConvertAll(item => new InteriorSegment(item));
+            //VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
+            //Color = other.Color;
+            //LinesList = other.LinesList.ConvertAll(item => new InteriorSegment(item));
         }
 
         // Выделение фигуры

@@ -9,10 +9,13 @@ namespace graphics_editor_cgs
 {
     public class PolygonTMO : Figure
     {
-        public int IndexTMO { get; set; }// Мб сделать get приватным
-        public Polygon Polygon_1 { get; set; } // Мб сделать get приватным
-        public Polygon Polygon_2 { get; set; }// Мб сделать get приватным
+        public int IndexTMO { private get; set; }// Мб сделать get приватным
+        public Polygon Polygon_1 { private get; set; } // Мб сделать get приватным
+        public Polygon Polygon_2 { private get; set; }// Мб сделать get приватным
         public List<InteriorSegment> ResultLines { get; set; }
+
+        public int Xmin_e { private get; set; }
+        public int Xmax_e { private get; set; }
 
         public List<PointF> VertexList { get; set; }
         public Color Color { get; set; }
@@ -25,6 +28,12 @@ namespace graphics_editor_cgs
             ResultLines = new List<InteriorSegment>();
             VertexList = new List<PointF>();
             Color = Color.Black;
+        }
+
+        public PolygonTMO(int xmin_e, int xmax_e) : this()
+        {
+            Xmin_e = xmin_e;
+            Xmax_e = xmax_e;
         }
 
         public PolygonTMO(int indexTMO, Polygon polygon_1, Polygon polygon_2, Color color) : this()
@@ -124,11 +133,11 @@ namespace graphics_editor_cgs
 
                 if (nM > 0)
                 {
-                    //if (M[0].x >= Xmin_e && M[0].dQ < 0)
-                    //{
-                    //    Xrl.Add(Xmin_e);
-                    //    Q = -M[0].dQ;
-                    //}
+                    if (M[0].x >= Xmin_e && M[0].dQ < 0)
+                    {
+                        Xrl.Add(Xmin_e);
+                        Q = -M[0].dQ;
+                    }
                     int x;
                     for (int i = 0; i < nM; i++)
                     {
@@ -146,10 +155,10 @@ namespace graphics_editor_cgs
                         }
                         Q = Qnew;
                     }
-                    //if (Q >= SetQ[0] && Q <= SetQ[1])
-                    //{
-                    //    Xrr.Add(Xmax_e);
-                    //}
+                    if (Q >= SetQ[0] && Q <= SetQ[1])
+                    {
+                        Xrr.Add(Xmax_e);
+                    }
 
                     for (int i = 0; i < Xrl.Count; i++)
                     {

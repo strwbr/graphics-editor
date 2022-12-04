@@ -21,10 +21,10 @@ namespace graphics_editor_cgs
             Color = color;
         }
 
-        public LineSegment(Figure other)
+        public LineSegment(Figure other): this(other.VertexList, other.Color)
         {
-            VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
-            Color = other.Color;
+            //VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
+            //Color = other.Color;
         }
 
         public bool Select(PointF p)

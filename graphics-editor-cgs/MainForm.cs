@@ -52,6 +52,8 @@ namespace graphics_editor_cgs
             g = Graphics.FromImage(myBitmap);
             g.SmoothingMode = SmoothingMode.AntiAlias;
             currentColorPanel.BackColor = Color.Black;
+            polygonTMO.Xmin_e = drawingPanel.Height;
+            polygonTMO.Xmax_e = drawingPanel.Width;
         }
 
         private void ClearPanel()
@@ -67,7 +69,7 @@ namespace graphics_editor_cgs
             LineSegmentPoints.Clear();
 
             selectedFigure = null;
-            polygonTMO = new PolygonTMO();
+            polygonTMO = new PolygonTMO(0, drawingPanel.Width);
 
             isSelectedFigure = false;
             isMoveMode = false;
@@ -122,13 +124,13 @@ namespace graphics_editor_cgs
             rotatoinControlsPanel.Visible = false;
         }
 
-        // Удаление фигуры = 2
+        // Удаление фигуры
         private void DeleteFigureBtn_Click(object sender, EventArgs e)
         {
             indexOperation = 2;
             tmoCb.Visible = false;
             rotatoinControlsPanel.Visible = false;
-            if (selectedFigureIndex!=-1)
+            if (selectedFigureIndex != -1)
             {
                 //FigureList.RemoveAt(selectedFigureIndex);
                 FigureList.Remove(selectedFigure);
@@ -146,11 +148,11 @@ namespace graphics_editor_cgs
             ClearPanel();
         }
 
-        // ТМО = 3
+        // ТМО = 2
         private void TmoBtn_Click(object sender, EventArgs e)
         {
             tmoCb.Visible = true;
-            indexOperation = 3;
+            indexOperation = 2;
         }
 
         // Выбор ТМО
@@ -278,14 +280,14 @@ namespace graphics_editor_cgs
         {
             lastSelectedFigureIndex = selectedFigureIndex;
             selectedFigureIndex = FindSelectedFigure(lastMouseClickPosition);
-
+            UpdateScene();
             if (e.Button == MouseButtons.Right)
             {
                 if (lastSelectedFigureIndex != -1)
                 {
                     rotateCenter = e.Location;
 
-                    UpdateScene();
+                    //UpdateScene();
                     DrawSelection(lastSelectedFigureIndex);
                     DrawCenter(rotateCenter);
                     isRotateMode = true;
@@ -302,15 +304,14 @@ namespace graphics_editor_cgs
                 // Если до этого была уже выделена фигура
                 if (lastSelectedFigureIndex != -1)
                 {
-                    //if (FigureList[lastSelectedFigureIndex].CheckResize(e.X, e.Y))
-                    if(CheckResize(lastSelectedFigureIndex, e.Location))
+                    if (CheckResize(lastSelectedFigureIndex, e.Location))
                         isResizeMode = true; // тут происходит что-то странное (вроде исправила лол)
                     else isResizeMode = false;
                 }
                 if (selectedFigureIndex != -1)
                 {
                     selectedFigure = FigureList[selectedFigureIndex];
-                    UpdateScene(); 
+                    //UpdateScene();
                     DrawSelection(selectedFigureIndex);
                     isSelectedFigure = true;
                     isMoveMode = true;
@@ -332,7 +333,6 @@ namespace graphics_editor_cgs
                     if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
                     {
                         DrawSelection(index);
-                        //DrawSelection(FigureList[index]);
                         polygonTMO.Polygon_1 = new Polygon((Polygon)FigureList[index]);
                         FigureList.RemoveAt(index);
                         countSelectedFigures++;
@@ -343,7 +343,6 @@ namespace graphics_editor_cgs
                     if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
                     {
                         DrawSelection(index);
-                        //DrawSelection(FigureList[index]);
                         polygonTMO.Polygon_2 = new Polygon((Polygon)FigureList[index]);
                         FigureList.RemoveAt(index);
 
@@ -354,7 +353,7 @@ namespace graphics_editor_cgs
                         UpdateScene();
 
                         countSelectedFigures = 0;
-                        polygonTMO = new PolygonTMO();
+                        polygonTMO = new PolygonTMO(0, drawingPanel.Width);
                     }
                     break;
             }
@@ -363,27 +362,42 @@ namespace graphics_editor_cgs
         private void DrawingPanel_MouseDown(object sender, MouseEventArgs e)
         {
             lastMouseClickPosition = new PointF(e.X, e.Y);
-            // 0 - Добавление фигуры на сцену
-            if (indexOperation == 0)
+            switch(indexOperation)
             {
-                AddChosenFigureToScene(e);
-            }
-            // 1 - Выделение
-            else if (indexOperation == 1)
-            {
-                SelectFigureOnScene(e);
-            }
-            // 3 - ТМО
-            else if (indexOperation == 3)
-            {
-                lastSelectedFigureIndex = -1;
-                selectedFigureIndex = -1;
+                case 0: AddChosenFigureToScene(e); break;
+                case 1: SelectFigureOnScene(e); break;
+                case 2:
+                    lastSelectedFigureIndex = -1;
+                    selectedFigureIndex = -1;
 
-                if (indexTMO != -1)
-                    BuildPolygonTMO();
-                else MessageBox.Show("Выберите тип ТМО", "Не выбран тип ТМО", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    if (indexTMO != -1)
+                        BuildPolygonTMO();
+                    else MessageBox.Show("Выберите тип ТМО", "Не выбран тип ТМО",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    break;
             }
+            
+            //// 0 - Добавление фигуры на сцену
+            //if (indexOperation == 0)
+            //{
+            //    AddChosenFigureToScene(e);
+            //}
+            //// 1 - Выделение
+            //else if (indexOperation == 1)
+            //{
+            //    SelectFigureOnScene(e);
+            //}
+            //// 2 - ТМО
+            //else if (indexOperation == 2)
+            //{
+            //    lastSelectedFigureIndex = -1;
+            //    selectedFigureIndex = -1;
+
+            //    if (indexTMO != -1)
+            //        BuildPolygonTMO();
+            //    else MessageBox.Show("Выберите тип ТМО", "Не выбран тип ТМО",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //}
             drawingPanel.Image = myBitmap;
         }
 
@@ -414,7 +428,7 @@ namespace graphics_editor_cgs
             isMoveMode = false;
             isResizeMode = false;
 
-           if(indexOperation!=3) UpdateScene();
+            if (indexOperation == 0) UpdateScene();
 
             if (selectedFigureIndex != -1)
                 DrawSelection(selectedFigureIndex);

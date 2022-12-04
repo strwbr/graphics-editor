@@ -23,10 +23,10 @@ namespace graphics_editor_cgs
             Color = color;
         }
 
-        public BezierCurve(Figure other)
+        public BezierCurve(Figure other):this(other.VertexList, other.Color)
         {
-            VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
-            Color = other.Color;
+            //VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
+            //Color = other.Color;
         }
 
         private bool CheckHitting(PointF p1, PointF p2, PointF pClick)
