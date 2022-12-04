@@ -21,8 +21,6 @@ namespace graphics_editor_cgs
         private List<Figure> FigureList = new List<Figure>();
         private Figure selectedFigure = null;
 
-        private int[] SetQ = new int[] { -1, -1 };
-
         private int indexTMO = -1;
         private int indexFigure = 0;
         private int indexOperation = 0;
@@ -34,7 +32,6 @@ namespace graphics_editor_cgs
         private int lastSelectedFigureIndex = -1;
         private int selectedFigureIndex = -1;
 
-        private bool isSelectedFigure = false;
         private bool isMoveMode = false;
         private bool isResizeMode = false;
         private bool isRotateMode = false;
@@ -71,7 +68,7 @@ namespace graphics_editor_cgs
             selectedFigure = null;
             polygonTMO = new PolygonTMO(0, drawingPanel.Width);
 
-            isSelectedFigure = false;
+            //isSelectedFigure = false;
             isMoveMode = false;
             isResizeMode = false;
             isRotateMode = false;
@@ -313,12 +310,12 @@ namespace graphics_editor_cgs
                     selectedFigure = FigureList[selectedFigureIndex];
                     //UpdateScene();
                     DrawSelection(selectedFigureIndex);
-                    isSelectedFigure = true;
+                    //isSelectedFigure = true;
                     isMoveMode = true;
                 }
                 else
                 {
-                    isSelectedFigure = false;
+                    //isSelectedFigure = false;
                     isMoveMode = false;
                 }
             }

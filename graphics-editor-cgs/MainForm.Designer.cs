@@ -44,8 +44,6 @@ namespace graphics_editor_cgs
             this.clearPanelBtn = new System.Windows.Forms.Button();
             this.tmoCb = new System.Windows.Forms.ComboBox();
             this.tmoBtn = new System.Windows.Forms.Button();
-            this.debugLabel = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.rotationTb = new System.Windows.Forms.TrackBar();
             this.rotationAngleMode = new System.Windows.Forms.CheckBox();
             this.deleteFigureBtn = new System.Windows.Forms.Button();
@@ -56,6 +54,8 @@ namespace graphics_editor_cgs
             this.segmentBtn = new System.Windows.Forms.Button();
             this.drawingPanel = new System.Windows.Forms.PictureBox();
             this.rotatoinControlsPanel = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.settingColorBox.SuspendLayout();
             this.standartColorsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rotationTb)).BeginInit();
@@ -72,7 +72,7 @@ namespace graphics_editor_cgs
             this.colorDialogBtn.AutoSize = true;
             this.colorDialogBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.colorDialogBtn.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.colorDialogBtn.Location = new System.Drawing.Point(204, 29);
+            this.colorDialogBtn.Location = new System.Drawing.Point(146, 26);
             this.colorDialogBtn.Name = "colorDialogBtn";
             this.colorDialogBtn.Size = new System.Drawing.Size(90, 30);
             this.colorDialogBtn.TabIndex = 0;
@@ -87,9 +87,9 @@ namespace graphics_editor_cgs
             this.settingColorBox.Controls.Add(this.colorDialogBtn);
             this.settingColorBox.Controls.Add(this.currentColorPanel);
             this.settingColorBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.settingColorBox.Location = new System.Drawing.Point(10, 473);
+            this.settingColorBox.Location = new System.Drawing.Point(10, 376);
             this.settingColorBox.Name = "settingColorBox";
-            this.settingColorBox.Size = new System.Drawing.Size(309, 149);
+            this.settingColorBox.Size = new System.Drawing.Size(267, 149);
             this.settingColorBox.TabIndex = 1;
             this.settingColorBox.TabStop = false;
             this.settingColorBox.Text = "Цвет";
@@ -114,7 +114,7 @@ namespace graphics_editor_cgs
             this.standartColorsPanel.Controls.Add(this.blackBtn);
             this.standartColorsPanel.Location = new System.Drawing.Point(5, 26);
             this.standartColorsPanel.Name = "standartColorsPanel";
-            this.standartColorsPanel.Size = new System.Drawing.Size(185, 42);
+            this.standartColorsPanel.Size = new System.Drawing.Size(130, 33);
             this.standartColorsPanel.TabIndex = 1;
             // 
             // redBtn
@@ -124,7 +124,7 @@ namespace graphics_editor_cgs
             this.redBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.redBtn.Location = new System.Drawing.Point(3, 3);
             this.redBtn.Name = "redBtn";
-            this.redBtn.Size = new System.Drawing.Size(30, 30);
+            this.redBtn.Size = new System.Drawing.Size(20, 20);
             this.redBtn.TabIndex = 0;
             this.redBtn.UseVisualStyleBackColor = false;
             this.redBtn.Click += new System.EventHandler(this.RedBtn_Click);
@@ -134,9 +134,9 @@ namespace graphics_editor_cgs
             this.yellowBtn.BackColor = System.Drawing.Color.Yellow;
             this.yellowBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.yellowBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.yellowBtn.Location = new System.Drawing.Point(39, 3);
+            this.yellowBtn.Location = new System.Drawing.Point(29, 3);
             this.yellowBtn.Name = "yellowBtn";
-            this.yellowBtn.Size = new System.Drawing.Size(30, 30);
+            this.yellowBtn.Size = new System.Drawing.Size(20, 20);
             this.yellowBtn.TabIndex = 1;
             this.yellowBtn.UseVisualStyleBackColor = false;
             this.yellowBtn.Click += new System.EventHandler(this.YellowBtn_Click);
@@ -146,9 +146,9 @@ namespace graphics_editor_cgs
             this.greenBtn.BackColor = System.Drawing.Color.Green;
             this.greenBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.greenBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.greenBtn.Location = new System.Drawing.Point(75, 3);
+            this.greenBtn.Location = new System.Drawing.Point(55, 3);
             this.greenBtn.Name = "greenBtn";
-            this.greenBtn.Size = new System.Drawing.Size(30, 30);
+            this.greenBtn.Size = new System.Drawing.Size(20, 20);
             this.greenBtn.TabIndex = 2;
             this.greenBtn.UseVisualStyleBackColor = false;
             this.greenBtn.Click += new System.EventHandler(this.GreenBtn_Click);
@@ -158,9 +158,9 @@ namespace graphics_editor_cgs
             this.blueBtn.BackColor = System.Drawing.Color.Blue;
             this.blueBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.blueBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.blueBtn.Location = new System.Drawing.Point(111, 3);
+            this.blueBtn.Location = new System.Drawing.Point(81, 3);
             this.blueBtn.Name = "blueBtn";
-            this.blueBtn.Size = new System.Drawing.Size(30, 30);
+            this.blueBtn.Size = new System.Drawing.Size(20, 20);
             this.blueBtn.TabIndex = 3;
             this.blueBtn.UseVisualStyleBackColor = false;
             this.blueBtn.Click += new System.EventHandler(this.BlueBtn_Click);
@@ -170,9 +170,9 @@ namespace graphics_editor_cgs
             this.blackBtn.BackColor = System.Drawing.Color.Black;
             this.blackBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.blackBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.blackBtn.Location = new System.Drawing.Point(147, 3);
+            this.blackBtn.Location = new System.Drawing.Point(107, 3);
             this.blackBtn.Name = "blackBtn";
-            this.blackBtn.Size = new System.Drawing.Size(30, 30);
+            this.blackBtn.Size = new System.Drawing.Size(20, 20);
             this.blackBtn.TabIndex = 4;
             this.blackBtn.UseVisualStyleBackColor = false;
             this.blackBtn.Click += new System.EventHandler(this.BlackBtn_Click);
@@ -191,7 +191,7 @@ namespace graphics_editor_cgs
             this.clearPanelBtn.BackgroundImage = global::graphics_editor_cgs.Properties.Resources.clean;
             this.clearPanelBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.clearPanelBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.clearPanelBtn.Location = new System.Drawing.Point(122, 141);
+            this.clearPanelBtn.Location = new System.Drawing.Point(122, 126);
             this.clearPanelBtn.Name = "clearPanelBtn";
             this.clearPanelBtn.Size = new System.Drawing.Size(50, 50);
             this.clearPanelBtn.TabIndex = 12;
@@ -207,7 +207,7 @@ namespace graphics_editor_cgs
             "Симметрическая разность",
             "Разность А/В",
             "Разность В/А"});
-            this.tmoCb.Location = new System.Drawing.Point(10, 270);
+            this.tmoCb.Location = new System.Drawing.Point(10, 218);
             this.tmoCb.Name = "tmoCb";
             this.tmoCb.Size = new System.Drawing.Size(231, 28);
             this.tmoCb.TabIndex = 13;
@@ -220,35 +220,13 @@ namespace graphics_editor_cgs
             this.tmoBtn.AutoSize = true;
             this.tmoBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tmoBtn.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tmoBtn.Location = new System.Drawing.Point(10, 234);
+            this.tmoBtn.Location = new System.Drawing.Point(10, 182);
             this.tmoBtn.Name = "tmoBtn";
             this.tmoBtn.Size = new System.Drawing.Size(80, 30);
             this.tmoBtn.TabIndex = 14;
             this.tmoBtn.Text = "ТМО";
             this.tmoBtn.UseVisualStyleBackColor = true;
             this.tmoBtn.Click += new System.EventHandler(this.TmoBtn_Click);
-            // 
-            // debugLabel
-            // 
-            this.debugLabel.AutoSize = true;
-            this.debugLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.debugLabel.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.debugLabel.Location = new System.Drawing.Point(783, 511);
-            this.debugLabel.Name = "debugLabel";
-            this.debugLabel.Size = new System.Drawing.Size(91, 21);
-            this.debugLabel.TabIndex = 15;
-            this.debugLabel.Text = "debugLabel";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.label5.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.label5.Location = new System.Drawing.Point(979, 544);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 21);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "label5";
             // 
             // rotationTb
             // 
@@ -277,7 +255,7 @@ namespace graphics_editor_cgs
             this.deleteFigureBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.deleteFigureBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.deleteFigureBtn.Image = global::graphics_editor_cgs.Properties.Resources.delete;
-            this.deleteFigureBtn.Location = new System.Drawing.Point(66, 141);
+            this.deleteFigureBtn.Location = new System.Drawing.Point(66, 126);
             this.deleteFigureBtn.Name = "deleteFigureBtn";
             this.deleteFigureBtn.Size = new System.Drawing.Size(50, 50);
             this.deleteFigureBtn.TabIndex = 11;
@@ -292,7 +270,7 @@ namespace graphics_editor_cgs
             this.selectFigureBtn.BackgroundImage = global::graphics_editor_cgs.Properties.Resources.selection;
             this.selectFigureBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.selectFigureBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.selectFigureBtn.Location = new System.Drawing.Point(10, 141);
+            this.selectFigureBtn.Location = new System.Drawing.Point(10, 126);
             this.selectFigureBtn.Name = "selectFigureBtn";
             this.selectFigureBtn.Size = new System.Drawing.Size(50, 50);
             this.selectFigureBtn.TabIndex = 10;
@@ -307,7 +285,7 @@ namespace graphics_editor_cgs
             this.arrow2Btn.BackgroundImage = global::graphics_editor_cgs.Properties.Resources.arrow_left_right;
             this.arrow2Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.arrow2Btn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.arrow2Btn.Location = new System.Drawing.Point(66, 69);
+            this.arrow2Btn.Location = new System.Drawing.Point(178, 35);
             this.arrow2Btn.Name = "arrow2Btn";
             this.arrow2Btn.Size = new System.Drawing.Size(50, 50);
             this.arrow2Btn.TabIndex = 9;
@@ -322,7 +300,7 @@ namespace graphics_editor_cgs
             this.arrow1Btn.BackgroundImage = global::graphics_editor_cgs.Properties.Resources.arrow_right;
             this.arrow1Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.arrow1Btn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.arrow1Btn.Location = new System.Drawing.Point(10, 69);
+            this.arrow1Btn.Location = new System.Drawing.Point(122, 35);
             this.arrow1Btn.Name = "arrow1Btn";
             this.arrow1Btn.Size = new System.Drawing.Size(50, 50);
             this.arrow1Btn.TabIndex = 8;
@@ -337,7 +315,7 @@ namespace graphics_editor_cgs
             this.bezierBtn.BackgroundImage = global::graphics_editor_cgs.Properties.Resources.line;
             this.bezierBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.bezierBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.bezierBtn.Location = new System.Drawing.Point(66, 12);
+            this.bezierBtn.Location = new System.Drawing.Point(66, 35);
             this.bezierBtn.Name = "bezierBtn";
             this.bezierBtn.Size = new System.Drawing.Size(50, 50);
             this.bezierBtn.TabIndex = 7;
@@ -351,7 +329,7 @@ namespace graphics_editor_cgs
             this.segmentBtn.BackgroundImage = global::graphics_editor_cgs.Properties.Resources.diagonal_line;
             this.segmentBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.segmentBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.segmentBtn.Location = new System.Drawing.Point(10, 12);
+            this.segmentBtn.Location = new System.Drawing.Point(10, 35);
             this.segmentBtn.Name = "segmentBtn";
             this.segmentBtn.Size = new System.Drawing.Size(50, 50);
             this.segmentBtn.TabIndex = 3;
@@ -366,9 +344,9 @@ namespace graphics_editor_cgs
             | System.Windows.Forms.AnchorStyles.Right)));
             this.drawingPanel.BackColor = System.Drawing.Color.White;
             this.drawingPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.drawingPanel.Location = new System.Drawing.Point(284, 12);
+            this.drawingPanel.Location = new System.Drawing.Point(283, 12);
             this.drawingPanel.Name = "drawingPanel";
-            this.drawingPanel.Size = new System.Drawing.Size(799, 455);
+            this.drawingPanel.Size = new System.Drawing.Size(815, 513);
             this.drawingPanel.TabIndex = 2;
             this.drawingPanel.TabStop = false;
             this.drawingPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseDown);
@@ -379,20 +357,40 @@ namespace graphics_editor_cgs
             // 
             this.rotatoinControlsPanel.Controls.Add(this.rotationTb);
             this.rotatoinControlsPanel.Controls.Add(this.rotationAngleMode);
-            this.rotatoinControlsPanel.Location = new System.Drawing.Point(10, 320);
+            this.rotatoinControlsPanel.Location = new System.Drawing.Point(10, 268);
             this.rotatoinControlsPanel.Name = "rotatoinControlsPanel";
             this.rotatoinControlsPanel.Size = new System.Drawing.Size(257, 93);
             this.rotatoinControlsPanel.TabIndex = 19;
             this.rotatoinControlsPanel.Visible = false;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 11.25F);
+            this.label2.Location = new System.Drawing.Point(11, 12);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(92, 20);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Примитивы";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 11.25F);
+            this.label3.Location = new System.Drawing.Point(11, 103);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(103, 20);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Инструменты";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1110, 637);
+            this.ClientSize = new System.Drawing.Size(1110, 538);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.rotatoinControlsPanel);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.debugLabel);
             this.Controls.Add(this.tmoBtn);
             this.Controls.Add(this.tmoCb);
             this.Controls.Add(this.clearPanelBtn);
@@ -441,10 +439,10 @@ namespace graphics_editor_cgs
         private Button clearPanelBtn;
         private ComboBox tmoCb;
         private Button tmoBtn;
-        private Label debugLabel;
-        private Label label5;
         private TrackBar rotationTb;
         private CheckBox rotationAngleMode;
         private Panel rotatoinControlsPanel;
+        private Label label2;
+        private Label label3;
     }
 }
