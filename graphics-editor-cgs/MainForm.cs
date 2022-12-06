@@ -27,6 +27,7 @@ namespace graphics_editor_cgs
 
         private PointF lastMouseClickPosition = new Point();
         private PointF rotateCenter = new Point();
+        private PointF resizeCenter = new Point();
         private float prevRotationAngle = 0;
 
         private int lastSelectedFigureIndex = -1;
@@ -277,14 +278,14 @@ namespace graphics_editor_cgs
         {
             lastSelectedFigureIndex = selectedFigureIndex;
             selectedFigureIndex = FindSelectedFigure(lastMouseClickPosition);
-            UpdateScene();
+            //UpdateScene();
             if (e.Button == MouseButtons.Right)
             {
                 if (lastSelectedFigureIndex != -1)
                 {
                     rotateCenter = e.Location;
 
-                    //UpdateScene();
+                    UpdateScene();
                     DrawSelection(lastSelectedFigureIndex);
                     DrawCenter(rotateCenter);
                     isRotateMode = true;
@@ -302,13 +303,16 @@ namespace graphics_editor_cgs
                 if (lastSelectedFigureIndex != -1)
                 {
                     if (CheckResize(lastSelectedFigureIndex, e.Location))
+                    {
                         isResizeMode = true; // тут происходит что-то странное (вроде исправила лол)
+                        resizeCenter = FigureList[lastSelectedFigureIndex].Center;
+                    }
                     else isResizeMode = false;
                 }
                 if (selectedFigureIndex != -1)
                 {
                     selectedFigure = FigureList[selectedFigureIndex];
-                    //UpdateScene();
+                    UpdateScene();
                     DrawSelection(selectedFigureIndex);
                     //isSelectedFigure = true;
                     isMoveMode = true;
@@ -373,28 +377,6 @@ namespace graphics_editor_cgs
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
             }
-            
-            //// 0 - Добавление фигуры на сцену
-            //if (indexOperation == 0)
-            //{
-            //    AddChosenFigureToScene(e);
-            //}
-            //// 1 - Выделение
-            //else if (indexOperation == 1)
-            //{
-            //    SelectFigureOnScene(e);
-            //}
-            //// 2 - ТМО
-            //else if (indexOperation == 2)
-            //{
-            //    lastSelectedFigureIndex = -1;
-            //    selectedFigureIndex = -1;
-
-            //    if (indexTMO != -1)
-            //        BuildPolygonTMO();
-            //    else MessageBox.Show("Выберите тип ТМО", "Не выбран тип ТМО",
-            //        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //}
             drawingPanel.Image = myBitmap;
         }
 
@@ -402,9 +384,9 @@ namespace graphics_editor_cgs
         {
             if (isResizeMode && lastSelectedFigureIndex != -1)
             {
-                FigureList[lastSelectedFigureIndex].Resize(e.Location);
+                FigureList[lastSelectedFigureIndex].Resize(e.Location /*FigureList[lastSelectedFigureIndex].Center*/ /*resizeCenter*/);
                 UpdateScene();
-                DrawCenter(FigureList[lastSelectedFigureIndex].Center);
+                DrawCenter(/*FigureList[lastSelectedFigureIndex].Center*/ resizeCenter);
                 //DrawSelection(lastSelectedFigureIndex);
                 //DrawSelection(FigureList[lastSelectedFigureIndex]);
             }

@@ -30,11 +30,11 @@ namespace graphics_editor_cgs
             linesList = linesList.ConvertAll(item => new InteriorSegment(item));
         }
 
-        public Polygon(Polygon other) : this(other.VertexList, other.LinesList, other.Color)
+        public Polygon(Polygon other)  /*this(other.VertexList, other.LinesList, other.Color)*/
         {
-            //VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
-            //Color = other.Color;
-            //LinesList = other.LinesList.ConvertAll(item => new InteriorSegment(item));
+            VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
+            Color = other.Color;
+            LinesList = other.LinesList.ConvertAll(item => new InteriorSegment(item));
         }
 
         // Выделение фигуры
@@ -157,6 +157,35 @@ namespace graphics_editor_cgs
             }
             Fill();
         }
+        public void Resize(PointF mP, PointF center)
+        {
+            //PointF center = Center;
+            float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.02f : 0.02f;
+            bx += 1;
+            for (int i = 0; i < VertexList.Count; i++)
+            {
+                PointF newPoint = new PointF();
+                newPoint.X = (VertexList[i].X - center.X) * bx + center.X;
+                newPoint.Y = VertexList[i].Y;
+                VertexList[i] = newPoint;
+            }
+
+            Fill();
+        }
+        //public void Resize(PointF mP, PointF center)
+        //{
+        //    //PointF center = Center;
+        //    float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.02f : 0.02f;
+        //    bx += 1;
+        //    for (int i = 0; i < VertexList.Count; i++)
+        //    {
+        //        PointF newPoint = new PointF();
+        //        newPoint.X = (VertexList[i].X - center.X) * bx + center.X;
+        //        newPoint.Y = VertexList[i].Y;
+        //        VertexList[i] = newPoint;
+        //    }
+        //    Fill();
+        //}
 
         public void Rotate(float angle, PointF center)
         {

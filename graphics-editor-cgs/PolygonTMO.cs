@@ -131,7 +131,7 @@ namespace graphics_editor_cgs
                 Xrl.Clear();
                 Xrr.Clear();
 
-                if (nM > 0)
+                if (M.Count > 0)
                 {
                     if (M[0].x >= Xmin_e && M[0].dQ < 0)
                     {
@@ -190,13 +190,24 @@ namespace graphics_editor_cgs
             MakeTMO();
         }
 
-        public void Resize(PointF mP)
+        public void Resize(PointF mP/*, PointF center*/)
         {
             ResultLines.Clear();
-            Polygon_1.Resize(mP);
-            Polygon_2.Resize(mP);
+            float xc = (Polygon_1.Center.X + Polygon_2.Center.X) / 2;
+            float yc = (Polygon_1.Center.Y + Polygon_2.Center.Y) / 2;
+            PointF c = new PointF(xc, yc);
+            Polygon_1.Resize(mP, c);
+            Polygon_2.Resize(mP, c);
             MakeTMO();
         }
+        
+        //public void Resize(PointF mP, PointF center)
+        //{
+        //    ResultLines.Clear();
+        //    Polygon_1.Resize(mP, Center);
+        //    Polygon_2.Resize(mP, Center);
+        //    MakeTMO();
+        //}
 
         public void Rotate(float angle, PointF center)
         {

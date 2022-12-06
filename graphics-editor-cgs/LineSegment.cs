@@ -21,10 +21,10 @@ namespace graphics_editor_cgs
             Color = color;
         }
 
-        public LineSegment(Figure other): this(other.VertexList, other.Color)
+        public LineSegment(Figure other)
         {
-            //VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
-            //Color = other.Color;
+            VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
+            Color = other.Color;
         }
 
         public bool Select(PointF p)
@@ -50,7 +50,7 @@ namespace graphics_editor_cgs
             }
         }
 
-        public void Resize(PointF mP)
+        public void Resize(PointF mP/*, PointF center*/)
         {
             PointF center = Center;
             float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.03f : 0.03f;
