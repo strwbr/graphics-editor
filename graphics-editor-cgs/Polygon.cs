@@ -30,7 +30,7 @@ namespace graphics_editor_cgs
             linesList = linesList.ConvertAll(item => new InteriorSegment(item));
         }
 
-        public Polygon(Polygon other):this(other.VertexList, other.LinesList, other.Color)
+        public Polygon(Polygon other) : this(other.VertexList, other.LinesList, other.Color)
         {
             //VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
             //Color = other.Color;
@@ -88,8 +88,7 @@ namespace graphics_editor_cgs
                 for (int i = 0; i < VertexList.Count; i++)
                 {
                     int k;
-                    if (i < VertexList.Count - 1)
-                        k = i + 1;
+                    if (i < VertexList.Count - 1) k = i + 1;
                     else k = 0;
 
                     if ((VertexList[i].Y < j && VertexList[k].Y >= j)
@@ -195,6 +194,6 @@ namespace graphics_editor_cgs
                 && (y >= Yc - 7 && y <= Yc + 7);
         }
 
-        
+
     }
 }

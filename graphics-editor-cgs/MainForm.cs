@@ -58,8 +58,8 @@ namespace graphics_editor_cgs
             g.Clear(drawingPanel.BackColor);
 
             countSelectedFigures = 0;
-            countBezierPoints = 0;
-            countLineSegmentPoints = 0;
+            //countBezierPoints = 0;
+            //countLineSegmentPoints = 0;
 
             FigureList.Clear();
             BezierPoints.Clear();
@@ -196,18 +196,18 @@ namespace graphics_editor_cgs
         {
             if (e.Button == MouseButtons.Left)
             {
-                switch (countLineSegmentPoints)
+                switch (LineSegmentPoints.Count)
                 {
                     case 0:
                         LineSegmentPoints.Add(lastMouseClickPosition);
-                        countLineSegmentPoints++;
+                        //countLineSegmentPoints++;
                         break;
                     case 1:
                         LineSegmentPoints.Add(lastMouseClickPosition);
                         LineSegment segment = new LineSegment(LineSegmentPoints, CurrentColor);
                         FigureList.Add(segment);
                         DrawLineSegment(segment);
-                        countLineSegmentPoints = 0;
+                        //countLineSegmentPoints = 0;
                         LineSegmentPoints.Clear();
                         break;
                 }
@@ -219,16 +219,16 @@ namespace graphics_editor_cgs
             if (e.Button == MouseButtons.Left)
             {
                 BezierPoints.Add(lastMouseClickPosition); // mousePoint!!!
-                countBezierPoints++;
+                //countBezierPoints++;
             }
             else if (e.Button == MouseButtons.Right)
             {
-                if (countBezierPoints > 1)
+                if (BezierPoints.Count > 1)
                 {
-                    BezierCurve curve = Figures.Bezier(BezierPoints, countBezierPoints - 1, CurrentColor);
+                    BezierCurve curve = Figures.Bezier(BezierPoints, CurrentColor);
                     FigureList.Add(curve);
                     DrawBezier(curve);
-                    countBezierPoints = 0;
+                    //countBezierPoints = 0;
                     BezierPoints.Clear();
                 }
             }
