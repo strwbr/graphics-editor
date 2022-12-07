@@ -156,18 +156,19 @@ namespace graphics_editor_cgs
         // Выбор ТМО
         private void TmoCb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (tmoCb.SelectedIndex)
-            {
-                case 0: // Сим разность
-                    indexTMO = 0;
-                    break;
-                case 1: // Разность А/В
-                    indexTMO = 1;
-                    break;
-                case 2: // Разность В/А
-                    indexTMO = 2;
-                    break;
-            }
+            //switch (tmoCb.SelectedIndex)
+            //{
+            //    case 0: // Сим разность
+            //        indexTMO = 0;
+            //        break;
+            //    case 1: // Разность А/В
+            //        indexTMO = 1;
+            //        break;
+            //    case 2: // Разность В/А
+            //        indexTMO = 2;
+            //        break;
+            //}
+            indexTMO = tmoCb.SelectedIndex;
         }
 
         // Перерисовка объектов на сцене (обозначение выделения и центра не перерисовываются)
