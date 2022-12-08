@@ -1,11 +1,12 @@
 ﻿
 namespace graphics_editor_cgs
 {
+    // Закрашиваемый сегмент многоугольника
     public class InteriorSegment
     {
-        public int Xl;
-        public int Xr;
-        public int Y;
+        public int Xl; // левая граница сегмента
+        public int Xr; // правая граница сегмента
+        public int Y; // строка
 
         public InteriorSegment(int xl, int xr, int y) : this()
         {

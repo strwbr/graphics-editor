@@ -52,14 +52,14 @@ namespace graphics_editor_cgs
             this.arrow1Btn = new System.Windows.Forms.Button();
             this.bezierBtn = new System.Windows.Forms.Button();
             this.segmentBtn = new System.Windows.Forms.Button();
-            this.drawingPanel = new System.Windows.Forms.PictureBox();
+            this.scene = new System.Windows.Forms.PictureBox();
             this.rotatoinControlsPanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.settingColorBox.SuspendLayout();
             this.standartColorsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rotationTb)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.drawingPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.scene)).BeginInit();
             this.rotatoinControlsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -82,14 +82,15 @@ namespace graphics_editor_cgs
             // 
             // settingColorBox
             // 
+            this.settingColorBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.settingColorBox.Controls.Add(this.label1);
             this.settingColorBox.Controls.Add(this.standartColorsPanel);
             this.settingColorBox.Controls.Add(this.colorDialogBtn);
             this.settingColorBox.Controls.Add(this.currentColorPanel);
             this.settingColorBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.settingColorBox.Location = new System.Drawing.Point(10, 376);
+            this.settingColorBox.Location = new System.Drawing.Point(10, 447);
             this.settingColorBox.Name = "settingColorBox";
-            this.settingColorBox.Size = new System.Drawing.Size(267, 149);
+            this.settingColorBox.Size = new System.Drawing.Size(257, 149);
             this.settingColorBox.TabIndex = 1;
             this.settingColorBox.TabStop = false;
             this.settingColorBox.Text = "Цвет";
@@ -339,25 +340,25 @@ namespace graphics_editor_cgs
             // 
             // drawingPanel
             // 
-            this.drawingPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.scene.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.drawingPanel.BackColor = System.Drawing.Color.White;
-            this.drawingPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.drawingPanel.Location = new System.Drawing.Point(283, 12);
-            this.drawingPanel.Name = "drawingPanel";
-            this.drawingPanel.Size = new System.Drawing.Size(815, 513);
-            this.drawingPanel.TabIndex = 2;
-            this.drawingPanel.TabStop = false;
-            this.drawingPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseDown);
-            this.drawingPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseMove);
-            this.drawingPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseUp);
+            this.scene.BackColor = System.Drawing.Color.White;
+            this.scene.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.scene.Location = new System.Drawing.Point(283, 12);
+            this.scene.Name = "drawingPanel";
+            this.scene.Size = new System.Drawing.Size(863, 584);
+            this.scene.TabIndex = 2;
+            this.scene.TabStop = false;
+            this.scene.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseDown);
+            this.scene.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseMove);
+            this.scene.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrawingPanel_MouseUp);
             // 
             // rotatoinControlsPanel
             // 
             this.rotatoinControlsPanel.Controls.Add(this.rotationTb);
             this.rotatoinControlsPanel.Controls.Add(this.rotationAngleMode);
-            this.rotatoinControlsPanel.Location = new System.Drawing.Point(10, 268);
+            this.rotatoinControlsPanel.Location = new System.Drawing.Point(10, 252);
             this.rotatoinControlsPanel.Name = "rotatoinControlsPanel";
             this.rotatoinControlsPanel.Size = new System.Drawing.Size(257, 93);
             this.rotatoinControlsPanel.TabIndex = 19;
@@ -387,7 +388,7 @@ namespace graphics_editor_cgs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1110, 538);
+            this.ClientSize = new System.Drawing.Size(1158, 609);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.rotatoinControlsPanel);
@@ -400,7 +401,7 @@ namespace graphics_editor_cgs
             this.Controls.Add(this.arrow1Btn);
             this.Controls.Add(this.bezierBtn);
             this.Controls.Add(this.segmentBtn);
-            this.Controls.Add(this.drawingPanel);
+            this.Controls.Add(this.scene);
             this.Controls.Add(this.settingColorBox);
             this.Name = "MainForm";
             this.Text = "Графический редактор | Вариант 7";
@@ -408,7 +409,7 @@ namespace graphics_editor_cgs
             this.settingColorBox.PerformLayout();
             this.standartColorsPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.rotationTb)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.drawingPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.scene)).EndInit();
             this.rotatoinControlsPanel.ResumeLayout(false);
             this.rotatoinControlsPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -429,7 +430,7 @@ namespace graphics_editor_cgs
         private Button blueBtn;
         private Button blackBtn;
         private Panel currentColorPanel;
-        private PictureBox drawingPanel;
+        private PictureBox scene;
         private Button segmentBtn;
         private Button bezierBtn;
         private Button arrow1Btn;

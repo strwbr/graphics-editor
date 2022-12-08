@@ -2,24 +2,19 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
-using System.Xml;
 
 namespace graphics_editor_cgs
 {
     public class Polygon : Figure
     {
-        // из интерфейса
         public List<PointF> VertexList { get; set; }
         public Color Color { get; set; }
-
         public List<InteriorSegment> LinesList { get; set; }
 
         public Polygon()
         {
             VertexList = new List<PointF>();
             Color = Color.Black; // по умолчанию черный
-
             LinesList = new List<InteriorSegment>();
         }
 
@@ -30,11 +25,43 @@ namespace graphics_editor_cgs
             linesList = linesList.ConvertAll(item => new InteriorSegment(item));
         }
 
-        public Polygon(Polygon other)  /*this(other.VertexList, other.LinesList, other.Color)*/
+        public Polygon(Polygon other)
         {
             VertexList = other.VertexList.ConvertAll(item => new PointF(item.X, item.Y));
             Color = other.Color;
             LinesList = other.LinesList.ConvertAll(item => new InteriorSegment(item));
+        }
+
+        public PointF Center
+        {
+            get
+            {
+                PointF Pmin = Min;
+                PointF Pmax = Max;
+                return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
+            }
+        }
+
+        public PointF Min
+        {
+            get
+            {
+                PointF p = new PointF();
+                p.X = VertexList.Min(item => item.X);
+                p.Y = VertexList.Min(item => item.Y);
+                return p;
+            }
+        }
+
+        public PointF Max
+        {
+            get
+            {
+                PointF p = new PointF();
+                p.X = VertexList.Max(item => item.X);
+                p.Y = VertexList.Max(item => item.Y);
+                return p;
+            }
         }
 
         // Выделение фигуры
@@ -109,28 +136,6 @@ namespace graphics_editor_cgs
             }
         }
 
-        public PointF Min
-        {
-            get
-            {
-                PointF p = new PointF();
-                p.X = VertexList.Min(item => item.X);
-                p.Y = VertexList.Min(item => item.Y);
-                return p;
-            }
-        }
-
-        public PointF Max
-        {
-            get
-            {
-                PointF p = new PointF();
-                p.X = VertexList.Max(item => item.X);
-                p.Y = VertexList.Max(item => item.Y);
-                return p;
-            }
-        }
-
         public void Move(float dx, float dy)
         {
             for (int i = 0; i < VertexList.Count; i++)
@@ -157,6 +162,7 @@ namespace graphics_editor_cgs
             }
             Fill();
         }
+
         public void Resize(PointF mP, PointF center)
         {
             //PointF center = Center;
@@ -169,7 +175,6 @@ namespace graphics_editor_cgs
                 newPoint.Y = VertexList[i].Y;
                 VertexList[i] = newPoint;
             }
-
             Fill();
         }
         //public void Resize(PointF mP, PointF center)
@@ -202,27 +207,5 @@ namespace graphics_editor_cgs
             }
             Fill();
         }
-
-        public PointF Center
-        {
-            get
-            {
-                PointF Pmin = Min;
-                PointF Pmax = Max;
-                return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
-            }
-        }
-
-        public bool CheckResize(float x, float y)
-        {
-            float Xmin = Min.X;
-            float Xmax = Max.X;
-            float Yc = Center.Y;
-            return
-                ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
-                && (y >= Yc - 7 && y <= Yc + 7);
-        }
-
-
     }
 }

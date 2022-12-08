@@ -27,6 +27,40 @@ namespace graphics_editor_cgs
             Color = other.Color;
         }
 
+        public PointF Center
+        {
+            get
+            {
+                PointF p1 = VertexList[0];
+                PointF p2 = VertexList[1];
+                return new PointF((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2);
+            }
+        }
+
+        public PointF Min
+        {
+            get
+            {
+                // Выбирается минимальная координата из двух точек отрезка
+                PointF p = new PointF();
+                p.X = (VertexList[0].X < VertexList[1].X) ? VertexList[0].X : VertexList[1].X;
+                p.Y = (VertexList[0].Y < VertexList[1].Y) ? VertexList[0].Y : VertexList[1].Y;
+                return p;
+            }
+        }
+
+        public PointF Max
+        {
+            get
+            {
+                // Выбирается максимальная координата из двух точек отрезка
+                PointF p = new PointF();
+                p.X = VertexList[0].X > VertexList[1].X ? VertexList[0].X : VertexList[1].X;
+                p.Y = VertexList[0].Y > VertexList[1].Y ? VertexList[0].Y : VertexList[1].Y;
+                return p;
+            }
+        }
+
         public bool Select(PointF p)
         {
             PointF p1 = VertexList[0];
@@ -77,47 +111,9 @@ namespace graphics_editor_cgs
             }
         }
 
-        public PointF Center
-        {
-            get
-            {
-                PointF p1 = VertexList[0];
-                PointF p2 = VertexList[1];
-                return new PointF((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2);
-            }
-        }
+        
 
-        public PointF Min
-        {
-            get
-            {
-                PointF p = new PointF();
-                p.X = (VertexList[0].X < VertexList[1].X) ? VertexList[0].X : VertexList[1].X;
-                p.Y = (VertexList[0].Y < VertexList[1].Y) ? VertexList[0].Y : VertexList[1].Y;
-                return p;
-            }
-        }
-
-        public PointF Max
-        {
-            get
-            {
-                PointF p = new PointF();
-                p.X = VertexList[0].X > VertexList[1].X ? VertexList[0].X : VertexList[1].X;
-                p.Y = VertexList[0].Y > VertexList[1].Y ? VertexList[0].Y : VertexList[1].Y;
-                return p;
-            }
-        }
-
-        public bool CheckResize(float x, float y)
-        {
-            float Xmin = Min.X;
-            float Xmax = Max.X;
-            float Yc = Center.Y;
-            return
-                ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
-                && (y >= Yc - 7 && y <= Yc + 7);
-        }
+        
 
 
     }

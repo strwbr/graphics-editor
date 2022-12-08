@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace graphics_editor_cgs
 {
@@ -13,8 +10,8 @@ namespace graphics_editor_cgs
         {
             Polygon arrow = new Polygon();
             arrow.Color = color;
-            const int w = 90;
-            const int h = 60;
+            const int w = 90; // ширина
+            const int h = 60; // высота
 
             float xc = Pcenter.X;
             float yc = Pcenter.Y;
@@ -26,7 +23,7 @@ namespace graphics_editor_cgs
             PointF p5 = new PointF(xc + w / 6, yc + h / 2); arrow.VertexList.Add(p5);
             PointF p6 = new PointF(xc + w / 6, yc + h / 4); arrow.VertexList.Add(p6);
             PointF p7 = new PointF(xc - w / 2, yc + h / 4); arrow.VertexList.Add(p7);
-
+            // Закрашивание
             arrow.Fill();
             return arrow;
         }
@@ -36,8 +33,8 @@ namespace graphics_editor_cgs
             Polygon arrow = new Polygon();
             arrow.Color = color;
 
-            const int w = 90;
-            const int h = 60;
+            const int w = 90; // ширина
+            const int h = 60; // высота
 
             float xc = Pcenter.X;
             float yc = Pcenter.Y;

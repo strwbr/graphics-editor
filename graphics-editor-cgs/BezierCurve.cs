@@ -29,6 +29,39 @@ namespace graphics_editor_cgs
             Color = other.Color;
         }
 
+        public PointF Center
+        {
+            get
+            {
+                PointF Pmin = Min;
+                PointF Pmax = Max;
+                return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
+            }
+        }
+
+        public PointF Min
+        {
+            get
+            {
+                PointF p = new PointF();
+                p.X = VertexList.Min(item => item.X);
+                p.Y = VertexList.Min(item => item.Y);
+                return p;
+            }
+        }
+
+        public PointF Max
+        {
+            get
+            {
+                PointF p = new PointF();
+                p.X = VertexList.Max(item => item.X);
+                p.Y = VertexList.Max(item => item.Y);
+                return p;
+            }
+        }
+
+        // Проверка попадания в прямоугольник
         private bool CheckHitting(PointF p1, PointF p2, PointF pClick)
         {
             float xmin = p1.X > p2.X ? p2.X : p1.X;
@@ -42,6 +75,7 @@ namespace graphics_editor_cgs
 
         public bool Select(PointF p)
         {
+            // Точка p должна лежать внутри прямоугольника, образуемого двумя соседними вершинами
             for (int i = 0; i < VertexList.Count - 1; i++)
             {
                 if (VertexList[i].X == p.X && VertexList[i].Y == p.Y) 
@@ -93,51 +127,5 @@ namespace graphics_editor_cgs
                 VertexList[i] = p;
             }
         }
-
-        public PointF Center
-        {
-            get
-            {
-                PointF Pmin = Min;
-                PointF Pmax = Max;
-                return new PointF((Pmax.X + Pmin.X) / 2, (Pmax.Y + Pmin.Y) / 2);
-            }
-        }
-
-        public PointF Min
-        {
-            get
-            {
-                PointF p = new PointF();
-                p.X = VertexList.Min(item => item.X);
-                p.Y = VertexList.Min(item => item.Y);
-                return p;
-            }
-        }
-
-        public PointF Max
-        {
-            get
-            {
-                PointF p = new PointF();
-                p.X = VertexList.Max(item => item.X);
-                p.Y = VertexList.Max(item => item.Y);
-                return p;
-            }
-        }
-
-        public bool CheckResize(float x, float y)
-        {
-            float Xmin = Min.X;
-            float Xmax = Max.X;
-            float Yc = Center.Y;
-            return
-                ((x >= Xmin - 10 && x <= Xmin + 4) || (x >= Xmax - 4 && x <= Xmax + 10))
-                && (y >= Yc - 7 && y <= Yc + 7);
-        }
-
-
     }
-
-
 }
