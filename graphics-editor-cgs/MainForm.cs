@@ -10,25 +10,25 @@ namespace graphics_editor_cgs
 {
     public partial class MainForm : Form
     {
-        private Graphics g;
-        private Bitmap buffer;
+        private Graphics g; // графика
+        private Bitmap buffer; // буфер, в к-ом формируется изображение
 
         private List<PointF> BezierPoints = new List<PointF>(); // Список опорных точек кривой Безье
         private List<PointF> LineSegmentPoints = new List<PointF>(); // Список вершин отрезка
 
         private List<Figure> FigureList = new List<Figure>(); // Список фигур, находящихся на сцене
         private Figure selectedFigure = null; // Выделенная фигура
+        private int lastSelectedFigureIndex = -1; // Индекс предыдущей выделенной фигуры
+        private int selectedFigureIndex = -1; // Индекс выделенной фигуры
 
         private int indexTMO = -1; // Индекс ТМО
         private int indexFigure = 0; // Индекс фигуры
         private int indexOperation = 0; // Индекс операции
 
         private PointF lastMouseClickPosition = new Point(); // Последняя позиция клика мыши
+        
         private PointF rotateCenter = new Point(); // Центр вращения
         private float prevRotationAngle = 0; // Предыдущий угол вращения
-
-        private int lastSelectedFigureIndex = -1; // Индекс предыдущей выделенной фигуры
-        private int selectedFigureIndex = -1; // Индекс выделенной фигуры
 
         private bool isMoveMode = false; // Режим перемещения
         private bool isResizeMode = false; // Режим масштабирования
@@ -39,7 +39,6 @@ namespace graphics_editor_cgs
         private PolygonTMO polygonTMO = new PolygonTMO(); // ТМО-фигура
         private int countOperands = 0; // Количество выделенных операндов для ТМО
 
-
         public MainForm()
         {
             InitializeComponent();
@@ -49,295 +48,6 @@ namespace graphics_editor_cgs
             currentColorPanel.BackColor = Color.Black;
             polygonTMO.Xmin_e = scene.Height;
             polygonTMO.Xmax_e = scene.Width;
-        }
-
-        // Очистка области рисования
-        private void ClearScene()
-        {
-            g.Clear(scene.BackColor);
-
-            countOperands = 0;
-
-            FigureList.Clear();
-            BezierPoints.Clear();
-            LineSegmentPoints.Clear();
-
-            selectedFigure = null;
-            polygonTMO = new PolygonTMO(0, scene.Width);
-
-            isMoveMode = false;
-            isResizeMode = false;
-            isRotateMode = false;
-
-            lastSelectedFigureIndex = -1;
-            selectedFigureIndex = -1;
-
-            scene.Image = buffer;
-        }
-
-        // Добавление фигуры = 1
-        // Отрезок = 0
-        private void SegmentBtn_Click(object sender, EventArgs e)
-        {
-            indexOperation = 0; // перенести в другой метод, где будет проверять индекс операции (если 4, то отключить)
-            indexFigure = 0;
-            tmoCb.Visible = false;
-            rotatoinControlsPanel.Visible = false;
-        }
-
-        // Прямая Безье = 1
-        private void BezierBtn_Click(object sender, EventArgs e)
-        {
-            indexOperation = 0;
-            indexFigure = 1;
-            tmoCb.Visible = false;
-            rotatoinControlsPanel.Visible = false;
-        }
-
-        // Стрелка1 = 2
-        private void Arrow1Btn_Click(object sender, EventArgs e)
-        {
-            indexOperation = 0;
-            indexFigure = 2;
-            tmoCb.Visible = false;
-            rotatoinControlsPanel.Visible = false;
-        }
-
-        // Стрелка2 = 3
-        private void Arrow2Btn_Click(object sender, EventArgs e)
-        {
-            indexOperation = 0;
-            indexFigure = 3;
-            tmoCb.Visible = false;
-            rotatoinControlsPanel.Visible = false;
-        }
-
-        // Выделение фигуры = 1
-        private void SelectFigureBtn_Click(object sender, EventArgs e)
-        {
-            indexOperation = 1;
-            tmoCb.Visible = false;
-            rotatoinControlsPanel.Visible = false;
-        }
-
-        // Удаление фигуры
-        private void DeleteFigureBtn_Click(object sender, EventArgs e)
-        {
-            //indexOperation = 2;
-            tmoCb.Visible = false;
-            rotatoinControlsPanel.Visible = false;
-            if (selectedFigureIndex != -1)
-            {
-                //FigureList.RemoveAt(selectedFigureIndex);
-                FigureList.Remove(selectedFigure);
-                selectedFigureIndex = -1;
-                lastSelectedFigureIndex = -1;
-                UpdateScene();
-                scene.Image = buffer;
-            }
-        }
-
-        // Кнопка очистки области рисования 
-        private void ClearPanelBtn_Click(object sender, EventArgs e)
-        {
-            tmoCb.Visible = false;
-            rotatoinControlsPanel.Visible = false;
-            ClearScene();
-        }
-
-        // ТМО = 2
-        private void TmoBtn_Click(object sender, EventArgs e)
-        {
-            tmoCb.Visible = true;
-            indexOperation = 2;
-        }
-
-        // Выбор ТМО
-        private void TmoCb_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            indexTMO = tmoCb.SelectedIndex;
-        }
-
-        // Перерисовка объектов на сцене
-        private void UpdateScene()
-        {
-            g.Clear(scene.BackColor);
-            foreach (Figure f in FigureList)
-            {
-                DrawFigure(f);
-            }
-        }
-
-        // Рисование фигуры
-        private void DrawFigure(Figure f)
-        {
-            if (f.GetType() == typeof(Polygon))
-                DrawPolygon((Polygon)f);
-            else if (f.GetType() == typeof(BezierCurve))
-                DrawBezier((BezierCurve)f);
-            else if (f.GetType() == typeof(LineSegment))
-                DrawLineSegment((LineSegment)f);
-            else if (f.GetType() == typeof(PolygonTMO))
-                DrawPolygonTMO((PolygonTMO)f);
-        }
-
-        // Построение отрезка
-        private void BuildLineSegment(MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                switch (LineSegmentPoints.Count)
-                {
-                    case 0:
-                        LineSegmentPoints.Add(lastMouseClickPosition);
-                        break;
-                    case 1:
-                        LineSegmentPoints.Add(lastMouseClickPosition);
-                        LineSegment segment = new LineSegment(LineSegmentPoints, CurrentColor);
-                        FigureList.Add(segment);
-                        DrawLineSegment(segment);
-                        LineSegmentPoints.Clear();
-                        break;
-                }
-            }
-        }
-
-        // Построение кривой Безье
-        private void BuildBezierCurve(MouseEventArgs e)
-        {
-            // При ЛКМ добавляются опорные точки
-            if (e.Button == MouseButtons.Left)
-            {
-                BezierPoints.Add(lastMouseClickPosition);
-            }
-            // При ПКМ строиться кривая
-            else if (e.Button == MouseButtons.Right)
-            {
-                if (BezierPoints.Count > 1)
-                {
-                    BezierCurve curve = Figures.Bezier(BezierPoints, CurrentColor);
-                    FigureList.Add(curve);
-                    DrawBezier(curve);
-                    BezierPoints.Clear();
-                }
-            }
-        }
-
-        // Построение стрелки 1 - стрелка вправо
-        private void BuildArrow1(MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                Polygon arrow = Figures.Arrow1(lastMouseClickPosition, CurrentColor);
-                FigureList.Add(arrow);
-                DrawPolygon(arrow);
-            }
-        }
-
-        // Построение стрелки 2 - двунаправленная стрелка
-        private void BuildArrow2(MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                Polygon arrow = Figures.Arrow2(lastMouseClickPosition, CurrentColor);
-                FigureList.Add(arrow);
-                DrawPolygon(arrow);
-            }
-        }
-
-        // Добавление выбранной фигуры на сцену
-        private void AddChosenFigureToScene(MouseEventArgs e)
-        {
-            switch (indexFigure)
-            {
-                case 0: BuildLineSegment(e); break;
-                case 1: BuildBezierCurve(e); break;
-                case 2: BuildArrow1(e); break;
-                case 3: BuildArrow2(e); break;
-            }
-        }
-
-        // Выделение фигуры на цене
-        private void SelectFigureOnScene(MouseEventArgs e)
-        {
-            lastSelectedFigureIndex = selectedFigureIndex;
-            selectedFigureIndex = FindSelectedFigure(lastMouseClickPosition);
-            UpdateScene();
-            // При ПКМ активируется режим вращения и задается его центр
-            if (e.Button == MouseButtons.Right)
-            {
-                // Если до этого была уже выделена фигура
-                if (lastSelectedFigureIndex != -1)
-                {
-                    rotateCenter = e.Location;
-
-                    //UpdateScene();
-                    DrawSelection(lastSelectedFigureIndex);
-                    DrawCenter(rotateCenter);
-                    isRotateMode = true;
-                    rotatoinControlsPanel.Visible = true;
-                    rotationTb.Value = 0;
-                    prevRotationAngle = 0;
-                }
-            }
-            // При ЛКМ 
-            if (e.Button == MouseButtons.Left)
-            {
-                // Если до этого была уже выделена фигура
-                if (lastSelectedFigureIndex != -1)
-                {
-                    // Активация режима масштабирования
-                    if (CheckResize(lastSelectedFigureIndex, e.Location))
-                        isResizeMode = true; 
-                    else isResizeMode = false;
-                }
-                // Если сейчас была выделена фигура
-                if (selectedFigureIndex != -1)
-                {
-                    selectedFigure = FigureList[selectedFigureIndex];
-                    DrawSelection(selectedFigureIndex);
-                    isMoveMode = true; // активация режима перемещения
-                }
-                else
-                    isMoveMode = false;
-            }
-        }
-
-        // Построение ТМО-фигуры
-        private void BuildPolygonTMO()
-        {
-            switch (countOperands)
-            {
-                case 0:
-                    int index = FindSelectedFigure(lastMouseClickPosition);
-                    // Если был выделен многоугольник
-                    if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
-                    {
-                        DrawSelection(index);
-                        polygonTMO.Polygon_1 = new Polygon((Polygon)FigureList[index]);
-                        FigureList.RemoveAt(index);
-                        countOperands++;
-                    }
-                    break;
-                case 1:
-                    index = FindSelectedFigure(lastMouseClickPosition);
-                    if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
-                    {
-                        DrawSelection(index);
-                        polygonTMO.Polygon_2 = new Polygon((Polygon)FigureList[index]);
-                        FigureList.RemoveAt(index);
-                        // Выполнение ТМО 
-                        polygonTMO.IndexTMO = indexTMO;
-                        polygonTMO.MakeTMO();
-                        polygonTMO.Color = CurrentColor;
-                        FigureList.Add(polygonTMO);
-                        UpdateScene();
-
-                        countOperands = 0;
-                        polygonTMO = new PolygonTMO(0, scene.Width);
-                    }
-                    break;
-            }
         }
 
         // Обработчик нажатия кнопки мыши по области рисования
@@ -414,10 +124,313 @@ namespace graphics_editor_cgs
             scene.Image = buffer;
         }
 
+        // Очистка области рисования
+        private void ClearScene()
+        {
+            g.Clear(scene.BackColor);
+
+            //prevRotationAngle = 0;
+
+            //lastMouseClickPosition = new PointF();
+
+            countOperands = 0;
+
+            FigureList.Clear();
+            BezierPoints.Clear();
+            LineSegmentPoints.Clear();
+
+            selectedFigure = null;
+            polygonTMO = new PolygonTMO(0, scene.Width);
+
+            isMoveMode = false;
+            isResizeMode = false;
+            isRotateMode = false;
+
+            lastSelectedFigureIndex = -1;
+            selectedFigureIndex = -1;
+
+            scene.Image = buffer;
+        }
+
+        // Добавление фигуры = 1
+        // Отрезок = 0
+        private void SegmentBtn_Click(object sender, EventArgs e)
+        {
+            indexOperation = 0; // перенести в другой метод, где будет проверять индекс операции (если 4, то отключить)
+            indexFigure = 0;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
+        }
+
+        // Прямая Безье = 1
+        private void BezierBtn_Click(object sender, EventArgs e)
+        {
+            indexOperation = 0;
+            indexFigure = 1;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
+        }
+
+        // Стрелка1 = 2
+        private void Arrow1Btn_Click(object sender, EventArgs e)
+        {
+            indexOperation = 0;
+            indexFigure = 2;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
+        }
+
+        // Стрелка2 = 3
+        private void Arrow2Btn_Click(object sender, EventArgs e)
+        {
+            indexOperation = 0;
+            indexFigure = 3;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
+        }
+
+        // Выделение фигуры = 1
+        private void SelectFigureBtn_Click(object sender, EventArgs e)
+        {
+            indexOperation = 1;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
+        }
+
+        // Выполнить ТМО = 2
+        private void TmoBtn_Click(object sender, EventArgs e)
+        {
+            tmoCb.Visible = true;
+            indexOperation = 2;
+        }
+
+        // Выбор ТМО
+        private void TmoCb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            indexTMO = tmoCb.SelectedIndex;
+        }
+
+        // Удаление фигуры
+        private void DeleteFigureBtn_Click(object sender, EventArgs e)
+        {
+            //indexOperation = 2;
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
+            if (selectedFigureIndex != -1)
+            {
+                //FigureList.RemoveAt(selectedFigureIndex);
+                FigureList.Remove(selectedFigure);
+                selectedFigureIndex = -1;
+                lastSelectedFigureIndex = -1;
+                UpdateScene();
+                scene.Image = buffer;
+            }
+        }
+
+        // Кнопка очистки области рисования 
+        private void ClearPanelBtn_Click(object sender, EventArgs e)
+        {
+            tmoCb.Visible = false;
+            rotatoinControlsPanel.Visible = false;
+            ClearScene();
+        }
+
+        // Перерисовка объектов на сцене
+        private void UpdateScene()
+        {
+            g.Clear(scene.BackColor);
+            foreach (Figure f in FigureList)
+            {
+                DrawFigure(f);
+            }
+        }
+
+        // Рисование фигуры
+        private void DrawFigure(Figure f)
+        {
+            if (f.GetType() == typeof(Polygon))
+                DrawPolygon((Polygon)f);
+            else if (f.GetType() == typeof(BezierCurve))
+                DrawBezier((BezierCurve)f);
+            else if (f.GetType() == typeof(LineSegment))
+                DrawLineSegment((LineSegment)f);
+            else if (f.GetType() == typeof(PolygonTMO))
+                DrawPolygonTMO((PolygonTMO)f);
+        }
+
+        // Добавление выбранной фигуры на сцену
+        private void AddChosenFigureToScene(MouseEventArgs e)
+        {
+            switch (indexFigure)
+            {
+                case 0: BuildLineSegment(e); break;
+                case 1: BuildBezierCurve(e); break;
+                case 2: BuildArrow1(e); break;
+                case 3: BuildArrow2(e); break;
+            }
+        }
+
+        // Построение отрезка
+        private void BuildLineSegment(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                switch (LineSegmentPoints.Count)
+                {
+                    case 0:
+                        LineSegmentPoints.Add(lastMouseClickPosition);
+                        break;
+                    case 1:
+                        LineSegmentPoints.Add(lastMouseClickPosition);
+                        LineSegment segment = new LineSegment(LineSegmentPoints, CurrentColor);
+                        FigureList.Add(segment);
+                        DrawLineSegment(segment);
+                        LineSegmentPoints.Clear();
+                        break;
+                }
+            }
+        }
+
+        // Построение кривой Безье
+        private void BuildBezierCurve(MouseEventArgs e)
+        {
+            // При ЛКМ добавляются опорные точки
+            if (e.Button == MouseButtons.Left)
+            {
+                BezierPoints.Add(lastMouseClickPosition);
+            }
+            // При ПКМ строиться кривая
+            else if (e.Button == MouseButtons.Right)
+            {
+                if (BezierPoints.Count > 1)
+                {
+                    BezierCurve curve = Figures.Bezier(BezierPoints, CurrentColor);
+                    FigureList.Add(curve);
+                    DrawBezier(curve);
+                    BezierPoints.Clear();
+                }
+            }
+        }
+
+        // Построение стрелки 1 - стрелка вправо
+        private void BuildArrow1(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Polygon arrow = Figures.Arrow1(lastMouseClickPosition, CurrentColor);
+                FigureList.Add(arrow);
+                DrawPolygon(arrow);
+            }
+        }
+
+        // Построение стрелки 2 - двунаправленная стрелка
+        private void BuildArrow2(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Polygon arrow = Figures.Arrow2(lastMouseClickPosition, CurrentColor);
+                FigureList.Add(arrow);
+                DrawPolygon(arrow);
+            }
+        }
+
+        // Построение ТМО-фигуры
+        private void BuildPolygonTMO()
+        {
+            switch (countOperands)
+            {
+                case 0:
+                    int index = FindSelectedFigure(lastMouseClickPosition);
+                    // Если был выделен многоугольник
+                    if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
+                    {
+                        DrawSelection(index);
+                        polygonTMO.Polygon_1 = new Polygon((Polygon)FigureList[index]);
+                        FigureList.RemoveAt(index);
+                        countOperands++;
+                    }
+                    break;
+                case 1:
+                    index = FindSelectedFigure(lastMouseClickPosition);
+                    if (index != -1 && FigureList[index].GetType() == typeof(Polygon))
+                    {
+                        DrawSelection(index);
+                        polygonTMO.Polygon_2 = new Polygon((Polygon)FigureList[index]);
+                        FigureList.RemoveAt(index);
+                        // Выполнение ТМО 
+                        polygonTMO.IndexTMO = indexTMO;
+                        polygonTMO.MakeTMO();
+                        polygonTMO.Color = CurrentColor;
+                        FigureList.Add(polygonTMO);
+                        UpdateScene();
+
+                        countOperands = 0;
+                        polygonTMO = new PolygonTMO(0, scene.Width);
+                    }
+                    break;
+            }
+        }
+
+        // Выделение фигуры на цене
+        private void SelectFigureOnScene(MouseEventArgs e)
+        {
+            lastSelectedFigureIndex = selectedFigureIndex;
+            selectedFigureIndex = FindSelectedFigure(lastMouseClickPosition);
+            UpdateScene();
+            // При ПКМ активируется режим вращения и задается его центр
+            if (e.Button == MouseButtons.Right)
+            {
+                // Если до этого была уже выделена фигура
+                if (lastSelectedFigureIndex != -1)
+                {
+                    rotateCenter = e.Location;
+
+                    //UpdateScene();
+                    DrawSelection(lastSelectedFigureIndex);
+                    DrawCenter(rotateCenter);
+                    isRotateMode = true;
+                    rotatoinControlsPanel.Visible = true;
+                    rotationTb.Value = 0;
+                    prevRotationAngle = 0;
+                }
+            }
+            // При ЛКМ 
+            if (e.Button == MouseButtons.Left)
+            {
+                // Если до этого была уже выделена фигура
+                if (lastSelectedFigureIndex != -1)
+                {
+                    // Активация режима масштабирования
+                    if (CheckResize(lastSelectedFigureIndex, e.Location))
+                        isResizeMode = true;
+                    else isResizeMode = false;
+                }
+                // Если сейчас была выделена фигура
+                if (selectedFigureIndex != -1)
+                {
+                    selectedFigure = FigureList[selectedFigureIndex];
+                    DrawSelection(selectedFigureIndex);
+                    isMoveMode = true; // активация режима перемещения
+                }
+                else
+                    isMoveMode = false;
+            }
+        }
+
         // Рисование отрезка
         private void DrawLineSegment(LineSegment lineSegment)
         {
             g.DrawLine(new Pen(lineSegment.Color), lineSegment.VertexList[0], lineSegment.VertexList[1]);
+        }
+
+        // Рисование кривой Безье
+        private void DrawBezier(BezierCurve bezierCurve)
+        {
+            for (int i = 0; i < bezierCurve.VertexList.Count - 1; i++)
+            {
+                g.DrawLine(new Pen(bezierCurve.Color), bezierCurve.VertexList[i], bezierCurve.VertexList[i + 1]);
+            }
+
         }
 
         // Рисование многоугольника
@@ -432,6 +445,7 @@ namespace graphics_editor_cgs
                 g.DrawLine(new Pen(polygon.Color), new PointF(xl, y), new PointF(xr, y));
             }
         }
+
         // Рисование ТМО-фигуры
         private void DrawPolygonTMO(PolygonTMO polygon)
         {
@@ -444,15 +458,7 @@ namespace graphics_editor_cgs
                 g.DrawLine(new Pen(polygon.Color), new PointF(xl, y), new PointF(xr, y));
             }
         }
-        // Рисование кривой Безье
-        private void DrawBezier(BezierCurve bezierCurve)
-        {
-            for (int i = 0; i < bezierCurve.VertexList.Count - 1; i++)
-            {
-                g.DrawLine(new Pen(bezierCurve.Color), bezierCurve.VertexList[i], bezierCurve.VertexList[i + 1]);
-            }
 
-        }
         // Рисование центра - красный крестик
         private void DrawCenter(PointF center)
         {
@@ -542,7 +548,5 @@ namespace graphics_editor_cgs
             ToolTip t = new ToolTip();
             t.SetToolTip(btn, text);
         }
-
-
     }
 }

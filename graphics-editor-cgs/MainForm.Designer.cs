@@ -338,7 +338,7 @@ namespace graphics_editor_cgs
             this.segmentBtn.Click += new System.EventHandler(this.SegmentBtn_Click);
             this.segmentBtn.MouseEnter += new System.EventHandler(this.SegmentBtn_MouseEnter);
             // 
-            // drawingPanel
+            // scene
             // 
             this.scene.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -346,7 +346,7 @@ namespace graphics_editor_cgs
             this.scene.BackColor = System.Drawing.Color.White;
             this.scene.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.scene.Location = new System.Drawing.Point(283, 12);
-            this.scene.Name = "drawingPanel";
+            this.scene.Name = "scene";
             this.scene.Size = new System.Drawing.Size(863, 584);
             this.scene.TabIndex = 2;
             this.scene.TabStop = false;
@@ -403,6 +403,8 @@ namespace graphics_editor_cgs
             this.Controls.Add(this.segmentBtn);
             this.Controls.Add(this.scene);
             this.Controls.Add(this.settingColorBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Графический редактор | Вариант 7";
             this.settingColorBox.ResumeLayout(false);

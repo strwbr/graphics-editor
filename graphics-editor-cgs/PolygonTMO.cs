@@ -7,7 +7,7 @@ namespace graphics_editor_cgs
 {
     public class PolygonTMO : Figure
     {
-        public int IndexTMO { private get; set; } // Индекс ТМО
+        public int IndexTMO { private get; set; } // Индекс вида ТМО
         public Polygon Polygon_1 { private get; set; } // 1-я фигура
         public Polygon Polygon_2 { private get; set; } // 2-я фигура
         public List<InteriorSegment> ResultLines { get; set; } // Список результирующих сегментов ТМО

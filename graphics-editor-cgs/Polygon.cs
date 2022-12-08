@@ -89,7 +89,7 @@ namespace graphics_editor_cgs
             return isSelect;
         }
 
-        // Закрашивание фигуры
+        // Заливка многоугольника - получение его внутренних сегментов 
         public void Fill()
         {
             LinesList.Clear();
