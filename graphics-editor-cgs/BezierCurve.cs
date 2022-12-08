@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace graphics_editor_cgs
 {
@@ -95,11 +94,11 @@ namespace graphics_editor_cgs
                 PointF newPoint = new PointF();
                 newPoint.X = VertexList[i].X + dx;
                 newPoint.Y = VertexList[i].Y + dy;
-                VertexList[i] = newPoint; //new PointF(newPoint.X, newPoint.Y);
+                VertexList[i] = newPoint; 
             }
         }
 
-        public void Resize(PointF mP/*, PointF center*/)
+        public void Resize(PointF mP)
         {
             PointF center = Center;
             float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.03f : 0.03f;
@@ -115,9 +114,7 @@ namespace graphics_editor_cgs
 
         public void Rotate(float angle, PointF center)
         {
-            //double cos = Math.Cos(angle);
             double cos = Math.Cos(angle * Math.PI / 180);
-            //double sin = Math.Sin(angle);
             double sin = Math.Sin(angle * Math.PI / 180);
             for (int i = 0; i < VertexList.Count; i++)
             {

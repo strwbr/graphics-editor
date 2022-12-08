@@ -25,7 +25,6 @@ namespace graphics_editor_cgs
 
         private PointF lastMouseClickPosition = new Point(); // Последняя позиция клика мыши
         private PointF rotateCenter = new Point(); // Центр вращения
-        //private PointF resizeCenter = new Point(); 
         private float prevRotationAngle = 0; // Предыдущий угол вращения
 
         private int lastSelectedFigureIndex = -1; // Индекс предыдущей выделенной фигуры
@@ -85,6 +84,7 @@ namespace graphics_editor_cgs
             tmoCb.Visible = false;
             rotatoinControlsPanel.Visible = false;
         }
+
         // Прямая Безье = 1
         private void BezierBtn_Click(object sender, EventArgs e)
         {
@@ -93,6 +93,7 @@ namespace graphics_editor_cgs
             tmoCb.Visible = false;
             rotatoinControlsPanel.Visible = false;
         }
+
         // Стрелка1 = 2
         private void Arrow1Btn_Click(object sender, EventArgs e)
         {
@@ -101,6 +102,7 @@ namespace graphics_editor_cgs
             tmoCb.Visible = false;
             rotatoinControlsPanel.Visible = false;
         }
+
         // Стрелка2 = 3
         private void Arrow2Btn_Click(object sender, EventArgs e)
         {
@@ -121,7 +123,7 @@ namespace graphics_editor_cgs
         // Удаление фигуры
         private void DeleteFigureBtn_Click(object sender, EventArgs e)
         {
-            indexOperation = 2;
+            //indexOperation = 2;
             tmoCb.Visible = false;
             rotatoinControlsPanel.Visible = false;
             if (selectedFigureIndex != -1)
@@ -153,18 +155,6 @@ namespace graphics_editor_cgs
         // Выбор ТМО
         private void TmoCb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //switch (tmoCb.SelectedIndex)
-            //{
-            //    case 0: // Сим разность
-            //        indexTMO = 0;
-            //        break;
-            //    case 1: // Разность А/В
-            //        indexTMO = 1;
-            //        break;
-            //    case 2: // Разность В/А
-            //        indexTMO = 2;
-            //        break;
-            //}
             indexTMO = tmoCb.SelectedIndex;
         }
 
@@ -218,9 +208,9 @@ namespace graphics_editor_cgs
             // При ЛКМ добавляются опорные точки
             if (e.Button == MouseButtons.Left)
             {
-                BezierPoints.Add(lastMouseClickPosition); // mousePoint!!!
+                BezierPoints.Add(lastMouseClickPosition);
             }
-            // При ПКМ сроится кривая
+            // При ПКМ строиться кривая
             else if (e.Button == MouseButtons.Right)
             {
                 if (BezierPoints.Count > 1)
@@ -272,7 +262,7 @@ namespace graphics_editor_cgs
         {
             lastSelectedFigureIndex = selectedFigureIndex;
             selectedFigureIndex = FindSelectedFigure(lastMouseClickPosition);
-            //UpdateScene();
+            UpdateScene();
             // При ПКМ активируется режим вращения и задается его центр
             if (e.Button == MouseButtons.Right)
             {
@@ -281,7 +271,7 @@ namespace graphics_editor_cgs
                 {
                     rotateCenter = e.Location;
 
-                    UpdateScene();
+                    //UpdateScene();
                     DrawSelection(lastSelectedFigureIndex);
                     DrawCenter(rotateCenter);
                     isRotateMode = true;
@@ -293,33 +283,23 @@ namespace graphics_editor_cgs
             // При ЛКМ 
             if (e.Button == MouseButtons.Left)
             {
-                //isRotateMode = false;
-
                 // Если до этого была уже выделена фигура
                 if (lastSelectedFigureIndex != -1)
                 {
                     // Активация режима масштабирования
                     if (CheckResize(lastSelectedFigureIndex, e.Location))
-                    {
-                        isResizeMode = true; // тут происходит что-то странное (вроде исправила лол)
-                        //resizeCenter = FigureList[lastSelectedFigureIndex].Center;
-                    }
+                        isResizeMode = true; 
                     else isResizeMode = false;
                 }
                 // Если сейчас была выделена фигура
                 if (selectedFigureIndex != -1)
                 {
                     selectedFigure = FigureList[selectedFigureIndex];
-                    UpdateScene();
                     DrawSelection(selectedFigureIndex);
-                    //isSelectedFigure = true;
                     isMoveMode = true; // активация режима перемещения
                 }
                 else
-                {
-                    //isSelectedFigure = false;
                     isMoveMode = false;
-                }
             }
         }
 
@@ -388,18 +368,15 @@ namespace graphics_editor_cgs
             // Если включен режим масштабирования
             if (isResizeMode && lastSelectedFigureIndex != -1)
             {
-                FigureList[lastSelectedFigureIndex].Resize(e.Location /*FigureList[lastSelectedFigureIndex].Center*/ /*resizeCenter*/);
+                FigureList[lastSelectedFigureIndex].Resize(e.Location);
                 UpdateScene();
-                DrawCenter(FigureList[lastSelectedFigureIndex].Center /*resizeCenter*/);
+                DrawCenter(FigureList[lastSelectedFigureIndex].Center);
                 DrawSelection(lastSelectedFigureIndex);
-                //DrawSelection(FigureList[lastSelectedFigureIndex]);
             }
             // Если включен режим перемещения
             if (isMoveMode)
             {
                 FigureList[selectedFigureIndex].Move(e.X - lastMouseClickPosition.X, e.Y - lastMouseClickPosition.Y);
-                //if (FigureList[selectedFigureIndex].GetType() == typeof(Polygon))
-                //    ((Polygon)FigureList[selectedFigureIndex]).Fill();
                 UpdateScene();
             }
             lastMouseClickPosition = e.Location;
@@ -416,18 +393,13 @@ namespace graphics_editor_cgs
 
             if (selectedFigureIndex != -1)
                 DrawSelection(selectedFigureIndex);
-            //DrawSelection(FigureList[selectedFigureIndex]);
             scene.Image = buffer;
-
-            //if (rotateCenter != null)
-            //    DrawCenter(rotateCenter);
-
         }
 
         // Обработчик движения ползунка
         private void RotationTb_Scroll(object sender, EventArgs e)
         {
-            if (isRotateMode /*&& lastSelectedFigureIndex != -1*/)
+            if (isRotateMode)
             {
                 float rotationAngle = (rotationAngleMode.Checked) ? 30f : rotationTb.Value - prevRotationAngle;
 
@@ -435,7 +407,6 @@ namespace graphics_editor_cgs
                 UpdateScene();
 
                 DrawCenter(rotateCenter);
-                //DrawSelection(FigureList[lastSelectedFigureIndex]);
                 DrawSelection(lastSelectedFigureIndex);
 
             }
@@ -528,9 +499,7 @@ namespace graphics_editor_cgs
             for (int i = 0; i < FigureList.Count; i++)
             {
                 if (FigureList[i].Select(mouseClickPoint))
-                {
                     index = i;
-                }
             }
             return index;
         }

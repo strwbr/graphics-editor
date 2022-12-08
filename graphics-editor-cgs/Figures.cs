@@ -54,7 +54,7 @@ namespace graphics_editor_cgs
             return arrow;
         }
 
-        public static BezierCurve Bezier(List<PointF> userPoints/*, int n*/, Color color)
+        public static BezierCurve Bezier(List<PointF> userPoints, Color color)
         {
             int n = userPoints.Count - 1;
             BezierCurve curve = new BezierCurve();
@@ -65,9 +65,6 @@ namespace graphics_editor_cgs
             const double dt = 0.0001;
             // Постоянный шаг табуляции
             double t = dt;
-            //PointF Ppred = new PointF();
-            //Ppred.X = userPoints[0].X;
-            //Ppred.Y = userPoints[0].Y;
             PointF Pt = new PointF();
 
             while (t < 1 + dt / 2)
@@ -89,8 +86,6 @@ namespace graphics_editor_cgs
                 curve.VertexList.Add(Pt);
 
                 t += dt;
-                //Ppred.X = (float)Math.Round(xt);
-                //Ppred.Y = (float)Math.Round(yt);
             }
             return curve;
         }

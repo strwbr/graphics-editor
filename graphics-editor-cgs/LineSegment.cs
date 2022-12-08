@@ -80,11 +80,11 @@ namespace graphics_editor_cgs
                 PointF newPoint = new PointF();
                 newPoint.X = VertexList[i].X + dx;
                 newPoint.Y = VertexList[i].Y + dy;
-                VertexList[i] = newPoint; //new PointF(newPoint.X, newPoint.Y);
+                VertexList[i] = newPoint; 
             }
         }
 
-        public void Resize(PointF mP/*, PointF center*/)
+        public void Resize(PointF mP)
         {
             PointF center = Center;
             float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.03f : 0.03f;
@@ -110,11 +110,5 @@ namespace graphics_editor_cgs
                 VertexList[i] = p;
             }
         }
-
-        
-
-        
-
-
     }
 }

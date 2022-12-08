@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace graphics_editor_cgs
 {
@@ -13,6 +11,7 @@ namespace graphics_editor_cgs
         public Polygon Polygon_1 { private get; set; } // 1-я фигура
         public Polygon Polygon_2 { private get; set; } // 2-я фигура
         public List<InteriorSegment> ResultLines { get; set; } // Список результирующих сегментов ТМО
+        
         public int Xmin_e { private get; set; } // Мин граница области рисования
         public int Xmax_e { private get; set; } // Макс граница области рисования
 
@@ -105,11 +104,6 @@ namespace graphics_editor_cgs
         {
             List<SegmentTMO> M = new List<SegmentTMO>();
 
-            //float Ymin_1 = Polygon_1.Min.Y;
-            //float Ymax_1 = Polygon_1.Max.Y;
-            //float Ymin_2 = Polygon_2.Min.Y;
-            //float Ymax_2 = Polygon_2.Max.Y;
-
             float Ymin = Math.Min(Polygon_1.Min.Y, Polygon_2.Min.Y);
             float Ymax = Math.Max(Polygon_1.Max.Y, Polygon_2.Max.Y);
 
@@ -135,7 +129,6 @@ namespace graphics_editor_cgs
                 {
                     Xlines_2 = Polygon_2.LinesList.FindAll(item => item.Y == j);
                 }
-                //int n = Xlines_1.Count;
                 // Заполнение массива М
                 // для 1-й фигуры
                 for (int i = 0; i < Xlines_1.Count; i++)
@@ -143,25 +136,13 @@ namespace graphics_editor_cgs
                     M.Add(new SegmentTMO(Xlines_1[i].Xl, 2));
                     M.Add(new SegmentTMO(Xlines_1[i].Xr, -2));
                 }
-                //int nM = n;
-                //for (int i = 0; i < Xlines_1.Count; i++)
-                //{
-                //    M.Add(new SegmentTMO(Xlines_1[i].Xr, -2));
-                //}
-                //nM += n;
-                //n = Xlines_2.Count;
                 // для 2-й фигуры
                 for (int i = 0; i < Xlines_2.Count; i++)
                 {
                     M.Add(new SegmentTMO(Xlines_2[i].Xl, 1));
                     M.Add(new SegmentTMO(Xlines_2[i].Xr, -1));
                 }
-                //nM += n;
-                //for (int i = 0; i < Xlines_2.Count; i++)
-                //{
-                //    M.Add(new SegmentTMO(Xlines_2[i].Xr, -1));
-                //}
-                //nM += n;
+                
                 // Сортировка массива М по возрастанию
                 M.Sort((e1, e2) => e1.x.CompareTo(e2.x));
                 int Q = 0; // предыдущее значение суммы Q
@@ -230,7 +211,7 @@ namespace graphics_editor_cgs
             MakeTMO();
         }
 
-        public void Resize(PointF mP/*, PointF center*/)
+        public void Resize(PointF mP)
         {
             ResultLines.Clear();
             float xc = (Polygon_1.Center.X + Polygon_2.Center.X) / 2;
@@ -241,14 +222,6 @@ namespace graphics_editor_cgs
             MakeTMO();
         }
         
-        //public void Resize(PointF mP, PointF center)
-        //{
-        //    ResultLines.Clear();
-        //    Polygon_1.Resize(mP, Center);
-        //    Polygon_2.Resize(mP, Center);
-        //    MakeTMO();
-        //}
-
         public void Rotate(float angle, PointF center)
         {
             ResultLines.Clear();

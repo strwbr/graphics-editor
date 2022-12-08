@@ -19,8 +19,5 @@ namespace graphics_editor_cgs
         void Move(float dx, float dy); // Плоскопараллельное перемещение
         void Resize(PointF mP); // Масштабирование относительно фентра фигуры по оси Х
         void Rotate(float angle, PointF center); // Вращение относительно заданного центра на угол angle
-
-
-        //bool CheckResize(float x, float y);
     }
 }

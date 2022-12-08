@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace graphics_editor_cgs
+﻿namespace graphics_editor_cgs
 {
     // Для хранения границ сегментов и приращений пороговых функций
     public struct SegmentTMO

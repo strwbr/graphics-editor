@@ -87,18 +87,6 @@ namespace graphics_editor_cgs
             }
             if (m % 2 == 1) isSelect = true;
             return isSelect;
-
-            //for (int i = 0; i < LinesList.Count; i++)
-            //{
-            //    if (p.Y == LinesList[i].y)
-            //    {
-            //        if (p.X >= LinesList[i].xl && p.X <= LinesList[i].xr)
-            //        {
-            //            return true;
-            //        }
-            //    }
-            //}
-            //return false;
         }
 
         // Закрашивание фигуры
@@ -165,7 +153,6 @@ namespace graphics_editor_cgs
 
         public void Resize(PointF mP, PointF center)
         {
-            //PointF center = Center;
             float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.02f : 0.02f;
             bx += 1;
             for (int i = 0; i < VertexList.Count; i++)
@@ -177,26 +164,10 @@ namespace graphics_editor_cgs
             }
             Fill();
         }
-        //public void Resize(PointF mP, PointF center)
-        //{
-        //    //PointF center = Center;
-        //    float bx = (mP.X >= Min.X && mP.X <= Max.X) ? -0.02f : 0.02f;
-        //    bx += 1;
-        //    for (int i = 0; i < VertexList.Count; i++)
-        //    {
-        //        PointF newPoint = new PointF();
-        //        newPoint.X = (VertexList[i].X - center.X) * bx + center.X;
-        //        newPoint.Y = VertexList[i].Y;
-        //        VertexList[i] = newPoint;
-        //    }
-        //    Fill();
-        //}
 
         public void Rotate(float angle, PointF center)
         {
-            //double cos = Math.Cos(angle);
             double cos = Math.Cos(angle * Math.PI / 180);
-            //double sin = Math.Sin(angle);
             double sin = Math.Sin(angle * Math.PI / 180);
             for (int i = 0; i < VertexList.Count; i++)
             {
